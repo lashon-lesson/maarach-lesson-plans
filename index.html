@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מַעֲרָךְ · מערכי שיעור לחט״ב ולתיכון</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2ea; --paper:#fffdf8; --ink:#1c2333; --ink2:#4a5468; --muted:#8a90a0;
+  --line:#e4ddcf; --line2:#d6cdb9;
+  --accent:#0f766e; --accent-d:#0b5a54; --accent-l:#d7efec;
+  --amber:#d97706; --amber-l:#fdf0d8; --red:#c2410c; --red-l:#fde6dc;
+  --radius:14px; --shadow:0 1px 2px rgba(28,35,51,.06),0 6px 20px rgba(28,35,51,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-size:15px;line-height:1.55}
+h1,h2,h3,.display{font-family:"Secular One",Heebo,sans-serif;font-weight:400;letter-spacing:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--accent)}
+.hidden{display:none!important}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:30;background:var(--ink);color:#fff;display:flex;align-items:center;gap:18px;padding:0 22px;height:60px}
+.brand{display:flex;align-items:baseline;gap:10px;white-space:nowrap}
+.brand b{font-family:"Secular One";font-size:26px;font-weight:400;color:#fff}
+.brand span{font-size:12px;color:#aeb6c8}
+.nav{display:flex;gap:4px;margin-inline-start:12px;overflow-x:auto}
+.nav a{color:#cfd5e2;text-decoration:none;padding:8px 14px;border-radius:999px;font-weight:500;white-space:nowrap;font-size:14px}
+.nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav a.on{background:#fff;color:var(--ink)}
+.top .sp{flex:1}
+.btn{border:1px solid var(--line2);background:var(--paper);padding:8px 14px;border-radius:10px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:.15s}
+.btn:hover{border-color:var(--ink2)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover{background:var(--accent-d)}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.ghost:hover{background:rgba(0,0,0,.05)}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:8px}
+.btn.warn{color:var(--red)}
+.btn:disabled{opacity:.5;cursor:default}
+.top .btn{background:var(--amber);border-color:var(--amber);color:#fff}
+
+main{max-width:1240px;margin:0 auto;padding:26px 22px 80px}
+.view{display:none}
+.view.on{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:end;margin-bottom:26px}
+.hero h1{font-size:40px;line-height:1.1;margin:0 0 10px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{margin:0;color:var(--ink2);font-size:16px;max-width:560px}
+.stats{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 16px;min-width:100px}
+.stat b{display:block;font-family:"Secular One";font-size:24px;font-weight:400}
+.stat span{font-size:12px;color:var(--muted)}
+
+/* filters */
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.search{flex:1;min-width:220px;position:relative}
+.search input{width:100%;padding:11px 40px 11px 14px;border:1px solid var(--line2);border-radius:12px;background:var(--paper)}
+.search svg{position:absolute;right:13px;top:50%;transform:translateY(-50%);opacity:.5}
+select.f,input.f,textarea.f{border:1px solid var(--line2);border-radius:10px;background:var(--paper);padding:9px 12px}
+textarea.f{resize:vertical;width:100%;min-height:70px}
+input.f:focus,select.f:focus,textarea.f:focus,.search input:focus{outline:2px solid var(--accent-l);border-color:var(--accent)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.chip{border:1px solid var(--line2);background:var(--paper);border-radius:999px;padding:5px 12px;font-size:13px}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:.15s}
+.card:hover{transform:translateY(-2px)}
+.card .band{height:6px}
+.card .body{padding:16px 18px 10px;flex:1}
+.card .meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tag{font-size:12px;padding:2px 9px;border-radius:999px;background:#efeae0;color:var(--ink2);font-weight:500}
+.tag.s{color:#fff}
+.card h3{margin:0 0 6px;font-size:19px;line-height:1.25}
+.card p{margin:0;color:var(--ink2);font-size:13.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card .acts{display:flex;gap:4px;padding:10px 12px;border-top:1px solid var(--line);background:#fbf8f1}
+.card .acts .sp{flex:1}
+.empty{text-align:center;padding:50px 20px;color:var(--muted);border:2px dashed var(--line2);border-radius:var(--radius)}
+
+/* builder */
+.bld{display:grid;grid-template-columns:320px 1fr;gap:22px;align-items:start}
+.side{position:sticky;top:76px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);max-height:calc(100vh - 96px);overflow:auto}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin-bottom:4px}
+.fld .f{width:100%}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bloom{display:flex;flex-wrap:wrap;gap:5px}
+.bloom .chip{font-size:12px;padding:3px 10px}
+.titlein{width:100%;font-family:"Secular One";font-size:30px;border:none;background:transparent;padding:4px 0;border-bottom:2px dashed transparent}
+.titlein:focus{outline:none;border-bottom-color:var(--line2)}
+.bhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.bhead .sp{flex:1}
+.saved{font-size:12px;color:var(--muted)}
+
+.timebar{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:16px}
+.timebar .bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:#eee7da;margin:8px 0 6px}
+.timebar .bar div{height:100%;border-left:2px solid var(--paper)}
+.timebar .lbl{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2)}
+.timebar .lbl b.over{color:var(--red)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:4px;vertical-align:-1px}
+
+.stage{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:14px;box-shadow:var(--shadow)}
+.stage-h{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.stage-h .num{width:28px;height:28px;border-radius:8px;color:#fff;display:grid;place-items:center;font-family:"Secular One";font-size:15px}
+.stage-h input{font-weight:700;font-size:17px;border:none;background:transparent;flex:1;padding:4px}
+.stage-h input:focus{outline:1px dashed var(--line2)}
+.stage-h .mins{font-size:13px;color:var(--muted);white-space:nowrap}
+.acts-list{padding:10px 12px 4px}
+.act{display:grid;grid-template-columns:34px 1fr auto;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:8px;background:#fff}
+.act .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:17px;background:var(--accent-l)}
+.act .top-r{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.act .top-r input.t{flex:1;min-width:160px;font-weight:600}
+.act .top-r select{max-width:170px}
+.act .top-r .m{width:72px}
+.act textarea{min-height:56px;font-size:14px}
+.act .ctl{display:flex;flex-direction:column;gap:2px}
+.ctl button{border:none;background:transparent;padding:3px 6px;border-radius:6px;color:var(--muted);font-size:14px}
+.ctl button:hover{background:#f1ece2;color:var(--ink)}
+.stage-f{display:flex;gap:6px;padding:4px 12px 12px;flex-wrap:wrap}
+
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.panel h3{margin:0 0 10px;font-size:18px;display:flex;align-items:center;gap:8px}
+.panel h3 .sp{flex:1}
+.diff3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.diff3 label{font-size:12.5px;font-weight:700;display:block;margin-bottom:4px}
+.diff3 .l1{color:#2563eb}.diff3 .l2{color:var(--accent)}.diff3 .l3{color:#9333ea}
+.qrow{display:grid;grid-template-columns:110px 1fr 30px;gap:8px;margin-bottom:6px}
+.aibar{display:flex;gap:8px;flex-wrap:wrap;background:linear-gradient(90deg,#eef7f5,#fdf3e1);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:16px;align-items:center}
+.aibar b{font-size:13px;margin-left:4px}
+
+/* generator */
+.gen{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.gen .panel{padding:22px}
+.models{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.model{border:1px solid var(--line2);border-radius:12px;padding:10px 12px;background:#fff;text-align:right}
+.model b{display:block;font-size:14px}
+.model span{font-size:12px;color:var(--muted)}
+.model.on{border-color:var(--accent);background:var(--accent-l);box-shadow:0 0 0 1px var(--accent)}
+.out{min-height:300px}
+.loader{display:flex;align-items:center;gap:10px;color:var(--ink2)}
+.dots i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin:0 2px;animation:b 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,100%{opacity:.25}50%{opacity:1}}
+.note{font-size:13px;background:var(--amber-l);border:1px solid #f3d9a6;border-radius:10px;padding:10px 12px;color:#7c4a03}
+.prev h4{margin:14px 0 4px;font-size:15px}
+.prev ul{margin:4px 0;padding-right:18px}
+.prev li{margin-bottom:3px;font-size:14px}
+
+/* toolbox */
+.srcrow{display:grid;grid-template-columns:1fr 1.4fr auto auto;gap:6px;margin-bottom:6px;align-items:center}
+.curline{font-size:12.5px;color:var(--accent-d);margin:-2px 0 6px;font-weight:500}
+.wcard .org{font-size:12px;color:var(--muted)}
+.wcard h4 a{color:var(--ink);text-decoration:none}
+.wcard h4 a:hover{color:var(--accent);text-decoration:underline}
+.wcard .host{font-size:11.5px;color:var(--muted);direction:ltr;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topics{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;box-shadow:var(--shadow)}
+.topics h3{margin:0 0 4px;font-size:18px}
+.topics .tg{margin:10px 0 0}
+.topics .tg b{display:block;font-size:13px;color:var(--ink2);margin-bottom:5px}
+.topics .tg .chip{margin:0 0 5px 5px;font-size:12.5px}
+.topics .tg .chip:hover{border-color:var(--accent);color:var(--accent)}
+.tb{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.strat{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:6px}
+.strat .hd{display:flex;align-items:center;gap:10px}
+.strat .hd .ic{font-size:22px;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--accent-l)}
+.strat h4{margin:0;font-size:16px}
+.strat .why{font-size:12.5px;color:var(--accent-d);background:var(--accent-l);border-radius:8px;padding:6px 9px}
+.strat p{margin:0;font-size:13.5px;color:var(--ink2)}
+.strat .ft{display:flex;gap:6px;align-items:center;margin-top:auto;padding-top:6px}
+.strat .ft .sp{flex:1}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(20,25,38,.55);z-index:60;display:grid;place-items:center;padding:20px}
+.modal .box{background:var(--paper);border-radius:16px;max-width:760px;width:100%;max-height:86vh;overflow:auto;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal .box h3{margin:0 0 12px;font-size:22px}
+.modal .box .ft{display:flex;gap:8px;justify-content:flex-start;margin-top:16px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;z-index:90;font-size:14px;box-shadow:var(--shadow)}
+
+/* presenter */
+.pres{position:fixed;inset:0;background:#10151f;color:#fff;z-index:80;display:grid;grid-template-columns:280px 1fr;font-size:17px}
+.pres aside{background:#171e2c;padding:18px;overflow:auto;border-left:1px solid #253046}
+.pres aside h4{margin:0 0 4px;font-family:"Secular One";font-weight:400;font-size:18px}
+.pres aside .sub{font-size:13px;color:#8d98b0;margin-bottom:16px}
+.pres .st{margin-bottom:12px}
+.pres .st b{display:block;font-size:12px;color:#8d98b0;margin-bottom:4px;letter-spacing:.02em}
+.pres .it{display:block;width:100%;text-align:right;background:transparent;border:none;color:#c9d1e3;padding:7px 10px;border-radius:8px;font-size:14px}
+.pres .it:hover{background:#222b3d}
+.pres .it.on{background:#fff;color:#10151f;font-weight:700}
+.pres .it.done{color:#5d6a85;text-decoration:line-through}
+.stagearea{display:flex;flex-direction:column;padding:28px 40px;overflow:auto}
+.ptop{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.ptop .sp{flex:1}
+.pbtn{background:#222b3d;border:1px solid #2f3a52;color:#fff;border-radius:10px;padding:8px 14px;font-size:14px}
+.pbtn:hover{background:#2c3750}
+.pbtn.hl{background:var(--amber);border-color:var(--amber)}
+.pstage{font-size:14px;color:var(--amber);font-weight:700;margin-bottom:6px}
+.ptitle{font-family:"Secular One";font-size:52px;line-height:1.1;margin:0 0 18px}
+.pins{font-size:24px;line-height:1.6;color:#dfe5f1;white-space:pre-wrap;max-width:1000px}
+.ptype{display:inline-block;background:#222b3d;padding:4px 12px;border-radius:999px;font-size:14px;margin-bottom:16px;color:#b8c3da}
+.timer{margin-top:auto;display:flex;align-items:center;gap:16px;padding-top:28px}
+.clock{font-family:"Secular One";font-size:64px;font-variant-numeric:tabular-nums;min-width:200px;direction:ltr;text-align:center;background:#171e2c;border-radius:16px;padding:4px 18px}
+.clock.end{color:#fb923c;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.4}}
+.tool{position:fixed;inset:0;background:rgba(5,8,14,.85);z-index:85;display:grid;place-items:center}
+.tool .tbox{background:#171e2c;border-radius:20px;padding:28px;width:min(820px,92vw);max-height:88vh;overflow:auto;color:#fff}
+.tool textarea{width:100%;background:#10151f;color:#fff;border:1px solid #2f3a52;border-radius:10px;padding:10px;min-height:120px}
+.bigname{font-family:"Secular One";font-size:72px;text-align:center;padding:30px 0;min-height:160px;color:var(--amber)}
+.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:14px}
+.groups div{background:#222b3d;border-radius:12px;padding:12px}
+.groups b{color:var(--amber);display:block;margin-bottom:4px}
+
+/* print */
+#printArea{display:none}
+@media print{
+  body{background:#fff}
+  .top,main,.modal,.toast,.pres{display:none!important}
+  #printArea{display:block!important;font-size:12pt;color:#000}
+  #printArea h1{font-size:22pt;margin:0 0 4pt}
+  #printArea h2{font-size:14pt;border-bottom:1px solid #999;margin:14pt 0 6pt;padding-bottom:3pt}
+  #printArea table{width:100%;border-collapse:collapse}
+  #printArea td,#printArea th{border:1px solid #bbb;padding:5pt;vertical-align:top;text-align:right}
+  #printArea th{background:#eee}
+}
+
+@media (max-width:900px){
+  .hero,.bld,.gen{grid-template-columns:1fr}
+  .side{position:static;max-height:none}
+  .stats{justify-content:flex-start}
+  .pres{grid-template-columns:1fr}
+  .pres aside{display:none}
+  .ptitle{font-size:34px}.pins{font-size:19px}
+  .diff3{grid-template-columns:1fr}
+  .brand span{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand"><b>מַעֲרָךְ</b><span>מערכי שיעור שמדליקים כיתה</span></div>
+  <nav class="nav">
+    <a href="#library" data-v="library">הספרייה</a>
+    <a href="#edit" data-v="edit">בונה המערכים</a>
+    <a href="#ai" data-v="ai">מחולל חכם</a>
+    <a href="#toolbox" data-v="toolbox">בנק אסטרטגיות</a>
+    <a href="#web" data-v="web">מאגר ברשת</a>
+  </nav>
+  <div class="sp"></div>
+  <button class="btn" onclick="newLesson()">＋ מערך חדש</button>
+</header>
+
+<main>
+  <!-- LIBRARY -->
+  <section class="view" id="v-library">
+    <div class="hero">
+      <div>
+        <h1>שיעור טוב לא מתחיל ב<em>מצגת</em>.<br>הוא מתחיל בשאלה.</h1>
+        <p>מאגר אישי של מערכי שיעור לחטיבת הביניים ולתיכון: בונים לפי מודל פדגוגי, מאזנים זמנים, מבחינים לשלוש רמות, ומעבירים את השיעור על המסך עם טיימר, שולף שמות ומחלק קבוצות.</p>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="filters">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" placeholder="חיפוש לפי נושא, מטרה או מילת מפתח…" oninput="renderLibrary()">
+      </div>
+      <select class="f" id="fGrade" onchange="renderLibrary()"></select>
+      <select class="f" id="fModel" onchange="renderLibrary()"></select>
+      <button class="btn" onclick="openImport()">ייבוא</button>
+      <button class="btn" onclick="openExportAll()">ייצוא הכל</button>
+    </div>
+    <div class="chips" id="subjChips"></div>
+    <div class="grid" id="libGrid"></div>
+  </section>
+
+  <!-- BUILDER -->
+  <section class="view" id="v-edit">
+    <div id="editEmpty" class="empty hidden">
+      <h2>אין מערך פתוח</h2>
+      <p>פתחו מערך מהספרייה, צרו מערך חדש או תנו למחולל החכם לבנות טיוטה.</p>
+      <button class="btn pri" onclick="newLesson()">＋ מערך חדש</button>
+    </div>
+    <div id="editWrap" class="bld hidden">
+      <aside class="side" id="side"></aside>
+      <div>
+        <div class="bhead">
+          <input class="titlein" id="eTitle" placeholder="שם השיעור" oninput="upd('title',this.value)">
+        </div>
+        <div class="bhead">
+          <span class="saved" id="savedLbl">נשמר</span>
+          <div class="sp"></div>
+          <button class="btn pri" onclick="startPresent()">▶ העברת השיעור</button>
+          <button class="btn" onclick="printLesson()">הדפסה</button>
+          <button class="btn" onclick="copyText()">העתקה כטקסט</button>
+          <button class="btn" onclick="openExportOne()">ייצוא</button>
+        </div>
+        <div class="aibar" id="aibar">
+          <b>✦ עוזר חכם:</b>
+          <button class="btn sm" onclick="aiAssist('hook')">פתיחה מסקרנת</button>
+          <button class="btn sm" onclick="aiAssist('questions')">שאלות לפי בלום</button>
+          <button class="btn sm" onclick="aiAssist('diff')">הבחנה לשלוש רמות</button>
+          <button class="btn sm" onclick="aiAssist('exit')">כרטיס יציאה</button>
+          <span class="saved" id="aiStatus"></span>
+        </div>
+        <div class="timebar" id="timebar"></div>
+        <div id="stages"></div>
+        <div style="margin-bottom:18px"><button class="btn" onclick="addStage()">＋ שלב</button></div>
+
+        <div class="panel">
+          <h3>הבחנה (דיפרנציאציה)</h3>
+          <div class="diff3">
+            <div><label class="l1">תמיכה — למי שמתקשה</label><textarea class="f" id="dS" oninput="updDiff('support',this.value)"></textarea></div>
+            <div><label class="l2">ליבה — לכלל הכיתה</label><textarea class="f" id="dC" oninput="updDiff('core',this.value)"></textarea></div>
+            <div><label class="l3">העשרה — למי שמוכן להמריא</label><textarea class="f" id="dE" oninput="updDiff('enrich',this.value)"></textarea></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>שאלות לדיון ולהערכה<span class="sp"></span><button class="btn sm" onclick="addQ()">＋ שאלה</button></h3>
+          <div id="qs"></div>
+        </div>
+        <div class="panel">
+          <h3>כרטיס יציאה</h3>
+          <textarea class="f" id="eExit" placeholder="שאלה אחת-שתיים שהתלמידים עונים עליהן ביציאה מהשיעור" oninput="upd('exitTicket',this.value)"></textarea>
+        </div>
+        <div class="panel">
+          <h3>מקורות וקישורים<span class="sp"></span><button class="btn sm" onclick="addSrc()">＋ קישור</button><button class="btn sm" onclick="pickWebSrc()">מהמאגר ברשת</button></h3>
+          <div id="srcs"></div>
+        </div>
+        <div class="panel">
+          <h3>הערות למורה</h3>
+          <textarea class="f" id="eNotes" placeholder="מה לזכור, תקלות צפויות, הצעות לפעם הבאה…" oninput="upd('notes',this.value)"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI -->
+  <section class="view" id="v-ai">
+    <div class="hero" style="grid-template-columns:1fr">
+      <div>
+        <h1>מחולל <em>חכם</em></h1>
+        <p>מתארים נושא, שכבה ומשך — ומקבלים טיוטת מערך מלאה לפי מודל פדגוגי. הטיוטה נכנסת לבונה המערכים, ושם היא שלכם לעריכה.</p>
+      </div>
+    </div>
+    <div class="gen">
+      <div class="panel">
+        <div class="fld"><label>נושא השיעור</label><input class="f" id="gTopic" placeholder="למשל: אליהו בהר הכרמל, מבנה משפט מורכב, המהפכה הצרפתית"></div>
+        <div class="row2">
+          <div class="fld"><label>מקצוע</label><select class="f" id="gSubject"></select></div>
+          <div class="fld"><label>שכבה</label><select class="f" id="gGrade"></select></div>
+        </div>
+        <div class="row2">
+          <div class="fld"><label>משך (דקות)</label><select class="f" id="gMin"><option>45</option><option>90</option><option>60</option><option>40</option></select></div>
+          <div class="fld"><label>אופי הכיתה</label><select class="f" id="gClass"><option>הטרוגנית</option><option>מתקשה</option><option>מצטיינת</option><option>מקבצת</option><option>חינוך מיוחד / שילוב</option></select></div>
+        </div>
+        <div class="fld"><label>מודל פדגוגי</label><div class="models" id="gModels"></div></div>
+        <div class="fld"><label>דגשים (לא חובה)</label><textarea class="f" id="gExtra" placeholder="למשל: לשלב עבודה בקבוצות, לקשר לחיי התלמידים, הכנה לבגרות, טקסט מסוים"></textarea></div>
+        <button class="btn pri" id="gBtn" onclick="generate()" style="width:100%;justify-content:center;padding:12px">✦ בנה לי מערך</button>
+        <div class="note" id="gNote" style="margin-top:12px" hidden>המחולל מבוסס בינה מלאכותית זמין כשהעמוד פתוח בתוך Claude. כאן ייבנה שלד חכם מבנק האסטרטגיות, ואתם ממלאים את התוכן.</div>
+      </div>
+      <div class="panel out" id="gOut">
+        <div class="empty" style="border:none">הטיוטה תופיע כאן</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLBOX -->
+  <section class="view" id="v-toolbox">
+    <div class="hero" style="grid-template-columns:1fr">
+      <div>
+        <h1>בנק <em>אסטרטגיות</em></h1>
+        <p>דרכי הוראה פעילות שעובדות בחט״ב ובתיכון. כל אחת עם הסבר קצר למה היא עובדת — ובלחיצה אחת היא נכנסת למערך הפתוח.</p>
+      </div>
+    </div>
+    <div class="chips" id="tbChips"></div>
+    <div class="tb" id="tbGrid"></div>
+  </section>
+
+  <!-- WEB DIRECTORY -->
+  <section class="view" id="v-web">
+    <div class="hero" style="grid-template-columns:1fr">
+      <div>
+        <h1>מאגר <em>ברשת</em></h1>
+        <p>אוסף מסונן של אתרים רשמיים ומוכרים עם מערכי שיעור, יחידות הוראה ומסמכי תוכנית הלימודים של משרד החינוך, לחט״ב ולתיכון. לצד כל מקצוע מופיעים נושאי התוכנית. לחיצה על נושא בונה ממנו טיוטת מערך.</p>
+      </div>
+    </div>
+    <div class="filters">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="wq" placeholder="חיפוש באתר, ארגון או תיאור…" oninput="renderWeb()">
+      </div>
+      <select class="f" id="wKind" onchange="renderWeb()"></select>
+      <select class="f" id="wStage" onchange="renderWeb()"><option value="">חט״ב ותיכון</option><option value="jh">חטיבת ביניים (ז׳–ט׳)</option><option value="hs">תיכון (י׳–י״ב)</option></select>
+    </div>
+    <div class="chips" id="wChips"></div>
+    <div id="wTopics"></div>
+    <div class="tb" id="wGrid"></div>
+    <p class="saved" style="margin-top:18px">הקישורים נבדקו בנובמבר 2026. אתרי משרד החינוך מתעדכנים מדי פעם — אם קישור לא עובד, חפשו את שם הדף בפורטל עובדי הוראה. לפני השימוש בכיתה בדקו תמיד שהתוכן מתאים לנוסח העדכני של התוכנית.</p>
+  </section>
+</main>
+
+<div id="printArea"></div>
+<div id="modalRoot"></div>
+<div id="presRoot"></div>
+
+<script>
+"use strict";
+/* ============ CONSTANTS ============ */
+const SUBJECTS = {
+  "לשון":"#0284c7","תנ״ך":"#b45309","ספרות":"#be185d","היסטוריה":"#7c3aed","אזרחות":"#4f46e5",
+  "מתמטיקה":"#0f766e","מדעים":"#059669","ביולוגיה":"#16a34a","אנגלית":"#dc2626","גיאוגרפיה":"#0891b2",
+  "מחשבת ישראל":"#a16207","חינוך":"#db2777","פיזיקה":"#2563eb","כימיה":"#9333ea","מדעי המחשב":"#0e7490",
+  "ערבית":"#15803d","אחר":"#64748b"
+};
+const GRADES = ["ז׳","ח׳","ט׳","י׳","י״א","י״ב"];
+const BLOOM = ["זכירה","הבנה","יישום","ניתוח","הערכה","יצירה"];
+const TYPES = {
+  explain:{n:"הסבר מורה",i:"🗣"}, discuss:{n:"דיון כיתתי",i:"💬"}, tps:{n:"חשוב-זוג-שתף",i:"👥"},
+  group:{n:"עבודה בקבוצות",i:"🧩"}, read:{n:"קריאה מודרכת",i:"📖"}, poll:{n:"סקר / הצבעה",i:"✋"},
+  cloud:{n:"ענן מילים",i:"☁"}, quiz:{n:"חידון",i:"❓"}, game:{n:"משחק",i:"🎲"},
+  media:{n:"וידאו / מדיה",i:"🎬"}, write:{n:"כתיבה אישית",i:"✍"}, exit:{n:"כרטיס יציאה",i:"🎫"}
+};
+const MODELS = {
+  classic:{n:"פתיחה · גוף · סיכום",d:"המבנה המוכר, מחולק לארבעה",st:[["פתיחה",.15],["הקניה",.3],["תרגול",.35],["סיכום",.2]]},
+  e5:{n:"5E",d:"עניין, חקירה, הסבר, הרחבה, הערכה",st:[["עניין (Engage)",.12],["חקירה (Explore)",.25],["הסבר (Explain)",.2],["הרחבה (Elaborate)",.28],["הערכה (Evaluate)",.15]]},
+  release:{n:"אני · אנחנו · אתם",d:"שחרור הדרגתי של האחריות",st:[["אני מדגים",.2],["אנחנו יחד",.25],["אתם בזוגות",.3],["כל אחד לבד",.25]]},
+  inquiry:{n:"למידת חקר",d:"שאלה, איסוף, ניתוח, הצגה",st:[["שאלת חקר",.15],["איסוף מידע",.3],["ניתוח ומסקנות",.3],["הצגה ורפלקציה",.25]]},
+  flipped:{n:"כיתה הפוכה",d:"החומר נלמד בבית, הכיתה ליישום",st:[["בדיקת הבנה",.15],["יישום בקבוצות",.45],["שיתוף ומשוב",.25],["רפלקציה",.15]]},
+  debate:{n:"דיון ומחלוקת",d:"עמדות, טיעונים, הכרעה",st:[["הצגת הדילמה",.15],["בניית טיעונים",.3],["עימות מובנה",.35],["הכרעה אישית",.2]]}
+};
+const STRATS = [
+  {n:"חשוב-זוג-שתף",t:"tps",m:7,c:"שיח",d:"שאלה פתוחה → דקה של חשיבה שקטה → שיחה בזוגות → כמה זוגות משתפים את הכיתה.",w:"כל תלמיד מנסח תשובה, לא רק השלושה שתמיד מצביעים."},
+  {n:"ג׳יגסו (פסיפס)",t:"group",m:25,c:"שיתופי",d:"כל קבוצת ׳מומחים׳ לומדת חלק אחד של הנושא, ואז מתפזרים לקבוצות מעורבות ומלמדים זה את זה.",w:"מי שמלמד — לומד פעמיים. וכל אחד אחראי לחלק שאין לאחרים."},
+  {n:"ארבע פינות",t:"poll",m:10,c:"תנועה",d:"מציגים טענה. כל פינה בכיתה היא עמדה (מסכים מאוד ← מתנגד מאוד). התלמידים עוברים לפינה ומנמקים.",w:"תנועה פיזית + חובה להתחייב לעמדה לפני שמקשיבים לאחרים."},
+  {n:"מעגל כפול",t:"discuss",m:12,c:"שיח",d:"שני מעגלים זה מול זה. זוגות דנים בשאלה 2 דקות, המעגל החיצוני זז מקום, שאלה חדשה.",w:"הרבה שיחות קצרות עם בני זוג מתחלפים. אנרגיה גבוהה."},
+  {n:"דג בקערה (Fishbowl)",t:"discuss",m:20,c:"שיח",d:"קבוצה קטנה דנה במרכז, השאר צופים ורושמים טיעונים. כיסא ריק מאפשר להצטרף.",w:"מלמד להקשיב ולבנות על דברי אחרים, לא רק לדבר."},
+  {n:"גלריית הליכה",t:"group",m:15,c:"תנועה",d:"תוצרי קבוצות תלויים על הקירות. הכיתה מסתובבת ומשאירה פתקים: ׳שאלה׳, ׳חיזוק׳, ׳רעיון׳.",w:"משוב עמיתים מובנה, וכל תוצר זוכה לקהל."},
+  {n:"ראיתי · חשבתי · תהיתי",t:"write",m:8,c:"חשיבה",d:"מול תמונה, קטע או מקור: מה אני רואה? מה אני חושב על זה? על מה אני תוהה?",w:"מפריד בין תצפית לפרשנות — יסוד של חשיבה ביקורתית."},
+  {n:"שאלת פתיחה מתגרה",t:"discuss",m:5,c:"פתיחה",d:"שאלה בלי תשובה אחת נכונה שקשורה לעולמם של התלמידים, לפני שמזכירים את החומר.",w:"סקרנות קודמת לתוכן. שאלה טובה מייצרת צורך לדעת."},
+  {n:"תעלומה בפתיחה",t:"explain",m:6,c:"פתיחה",d:"מציגים פריט מסתורי (ציטוט, תמונה, נתון מפתיע) ומבקשים לנחש מה הקשר לשיעור.",w:"הפער בין מה שיודעים למה שרוצים לדעת מניע למידה."},
+  {n:"כרטיס יציאה 3-2-1",t:"exit",m:5,c:"סיכום",d:"3 דברים שלמדתי, 2 שהפתיעו אותי, שאלה אחת שנשארה לי.",w:"המורה מקבל תמונת מצב מיידית לתכנון השיעור הבא."},
+  {n:"משפט אחד, מילה אחת",t:"exit",m:4,c:"סיכום",d:"כל תלמיד כותב משפט שמסכם את השיעור ומילה אחת שתופסת את מהותו.",w:"תמצות מחייב הבנה. אפשר לאסוף את המילים לענן."},
+  {n:"מפת מושגים",t:"write",m:12,c:"חשיבה",d:"התלמידים מסדרים מושגי מפתח על דף ומחברים בחצים, עם מילת קישור על כל חץ.",w:"חושף איך התלמיד מארגן את הידע, לא רק מה הוא זוכר."},
+  {n:"מחוון אגודל",t:"poll",m:2,c:"הערכה",d:"אגודל למעלה / באמצע / למטה: כמה ברור לי מה שלמדנו עכשיו?",w:"בדיקת הבנה של עשר שניות בלי לעצור את השיעור."},
+  {n:"קריאה עם עיפרון",t:"read",m:15,c:"קריאה",d:"קריאת טקסט עם סימונים קבועים: ✓ ידעתי, ! חדש לי, ? לא הבנתי, ★ חשוב.",w:"הופך קריאה פסיבית לפעילה ומכין שאלות לדיון."},
+  {n:"קריאה הדדית",t:"read",m:15,c:"קריאה",d:"בקבוצות של 4 עם תפקידים מתחלפים: מסכם, שואל, מבהיר, מנבא.",w:"מלמד אסטרטגיות הבנת הנקרא דרך תפקידים מוחשיים."},
+  {n:"משפט פתיחה לכתיבה",t:"write",m:8,c:"כתיבה",d:"נותנים התחלה של משפט (׳אני חושב ש... כי...׳) וכל אחד משלים בכתב לפני הדיון.",w:"מנמיך את הרף לכתיבה ומבטיח שלכל אחד יש מה לומר."},
+  {n:"חידון זוגות מהיר",t:"quiz",m:8,c:"הערכה",d:"5 שאלות על הלוח, זוגות עונים על לוח מחיק ומרימים יחד. מדברים על הטעויות.",w:"אחזור מהזיכרון מחזק למידה יותר מקריאה חוזרת."},
+  {n:"לוח עמדות",t:"poll",m:8,c:"תנועה",d:"קו על הלוח מ׳מסכים׳ עד ׳מתנגד׳. כל תלמיד מדביק פתק עם שמו ונימוק.",w:"מפה חזותית של דעות הכיתה — נקודת פתיחה מצוינת לדיון."},
+  {n:"משחק תפקידים",t:"game",m:20,c:"חוויה",d:"התלמידים מגלמים דמויות (מהטקסט, מההיסטוריה) ועונים על שאלות מנקודת מבטן.",w:"נקודת מבט אחרת מחייבת הבנה עמוקה של הדמות וההקשר."},
+  {n:"בית משפט",t:"game",m:30,c:"חוויה",d:"דמות או החלטה עומדת למשפט. תביעה, הגנה, עדים ושופטים — הכל מבוסס על הטקסט.",w:"טיעון מבוסס ראיות בתוך מסגרת שתלמידים אוהבים."},
+  {n:"תחנות למידה",t:"group",m:35,c:"שיתופי",d:"4-5 תחנות עם משימות שונות; הקבוצות מתחלפות כל 7 דקות.",w:"מאפשר גיוון רמות ואופני למידה באותו שיעור."},
+  {n:"פריים רציונלי (Frayer)",t:"write",m:10,c:"אוצר מילים",d:"מושג במרכז, וסביבו: הגדרה, מאפיינים, דוגמה, לא-דוגמה.",w:"הלא-דוגמה מחדדת את גבולות המושג."},
+  {n:"דקת סיכום הפוכה",t:"exit",m:5,c:"סיכום",d:"התלמידים כותבים שאלת מבחן אחת על השיעור. המורה בוחר כמה ועונים יחד.",w:"ניסוח שאלה טובה דורש להבין מה חשוב."},
+  {n:"קטע וידאו עם עצירות",t:"media",m:12,c:"מדיה",d:"קטע קצר (עד 4 דקות) עם 2-3 עצירות מתוכננות לשאלה או לניבוי.",w:"צפייה פעילה במקום צפייה פסיבית."}
+];
+
+/* ============ STORAGE ============ */
+const KEY = "maarach_v1_lessons", KEY_CLASS = "maarach_v1_class";
+let MEM = {};
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return MEM[k]===undefined?null:MEM[k]; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ MEM[k]=v; } }
+const uid = () => Math.random().toString(36).slice(2,9);
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let lessons = [];
+let cur = null;
+let filterSubj = "", tbFilter = "";
+
+/* ============ SEED ============ */
+function A(t,title,m,ins){ return {id:uid(),type:t,title:title,minutes:m,instructions:ins}; }
+function S(name,acts){ return {id:uid(),name:name,activities:acts}; }
+function seed(){
+  const now = Date.now();
+  return [
+  {id:uid(),title:"המשפט המורכב: מי תלוי במי?",subject:"לשון",grade:"ט׳",minutes:45,model:"release",updated:now,
+   goals:["התלמידים יזהו משפט עיקרי ומשפט טפל במשפט מורכב","התלמידים יסבירו את תפקיד מילת השעבוד","התלמידים ינסחו משפט מורכב משלהם על פי תבנית"],
+   bloom:["הבנה","יישום","ניתוח"],materials:"כרטיסיות משפטים גזורות, לוח, דף עבודה",
+   stages:[
+    S("אני מדגים",[A("explain","משפט שאי אפשר לחתוך",4,"כותבים על הלוח: ׳התלמידים יצאו להפסקה כאשר הצלצול נשמע׳. שואלים: אם נמחק חצי — מה עדיין משפט שלם? מה כבר לא?"),A("explain","מודל חשיבה בקול",5,"המורה מנתח בקול 2 משפטים: מוצא את מילת השעבוד (ש-, כאשר, כי, אם), מקיף את הפסוקית ושואל ׳על מה היא עונה?׳")]),
+    S("אנחנו יחד",[A("game","משפטים חתוכים",10,"כל זוג מקבל 6 כרטיסיות: 3 משפטים עיקריים ו-3 פסוקיות. מרכיבים משפטים הגיוניים ומסמנים את מילת השעבוד. בודקים יחד בכיתה.")]),
+    S("אתם בזוגות",[A("tps","מה התפקיד?",10,"לכל משפט מדף העבודה: האם הפסוקית עונה על ׳מתי?׳, ׳למה?׳, ׳מה?׳ או ׳איזה?׳ — חושבים לבד, משווים בזוג, משתפים.")]),
+    S("כל אחד לבד",[A("write","משפט על עצמי",9,"כל תלמיד כותב 3 משפטים מורכבים על היום שלו, כל אחד עם מילת שעבוד אחרת, ומסמן את הטפל."),A("exit","כרטיס יציאה",7,"מנתחים משפט אחד חדש ומסבירים במשפט מה עושה בו מילת השעבוד.")])
+   ],
+   diff:{support:"בנק מילות שעבוד מודפס על השולחן; משפטים קצרים עם פסוקית אחת בלבד.",core:"כמתואר במערך.",enrich:"משפט עם שתי פסוקיות טפלות; לנסח כלל: איך מזהים פסוקית בלי מילת שעבוד גלויה?"},
+   questions:[{level:"הבנה",q:"מה ההבדל בין משפט עיקרי למשפט טפל?"},{level:"ניתוח",q:"מדוע אי אפשר להשמיט את המשפט העיקרי ולהשאיר משמעות שלמה?"},{level:"יצירה",q:"כתבו פרסומת קצרה שכל משפט בה מורכב."}],
+   exitTicket:"׳נשארנו בבית מפני שירד גשם׳ — סמנו את הפסוקית והסבירו על איזו שאלה היא עונה.",notes:"לשים לב לבלבול בין ש׳ הזיקה לש׳ התוכן — לא להיכנס לזה היום, רק לרשום שאלות."},
+
+  {id:uid(),title:"אליהו בהר הכרמל: מאבק על לב העם",subject:"תנ״ך",grade:"י׳",minutes:45,model:"e5",updated:now-1000,
+   goals:["התלמידים יתארו את מהלך המעמד בהר הכרמל (מלכים א יח)","התלמידים ינתחו את הקריאה ׳עד מתי אתם פוסחים על שתי הסעיפים׳","התלמידים יעריכו את דרכו של אליהו בהשוואה לדרכים אחרות לשכנוע"],
+   bloom:["הבנה","ניתוח","הערכה"],materials:"תנ״ך, דף מקורות, לוח",
+   stages:[
+    S("עניין (Engage)",[A("poll","מה משכנע אותך?",5,"ארבע פינות: ׳מה הכי משכנע אנשים לשנות דעה? נס / נימוק / דוגמה אישית / לחץ חברתי׳. כל תלמיד בוחר פינה ומנמק במשפט.")]),
+    S("חקירה (Explore)",[A("read","קריאה עם עיפרון",12,"קריאה זוגית בפסוקים כ-מ. סימונים: ! רגע דרמטי, ? לא ברור, ★ משפט מפתח. כל זוג בוחר את הפסוק החזק ביותר במעמד.")]),
+    S("הסבר (Explain)",[A("explain","פוסחים על שתי הסעיפים",8,"פירוש הדימוי (צולע בין שני ענפים / שתי דעות). דיון: למה אליהו פונה קודם אל העם ולא אל הנביאים? מה פירוש שתיקת העם בפסוק כא?")]),
+    S("הרחבה (Elaborate)",[A("game","משפט תפקידים",12,"שלוש קבוצות: אליהו, נביאי הבעל, העם. כל קבוצה מכינה מונולוג קצר של דקה: מה עבר עליי באותו יום? מציגים ושואלים שאלות.")]),
+    S("הערכה (Evaluate)",[A("exit","כרטיס יציאה",8,"האם הנס בכרמל שינה את העם לאורך זמן? הביאו רמז אחד מהמשך הפרק או מפרק יט.")])
+   ],
+   diff:{support:"דף פסוקים מנוקד עם מילון מילים קשות בשוליים; שאלות מכוונות לכל קטע.",core:"כמתואר במערך.",enrich:"השוואה לנאום משה ׳ובחרת בחיים׳ (דברים ל): שתי דרכים להעמיד את העם בפני בחירה."},
+   questions:[{level:"זכירה",q:"מה התנאי שקבע אליהו לניסיון?"},{level:"ניתוח",q:"מה תפקיד הלעג של אליהו לנביאי הבעל (פסוק כז)?"},{level:"הערכה",q:"האם נס הוא דרך טובה לחנך עם? נמקו."}],
+   exitTicket:"האם הנס בכרמל שינה את העם לאורך זמן? הביאו רמז אחד מהטקסט.",notes:"חיבור לפרק יט (בריחת אליהו) בשיעור הבא — ׳לא ברוח ה׳׳."},
+
+  {id:uid(),title:"מי הרוויח מהמהפכה התעשייתית?",subject:"היסטוריה",grade:"ט׳",minutes:90,model:"debate",updated:now-2000,
+   goals:["התלמידים יתארו שלושה שינויים מרכזיים שהביאה המהפכה התעשייתית","התלמידים ינתחו מקור ראשוני מנקודת מבט של קבוצה חברתית","התלמידים יבנו טיעון מבוסס ראיות"],
+   bloom:["הבנה","ניתוח","הערכה"],materials:"4 חבילות מקורות (פועל, בעל מפעל, ילד עובד, ממציא), לוח",
+   stages:[
+    S("הצגת הדילמה",[A("discuss","הטלפון שבכיס",8,"׳מי ייצר את הטלפון שלכם, ובאילו תנאים?׳ — מעבר מהשאלה העכשווית לשאלת השיעור: האם המהפכה התעשייתית הייתה טובה לכולם?")]),
+    S("בניית טיעונים",[A("group","ג׳יגסו מקורות",30,"4 קבוצות מומחים, כל אחת עם חבילת מקורות של קבוצה חברתית אחת. משימה: 3 ראיות ל׳הרווחנו׳ ו-3 ל׳הפסדנו׳. אחר כך קבוצות מעורבות — כל מומחה מציג.")]),
+    S("עימות מובנה",[A("discuss","דג בקערה",30,"4 נציגים (אחד מכל קבוצה חברתית) דנים במרכז, השאר רושמים טיעונים חזקים. כיסא ריק פתוח להצטרפות.")]),
+    S("הכרעה אישית",[A("poll","לוח עמדות",10,"כל תלמיד מדביק פתק על ציר ׳הרווחנו – הפסדנו׳ עם נימוק אחד."),A("write","פסקת טיעון",12,"כתיבת פסקה: טענה, שתי ראיות מהמקורות, הסתייגות.")])
+   ],
+   diff:{support:"מקורות מקוצרים עם שאלות הכוונה ותבנית פסקת טיעון.",core:"כמתואר במערך.",enrich:"השוואה לדיון עכשווי על אוטומציה ובינה מלאכותית: מה דומה ומה שונה?"},
+   questions:[{level:"הבנה",q:"מה השתנה בחיי משפחה כשהעבודה עברה מהבית למפעל?"},{level:"ניתוח",q:"מדוע אותו אירוע נראה שונה כל כך מנקודות מבט שונות?"},{level:"הערכה",q:"האם ׳קידמה׳ היא מושג טוב לתיאור המהפכה? נמקו."}],
+   exitTicket:"משפט אחד: מי הרוויח הכי הרבה ומי שילם את המחיר?",notes:"שיעור כפול. להשאיר 5 דקות להחזרת הכיתה לסידור."},
+
+  {id:uid(),title:"שכיחות: מה הנתונים מספרים עלינו?",subject:"מתמטיקה",grade:"ז׳",minutes:45,model:"inquiry",updated:now-3000,
+   goals:["התלמידים יגדירו משתנה ושכיחות","התלמידים ימיינו נתונים גולמיים לטבלת שכיחויות","התלמידים יסיקו מסקנה מנתונים שאספו"],
+   bloom:["הבנה","יישום","ניתוח"],materials:"פתקים, לוח, מחשבון",
+   stages:[
+    S("שאלת חקר",[A("discuss","מה הכיתה שלנו?",6,"׳אם היינו צריכים לתאר את הכיתה במספרים — מה היינו מודדים?׳ בוחרים יחד שאלה אחת לבדיקה (למשל: כמה אחים יש לכל אחד).")]),
+    S("איסוף מידע",[A("poll","סקר כיתתי",8,"כל תלמיד כותב תשובה על פתק ומדביק על הלוח. מקבלים ׳ערימת נתונים׳ לא מסודרת.")]),
+    S("ניתוח ומסקנות",[A("group","ממיינים את הבלגן",14,"בקבוצות: מארגנים את הנתונים לטבלה. המורה מכניס את המושגים משתנה, ערך, שכיחות. בודקים: האם סכום השכיחויות שווה למספר התלמידים?"),A("quiz","חידון זוגות מהיר",6,"4 טבלאות שכיחות קצרות — מה הערך השכיח? כמה נבדקו?")]),
+    S("הצגה ורפלקציה",[A("discuss","מה גילינו?",6,"כל קבוצה מציגה מסקנה אחת במשפט. האם המסקנה נכונה לכל כיתה ז׳ בארץ? למה כן ולמה לא?"),A("exit","כרטיס יציאה",5,"טבלת נתונים חדשה: מצאו את השכיחות של ערך אחד ואת הערך השכיח.")])
+   ],
+   diff:{support:"טבלה ריקה מוכנה עם עמודות מסומנות.",core:"כמתואר במערך.",enrich:"חישוב שכיחות יחסית ובאחוזים; לשאול שאלה שנייה ולהשוות."},
+   questions:[{level:"זכירה",q:"מהי שכיחות?"},{level:"יישום",q:"בנו טבלת שכיחויות לנתונים: 2,3,3,1,2,3,4"},{level:"ניתוח",q:"מתי הערך השכיח לא מייצג טוב את הנתונים?"}],
+   exitTicket:"בטבלה המצורפת: מהו הערך השכיח, וכמה תלמידים נבדקו?",notes:"לא לשאול שאלות רגישות (משקל, הכנסה). אחים / חיות / שעות שינה עובדים טוב."},
+
+  {id:uid(),title:"התא: עיר קטנה שעובדת בלי הפסקה",subject:"ביולוגיה",grade:"ח׳",minutes:45,model:"e5",updated:now-4000,
+   goals:["התלמידים יזהו את מרכיבי התא העיקריים ואת תפקידם","התלמידים ישוו בין תא צמחי לתא בעל חיים","התלמידים יבנו אנלוגיה מנומקת בין התא למערכת מוכרת"],
+   bloom:["זכירה","הבנה","יצירה"],materials:"מיקרוסקופ או תמונות מיקרוסקופ, דף עבודה, בריסטולים",
+   stages:[
+    S("עניין (Engage)",[A("explain","תעלומה בפתיחה",5,"מציגים תמונת מיקרוסקופ מוגדלת בלי כותרת: ׳מה זה? עיר מהאוויר? מפה?׳ — מגלים שזה תא.")]),
+    S("חקירה (Explore)",[A("group","תחנות תצפית",12,"3 תחנות: תא בצל, תא לחי (תמונה), סרטון קצר. בכל תחנה משרטטים מה רואים.")]),
+    S("הסבר (Explain)",[A("explain","מי עושה מה",8,"הסבר קצר: קרום, ציטופלזמה, גרעין, דופן, כלורופלסט, מיטוכונדריה. ממלאים טבלה.")]),
+    S("הרחבה (Elaborate)",[A("group","התא כעיר",14,"בקבוצות: כל קבוצה בונה אנלוגיה — התא כעיר / בית ספר / מפעל. כל מרכיב מקבל תפקיד בעיר ונימוק. גלריית הליכה קצרה.")]),
+    S("הערכה (Evaluate)",[A("exit","3-2-1",6,"3 מרכיבים ותפקידם, 2 הבדלים בין תא צמחי לתא בעל חיים, שאלה אחת שנשארה.")])
+   ],
+   diff:{support:"בנק מילים עם תמונות; אנלוגיה מוכנה חלקית להשלמה.",core:"כמתואר במערך.",enrich:"איפה האנלוגיה ׳נשברת׳? מה בתא אין לו מקבילה בעיר?"},
+   questions:[{level:"זכירה",q:"מה תפקיד הגרעין?"},{level:"הבנה",q:"מדוע יש כלורופלסטים בתאי עלה ולא בתאי שורש?"},{level:"יצירה",q:"המציאו אנלוגיה חדשה לתא ונמקו שלושה מרכיבים."}],
+   exitTicket:"3 מרכיבים ותפקידם, 2 הבדלים בין תא צמחי לתא בעל חיים, שאלה אחת.",notes:""},
+
+  {id:uid(),title:"נקודת מבט: מי מספר את הסיפור?",subject:"ספרות",grade:"ח׳",minutes:45,model:"classic",updated:now-5000,
+   goals:["התלמידים יבחינו בין מספר בגוף ראשון למספר כל-יודע","התלמידים ינתחו כיצד נקודת המבט משפיעה על יחס הקורא לדמות","התלמידים ישכתבו קטע מנקודת מבט אחרת"],
+   bloom:["הבנה","ניתוח","יצירה"],materials:"קטע קצר מסיפור הנלמד בכיתה, דף עבודה",
+   stages:[
+    S("פתיחה",[A("tps","אותו רגע, שני סיפורים",7,"׳ריב בהפסקה — איך יספר אותו מי שהתחיל, ואיך מי שעמד מהצד?׳ חושבים, מספרים לבן הזוג, שני זוגות משתפים.")]),
+    S("הקניה",[A("explain","סוגי מספרים",8,"מספר בגוף ראשון, מספר כל-יודע, מספר מוגבל. לכל אחד דוגמה קצרה ושאלה: מה המספר יודע ומה לא?"),A("read","קריאה עם עיפרון",7,"קוראים קטע מהסיפור הנלמד ומסמנים: מי מספר? איפה אנחנו ׳בתוך הראש׳ של דמות?")]),
+    S("תרגול",[A("write","שכתוב מנקודת מבט אחרת",14,"משכתבים פסקה מהסיפור מנקודת המבט של דמות משנית. 2-3 תלמידים קוראים בקול.")]),
+    S("סיכום",[A("discuss","מה השתנה?",5,"מה השתנה ביחס שלנו לדמות הראשית כשהסיפור סופר מפי אחר?"),A("exit","משפט אחד, מילה אחת",4,"משפט: למה סופר בוחר נקודת מבט? מילה: המילה שמסכמת את השיעור.")])
+   ],
+   diff:{support:"פתיחי משפטים לשכתוב (׳ראיתי אותו נכנס ו...׳).",core:"כמתואר במערך.",enrich:"לשכתב גם בגוף שני ולהסביר מה האפקט."},
+   questions:[{level:"הבנה",q:"מה יודע מספר כל-יודע שמספר בגוף ראשון לא יכול לדעת?"},{level:"ניתוח",q:"איך נקודת המבט בסיפור מעצבת את האהדה שלנו לדמות?"},{level:"יצירה",q:"כתבו את סוף הסיפור מנקודת מבטו של חפץ בחדר."}],
+   exitTicket:"משפט: למה סופר בוחר נקודת מבט מסוימת? מילה אחת שמסכמת את השיעור.",notes:"מתאים לכל סיפור קצר מתוכנית הלימודים — להחליף את הקטע."}
+  ].concat(seed2());
+}
+
+/* מערכים נוספים (גרסה 2) — מותאמים לנושאי תוכנית הלימודים */
+function seed2(){
+  const now = Date.now();
+  return [
+  {id:uid(),seedKey:"s2-civics",title:"שלטון החוק: האם גם השלטון צריך לציית?",subject:"אזרחות",grade:"י״א",minutes:45,model:"debate",updated:now-6000,
+   curriculum:"עקרונות המשטר הדמוקרטי — שלטון החוק",
+   goals:["התלמידים יגדירו את עקרון שלטון החוק ואת שני היבטיו: שלטון לפי חוק וכולם שווים בפני החוק","התלמידים ינתחו מקרה בוחן ויזהו בו פגיעה או שמירה על העיקרון","התלמידים יבנו טיעון בעד ונגד בדילמה המבוססת על העיקרון"],
+   bloom:["הבנה","ניתוח","הערכה"],materials:"כרטיסי מקרים (4), דף מושגים, לוח",
+   stages:[
+    S("הצגת הדילמה",[A("discuss","השופט שעבר באדום",6,"׳שופט בכיר עבר ברמזור אדום בדרך לדיון דחוף. האם צריך לקבל דוח כמו כולם?׳ — הצבעה מהירה ונימוק אחד מכל צד.")]),
+    S("בניית טיעונים",[A("explain","מושגי יסוד",8,"שלטון החוק: (1) החוק מעל השלטון — הרשויות פועלות רק לפי חוק; (2) שוויון בפני החוק; (3) חוקים כלליים, פומביים וידועים מראש. דוגמה לכל היבט."),A("group","מקרי בוחן",12,"4 קבוצות, לכל אחת מקרה (שר שמינה מקורב בניגוד לנוהל, חוק שפורסם רק לאחר שנכנס לתוקף ועוד). משימה: איזה היבט נפגע? מי מוסמך לפקח?")]),
+    S("עימות מובנה",[A("discuss","מעגל כפול",10,"שאלות מתחלפות: האם מותר להפר חוק לא צודק? האם ׳צורך ביטחוני׳ מצדיק חריגה מסמכות? כל 2 דקות מתחלפים בני זוג.")]),
+    S("הכרעה אישית",[A("write","פסקת עמדה",6,"טענה + נימוק המבוסס על אחד ההיבטים + הסתייגות."),A("exit","כרטיס יציאה",3,"מקרה קצר חדש: איזה היבט של שלטון החוק נפגע? משפט נימוק.")])
+   ],
+   diff:{support:"טבלת היבטים עם דוגמה מוכנה לכל אחד; מקרים מקוצרים.",core:"כמתואר במערך.",enrich:"השוואה בין ׳שלטון החוק׳ במובן הפורמלי למובן המהותי — האם חוק שנחקק כדין תמיד מקיים את העיקרון?"},
+   questions:[{level:"זכירה",q:"מהם שני ההיבטים של שלטון החוק?"},{level:"ניתוח",q:"מדוע שלטון החוק הכרחי לקיום משטר דמוקרטי?"},{level:"הערכה",q:"האם יש מצבים שבהם מוצדק לחרוג מהחוק? נמקו בעזרת עקרונות הדמוקרטיה."}],
+   exitTicket:"מקרה חדש: איזה היבט של שלטון החוק נפגע? משפט נימוק.",notes:"להתאים את המונחים לנוסח העדכני של תוכנית הלימודים ולמבנה שאלות הבגרות (זיהוי, הצגה, הסבר)."},
+
+  {id:uid(),seedKey:"s2-english",title:"Reading Between the Lines: Making Inferences",subject:"אנגלית",grade:"ח׳",minutes:45,model:"release",updated:now-7000,
+   curriculum:"Domain: Access to Information — reading comprehension (HOTS: inferring)",
+   goals:["Students will define 'inference' and distinguish it from a stated fact","Students will support an inference with evidence from the text","Students will write a short text that hints at a feeling without naming it"],
+   bloom:["הבנה","יישום","ניתוח"],materials:"Short story excerpt (1 page), picture prompt, worksheet",
+   stages:[
+    S("אני מדגים",[A("explain","Picture detective",5,"Show a photo (wet umbrella, muddy shoes by the door). Ask: What happened? How do you know? Introduce: clue + what I know = inference."),A("explain","Think-aloud",5,"Teacher reads 4 lines aloud and models: 'The text says… I know that… so I think…'")]),
+    S("אנחנו יחד",[A("read","Clue hunt",10,"Read the excerpt together. Underline clues about the character's feelings. Class builds a 3-column chart: Clue / What I know / Inference.")]),
+    S("אתם בזוגות",[A("tps","Inference cards",10,"Pairs get 6 short sentences ('She checked her phone for the tenth time.'). Write an inference + the clue word. Share two with the class.")]),
+    S("כל אחד לבד",[A("write","Show, don't tell",10,"Write 3–4 sentences showing a feeling (nervous, proud, bored) without naming it. Partner guesses the feeling."),A("exit","Exit ticket",5,"One new sentence: What can you infer? Which word is the clue?")])
+   ],
+   diff:{support:"Sentence frames: 'I think… because the text says…'; glossary of feeling words with pictures.",core:"As planned.",enrich:"Find an inference in the text that could be read two ways and argue for one."},
+   questions:[{level:"הבנה",q:"What is the difference between a fact and an inference?"},{level:"ניתוח",q:"Which clue in the text tells you the most about the character? Why?"},{level:"יצירה",q:"Write a sentence that hints at a secret without telling it."}],
+   exitTicket:"'He left his lunch untouched and stared out of the window.' What can you infer? Which words are clues?",notes:"מתאים לעבודה על HOTS — להשתמש בשפה של כישורי חשיבה מסדר גבוה כפי שמופיעה בתוכנית."},
+
+  {id:uid(),seedKey:"s2-geo",title:"מים בישראל: מאיפה מגיעה כוס המים שלי?",subject:"גיאוגרפיה",grade:"ט׳",minutes:45,model:"inquiry",updated:now-8000,
+   curriculum:"משאבי טבע וסביבה — משק המים בישראל",
+   goals:["התלמידים יתארו את מקורות המים העיקריים בישראל (טבעיים ומלאכותיים)","התלמידים ינתחו גרף או מפה של צריכת מים והפקתם","התלמידים יציעו פתרון מנומק לבעיית מים מקומית"],
+   bloom:["הבנה","ניתוח","יצירה"],materials:"מפת ישראל, גרף צריכת מים לפי מגזרים, כרטיסי מקורות",
+   stages:[
+    S("שאלת חקר",[A("discuss","כוס מים על השולחן",6,"מניחים כוס מים: ׳מאיפה הגיעו המים האלה?׳ אוספים השערות על הלוח (כנרת? ים? גשם?). מנסחים שאלת חקר.")]),
+    S("איסוף מידע",[A("group","תחנות מקורות מים",15,"4 תחנות: אקוויפרים (חוף והר), הכנרת, התפלה, מים מושבים (קולחין). בכל תחנה: איפה, כמה, יתרון, חיסרון.")]),
+    S("ניתוח ומסקנות",[A("explain","קריאת גרף",8,"ניתוח גרף צריכה לפי מגזרים (חקלאות, בית, תעשייה) ושינוי לאורך זמן. מה המגמה? מה השפיע עליה?"),A("tps","מה היה קורה אם…",5,"׳מה היה קורה למשק המים בלי מתקני התפלה?׳ — חושבים, זוג, משתפים.")]),
+    S("הצגה ורפלקציה",[A("write","פתרון לשכונה",7,"כל תלמיד מציע צעד אחד לחיסכון במים בבית הספר או בשכונה ומנמק."),A("exit","כרטיס יציאה",4,"שני מקורות מים בישראל ויתרון אחד לכל אחד.")])
+   ],
+   diff:{support:"טבלת תחנות מוכנה למילוי; גרף מפושט.",core:"כמתואר במערך.",enrich:"השוואה עם מדינה שכנה או אזור צחיח אחר בעולם: אילו פתרונות דומים ואילו שונים?"},
+   questions:[{level:"זכירה",q:"מהם שני האקוויפרים העיקריים בישראל?"},{level:"ניתוח",q:"מדוע התפלת מים פתרה בעיה אחת אך יצרה אתגרים אחרים?"},{level:"הערכה",q:"האם החקלאות צריכה לקבל עדיפות בהקצאת מים? נמקו."}],
+   exitTicket:"שני מקורות מים בישראל ויתרון אחד לכל אחד.",notes:"לעדכן נתונים מאתר רשות המים לפני השיעור — המספרים משתנים משנה לשנה."},
+
+  {id:uid(),seedKey:"s2-science",title:"שינוי פיזיקלי או כימי? חוקרים במעבדה",subject:"מדעים",grade:"ז׳",minutes:45,model:"e5",updated:now-9000,
+   curriculum:"חומרים — תכונות חומרים ושינויים בחומר",
+   goals:["התלמידים יבחינו בין שינוי פיזיקלי לשינוי כימי","התלמידים יזהו סימנים לשינוי כימי (גז, שינוי צבע, חום, משקע)","התלמידים יסווגו תופעות מחיי היום-יום ויצדיקו את הסיווג"],
+   bloom:["הבנה","יישום","ניתוח"],materials:"קרח, סוכר, חומץ, סודה לשתייה, כוסות שקופות, נר (הדגמת מורה)",
+   stages:[
+    S("עניין (Engage)",[A("explain","הקסם בכוס",5,"מוסיפים סודה לשתייה לחומץ — קצף! ׳האם נוצר כאן חומר חדש? איך נדע?׳")]),
+    S("חקירה (Explore)",[A("group","ארבע כוסות",13,"בקבוצות: קרח נמס, סוכר מתמוסס במים, חומץ+סודה, נייר נקרע. רושמים: מה ראינו? האם אפשר להחזיר לאחור?")]),
+    S("הסבר (Explain)",[A("explain","שני סוגי שינויים",8,"שינוי פיזיקלי — אותו חומר, צורה או מצב צבירה אחרים. שינוי כימי — נוצר חומר חדש. סימנים: גז, צבע, חום/אור, משקע.")]),
+    S("הרחבה (Elaborate)",[A("game","מיון מהיר",10,"כרטיסים: עוגה נאפית, ברזל מחליד, שוקולד נמס, עלה משנה צבע בסתיו… זוגות ממיינים ומנמקים את המקרים השנויים במחלוקת.")]),
+    S("הערכה (Evaluate)",[A("exit","כרטיס יציאה",9,"נר דולק: מה בו שינוי פיזיקלי ומה שינוי כימי? הסבירו בעזרת סימן אחד.")])
+   ],
+   diff:{support:"טבלת סימנים עם איורים; משפטי פתיחה לנימוק.",core:"כמתואר במערך.",enrich:"האם המסת סוכר היא באמת שינוי פיזיקלי? תכננו ניסוי שיוכיח זאת."},
+   questions:[{level:"זכירה",q:"מהם ארבעה סימנים לשינוי כימי?"},{level:"יישום",q:"סווגו: חלב מחמיץ, שבירת כוס, אידוי מים."},{level:"ניתוח",q:"מדוע הנר הוא דוגמה לשני סוגי השינויים יחד?"}],
+   exitTicket:"נר דולק: מה בו שינוי פיזיקלי ומה שינוי כימי?",notes:"בטיחות: הנר בהדגמת מורה בלבד. משקפי מגן אם התלמידים מערבבים."},
+
+  {id:uid(),seedKey:"s2-physics",title:"החוק השני של ניוטון: למה קשה לדחוף עגלה מלאה?",subject:"פיזיקה",grade:"י׳",minutes:45,model:"inquiry",updated:now-10000,
+   curriculum:"מכניקה — דינמיקה: חוקי ניוטון",
+   goals:["התלמידים ינסחו את הקשר בין כוח שקול, מסה ותאוצה (F=ma)","התלמידים ינתחו נתוני ניסוי או סימולציה ויסיקו את הקשר","התלמידים יפתרו בעיה כמותית ויסבירו אותה במילים"],
+   bloom:["הבנה","יישום","ניתוח"],materials:"סימולציית כוחות ותנועה (PhET) או עגלה ומשקולות, דף נתונים",
+   stages:[
+    S("שאלת חקר",[A("discuss","עגלת סופר",5,"׳למה קשה יותר להאיץ עגלה מלאה מאשר ריקה — ומה צריך לשנות כדי שהן יאיצו אותו דבר?׳ מנסחים השערה.")]),
+    S("איסוף מידע",[A("group","ניסוי / סימולציה",15,"זוגות: (1) מסה קבועה, משנים כוח — מודדים תאוצה. (2) כוח קבוע, משנים מסה. רושמים בטבלה.")]),
+    S("ניתוח ומסקנות",[A("explain","מהטבלה לנוסחה",8,"משרטטים גרף a כפונקציה של F. מה הקשר? מה משמעות השיפוע? מגיעים ל-ΣF=ma ולמשמעות הכוח השקול."),A("quiz","חידון זוגות מהיר",8,"4 בעיות קצרות: חישוב תאוצה, כוח ומסה, כולל מקרה של שני כוחות מנוגדים.")]),
+    S("הצגה ורפלקציה",[A("discuss","בחזרה לעגלה",4,"עונים על שאלת הפתיחה בשפה של החוק השני."),A("exit","כרטיס יציאה",5,"על גוף שמסתו 2 ק״ג פועלים 10 ניוטון ימינה ו-4 שמאלה. מה התאוצה? הסבירו.")])
+   ],
+   diff:{support:"דף נוסחאות עם יחידות; בעיות עם שלבי פתרון מודרכים.",core:"כמתואר במערך.",enrich:"מה קורה כשהכוח השקול אפס אך הגוף נע? חיבור לחוק הראשון."},
+   questions:[{level:"זכירה",q:"נסחו את החוק השני של ניוטון."},{level:"יישום",q:"מה תאוצתו של גוף בן 5 ק״ג שעליו פועל כוח שקול של 20 ניוטון?"},{level:"ניתוח",q:"מדוע בגרף a(F) מתקבל קו ישר דרך הראשית?"}],
+   exitTicket:"גוף 2 ק״ג, 10N ימינה ו-4N שמאלה — מה התאוצה?",notes:"לבדוק מראש שהסימולציה נפתחת במחשבי הכיתה."},
+
+  {id:uid(),seedKey:"s2-cs",title:"אלגוריתם בחיים: מהמתכון ללולאה",subject:"מדעי המחשב",grade:"י׳",minutes:45,model:"release",updated:now-11000,
+   curriculum:"יסודות מדעי המחשב — אלגוריתמים, תנאים ולולאות",
+   goals:["התלמידים יגדירו אלגוריתם ויזהו בו רצף, תנאי וחזרה","התלמידים יתרגמו הוראות מילוליות לאלגוריתם מדויק","התלמידים יכתבו לולאה פשוטה ויעקבו אחרי ביצועה בטבלת מעקב"],
+   bloom:["הבנה","יישום","יצירה"],materials:"מחשבים או דף עבודה, כרטיסי הוראות",
+   stages:[
+    S("אני מדגים",[A("game","הרובוט שמבין מילולית",6,"תלמיד מתנדב הוא ׳רובוט׳ שמבצע הוראות מילה במילה (׳מרח חמאה על לחם׳). הכיתה מגלה כמה דיוק נדרש."),A("explain","רצף, תנאי, חזרה",6,"שלושת אבני הבניין. דוגמה: ׳כל עוד יש כלים בכיור — שטוף כלי׳. מעבר לקוד: while / for.")]),
+    S("אנחנו יחד",[A("explain","טבלת מעקב",8,"עוקבים יחד אחרי לולאה שמחשבת סכום 1 עד 5: ערכי המשתנים בכל סיבוב.")]),
+    S("אתם בזוגות",[A("tps","מתכון לאלגוריתם",12,"כל זוג כותב אלגוריתם בפסאודו-קוד למשימה יום-יומית שכוללת תנאי ולולאה, ומחליף עם זוג אחר לבדיקה: האם ׳הרובוט׳ יצליח?")]),
+    S("כל אחד לבד",[A("write","לולאה ראשונה",8,"כתיבת קטע קוד שמדפיס את המספרים הזוגיים עד 20 + טבלת מעקב קצרה."),A("exit","כרטיס יציאה",5,"כמה פעמים תתבצע הלולאה, ומה יודפס בסוף?")])
+   ],
+   diff:{support:"תבנית קוד חלקית להשלמה; טבלת מעקב עם עמודות מוכנות.",core:"כמתואר במערך.",enrich:"לכתוב לולאה מקוננת שמדפיסה משולש של כוכביות."},
+   questions:[{level:"הבנה",q:"מה ההבדל בין תנאי ללולאה?"},{level:"יישום",q:"כתבו אלגוריתם שמוצא את המספר הגדול ברשימה."},{level:"יצירה",q:"תכננו אלגוריתם למשחק ׳נחש את המספר׳."}],
+   exitTicket:"כמה פעמים תתבצע הלולאה, ומה יודפס בסוף?",notes:"להתאים לשפת התכנות הנלמדת בבית הספר (C#, Java או Python)."}
+  ];
+}
+
+const KEY_SEEDV = "maarach_v1_seedv", SEED_V = 2;
+function load(){
+  let raw = lsGet(KEY);
+  if(raw){ try{ lessons = JSON.parse(raw)||[]; }catch(e){ lessons = []; } }
+  if(!raw){ lessons = seed(); lsSet(KEY_SEEDV, String(SEED_V)); save(); return; }
+  /* למשתמשים קיימים: הוספה חד-פעמית של מערכים חדשים בלי לגעת במערכים שלהם */
+  if((+lsGet(KEY_SEEDV)||1) < SEED_V){
+    const have = new Set(lessons.map(l=>l.seedKey).filter(Boolean));
+    seed2().forEach(l=>{ if(!have.has(l.seedKey)) lessons.push(l); });
+    lsSet(KEY_SEEDV, String(SEED_V)); save();
+  }
+}
+function save(){ lsSet(KEY, JSON.stringify(lessons)); }
+
+/* ============ HELPERS ============ */
+function toast(msg){
+  const t = document.createElement("div"); t.className="toast"; t.textContent=msg;
+  document.body.appendChild(t); setTimeout(()=>t.remove(),2400);
+}
+function modal(html){
+  const r = document.getElementById("modalRoot");
+  r.innerHTML = '<div class="modal" onclick="if(event.target===this)closeModal()"><div class="box">'+html+'</div></div>';
+}
+function closeModal(){ document.getElementById("modalRoot").innerHTML=""; }
+function confirmBox(msg, onYes){
+  modal('<h3>'+esc(msg)+'</h3><div class="ft"><button class="btn pri" id="cfY">כן</button><button class="btn" onclick="closeModal()">ביטול</button></div>');
+  document.getElementById("cfY").onclick = ()=>{ closeModal(); onYes(); };
+}
+function lessonMins(l){ return (l.stages||[]).reduce((s,st)=>s+st.activities.reduce((a,x)=>a+(+x.minutes||0),0),0); }
+function stageMins(st){ return st.activities.reduce((a,x)=>a+(+x.minutes||0),0); }
+const STAGE_COLORS = ["#0f766e","#d97706","#7c3aed","#0284c7","#be185d","#16a34a","#64748b"];
+function subjColor(s){ return SUBJECTS[s]||SUBJECTS["אחר"]; }
+function opts(arr, sel, allLabel){
+  return (allLabel?'<option value="">'+allLabel+'</option>':'')+arr.map(v=>'<option'+(v===sel?' selected':'')+'>'+esc(v)+'</option>').join("");
+}
+async function copy(text){
+  try{ await navigator.clipboard.writeText(text); toast("הועתק"); }
+  catch(e){ modal('<h3>העתקה</h3><p>סמנו והעתיקו ידנית:</p><textarea class="f" style="min-height:280px">'+esc(text)+'</textarea><div class="ft"><button class="btn" onclick="closeModal()">סגירה</button></div>'); }
+}
+
+/* ============ ROUTING ============ */
+function route(){
+  let v = (location.hash||"#library").slice(1);
+  if(!["library","edit","ai","toolbox","web"].includes(v)) v="library";
+  document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on", x.id==="v-"+v));
+  document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("on", a.dataset.v===v));
+  if(v==="library") renderLibrary();
+  if(v==="edit") renderEditor();
+  if(v==="toolbox") renderToolbox();
+  if(v==="web") renderWeb();
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", route);
+function go(v){ if(location.hash==="#"+v) route(); else location.hash=v; }
+
+/* ============ LIBRARY ============ */
+function renderLibrary(){
+  const q = document.getElementById("q").value.trim();
+  const g = document.getElementById("fGrade").value, m = document.getElementById("fModel").value;
+  const subjCount = {};
+  lessons.forEach(l=>subjCount[l.subject]=(subjCount[l.subject]||0)+1);
+  document.getElementById("subjChips").innerHTML =
+    '<button class="chip'+(filterSubj===""?" on":"")+'" onclick="filterSubj=\'\';renderLibrary()">הכל · '+lessons.length+'</button>'+
+    Object.keys(subjCount).map(s=>'<button class="chip'+(filterSubj===s?" on":"")+'" onclick="filterSubj=this.dataset.s;renderLibrary()" data-s="'+esc(s)+'">'+esc(s)+' · '+subjCount[s]+'</button>').join("");
+  const list = lessons.filter(l=>{
+    if(filterSubj && l.subject!==filterSubj) return false;
+    if(g && l.grade!==g) return false;
+    if(m && l.model!==m) return false;
+    if(q){ const hay=(l.title+" "+(l.goals||[]).join(" ")+" "+l.subject+" "+(l.notes||"")+" "+(l.curriculum||"")).toLowerCase(); if(!hay.includes(q.toLowerCase())) return false; }
+    return true;
+  }).sort((a,b)=>(b.updated||0)-(a.updated||0));
+  const totalActs = lessons.reduce((s,l)=>s+(l.stages||[]).reduce((a,st)=>a+st.activities.length,0),0);
+  document.getElementById("stats").innerHTML =
+    '<div class="stat"><b>'+lessons.length+'</b><span>מערכים</span></div>'+
+    '<div class="stat"><b>'+Object.keys(subjCount).length+'</b><span>מקצועות</span></div>'+
+    '<div class="stat"><b>'+totalActs+'</b><span>פעילויות</span></div>';
+  const grid = document.getElementById("libGrid");
+  if(!list.length){ grid.innerHTML='<div class="empty" style="grid-column:1/-1">לא נמצאו מערכים. <a href="#ai">נסו את המחולל החכם</a></div>'; return; }
+  grid.innerHTML = list.map(l=>{
+    const c = subjColor(l.subject), md = MODELS[l.model]?MODELS[l.model].n:"";
+    return '<article class="card"><div class="band" style="background:'+c+'"></div><div class="body">'+
+      '<div class="meta"><span class="tag s" style="background:'+c+'">'+esc(l.subject)+'</span><span class="tag">כיתה '+esc(l.grade)+'</span><span class="tag">'+l.minutes+' דק׳</span>'+(md?'<span class="tag">'+esc(md)+'</span>':'')+'</div>'+
+      '<h3>'+esc(l.title||"ללא שם")+'</h3>'+(l.curriculum?'<div class="curline">📘 '+esc(l.curriculum)+'</div>':'')+'<p>'+esc((l.goals||[]).join(" · "))+'</p></div>'+
+      '<div class="acts"><button class="btn sm pri" onclick="openLesson(\''+l.id+'\')">פתיחה</button><button class="btn sm" onclick="openLesson(\''+l.id+'\',true)">▶ הצגה</button><span class="sp"></span>'+
+      '<button class="btn sm ghost" title="שכפול" onclick="dupLesson(\''+l.id+'\')">שכפול</button><button class="btn sm ghost warn" title="מחיקה" onclick="delLesson(\''+l.id+'\')">מחיקה</button></div></article>';
+  }).join("");
+}
+function openLesson(id, present){
+  cur = lessons.find(l=>l.id===id)||null;
+  go("edit");
+  if(present && cur) setTimeout(startPresent, 50);
+}
+function dupLesson(id){
+  const o = lessons.find(l=>l.id===id); if(!o) return;
+  const c = JSON.parse(JSON.stringify(o)); c.id=uid(); c.title=o.title+" (עותק)"; c.updated=Date.now();
+  c.stages.forEach(st=>{ st.id=uid(); st.activities.forEach(a=>a.id=uid()); });
+  lessons.unshift(c); save(); renderLibrary(); toast("שוכפל");
+}
+function delLesson(id){
+  const o = lessons.find(l=>l.id===id); if(!o) return;
+  confirmBox("למחוק את ׳"+o.title+"׳?", ()=>{ lessons = lessons.filter(l=>l.id!==id); if(cur&&cur.id===id) cur=null; save(); renderLibrary(); toast("נמחק"); });
+}
+function blankLesson(model){
+  model = model||"classic";
+  const l = {id:uid(),title:"",subject:"לשון",grade:"ט׳",minutes:45,model:model,updated:Date.now(),goals:["","",""],bloom:[],materials:"",stages:[],diff:{support:"",core:"",enrich:""},questions:[],exitTicket:"",notes:""};
+  applyModel(l, model);
+  return l;
+}
+function applyModel(l, model){
+  const M = MODELS[model]||MODELS.classic;
+  l.model = model;
+  l.stages = M.st.map(([n,p])=>S(n,[A("explain","",Math.max(3,Math.round(l.minutes*p)),"")]));
+}
+function newLesson(){
+  cur = blankLesson(); lessons.unshift(cur); save(); go("edit");
+  setTimeout(()=>{ const t=document.getElementById("eTitle"); if(t) t.focus(); },60);
+}
+
+/* ============ EDITOR ============ */
+let saveT = null;
+function touch(){
+  if(!cur) return;
+  cur.updated = Date.now();
+  document.getElementById("savedLbl").textContent="שומר…";
+  clearTimeout(saveT);
+  saveT = setTimeout(()=>{ save(); document.getElementById("savedLbl").textContent="נשמר ✓"; },400);
+}
+function upd(k,v){ cur[k]=v; touch(); if(k==="minutes") renderTimebar(); }
+function updDiff(k,v){ cur.diff=cur.diff||{}; cur.diff[k]=v; touch(); }
+
+function renderEditor(){
+  const has = !!cur && lessons.includes(cur);
+  if(!has) cur=null;
+  document.getElementById("editEmpty").classList.toggle("hidden", has);
+  document.getElementById("editWrap").classList.toggle("hidden", !has);
+  if(!has) return;
+  cur.diff = cur.diff||{support:"",core:"",enrich:""};
+  cur.questions = cur.questions||[];
+  cur.goals = cur.goals||[];
+  document.getElementById("eTitle").value = cur.title||"";
+  document.getElementById("dS").value = cur.diff.support||"";
+  document.getElementById("dC").value = cur.diff.core||"";
+  document.getElementById("dE").value = cur.diff.enrich||"";
+  document.getElementById("eExit").value = cur.exitTicket||"";
+  document.getElementById("eNotes").value = cur.notes||"";
+  cur.sources = cur.sources||[];
+  renderSide(); renderStages(); renderQs(); renderSrcs();
+}
+function renderSrcs(){
+  const el = document.getElementById("srcs");
+  if(!cur.sources.length){ el.innerHTML='<div class="saved">אין עדיין קישורים. הוסיפו מקור, דף עבודה, סרטון או מערך מקביל מהרשת.</div>'; return; }
+  el.innerHTML = cur.sources.map((s,i)=>'<div class="srcrow"><input class="f" placeholder="שם המקור" value="'+esc(s.title)+'" oninput="cur.sources['+i+'].title=this.value;touch()">'+
+    '<input class="f" dir="ltr" placeholder="https://…" value="'+esc(s.url)+'" oninput="cur.sources['+i+'].url=this.value;touch()">'+
+    (safeUrl(s.url)?'<a class="btn sm" target="_blank" rel="noopener" href="'+esc(safeUrl(s.url))+'">פתיחה</a>':'<span></span>')+
+    '<button class="btn sm ghost warn" title="הסרה" onclick="cur.sources.splice('+i+',1);touch();renderSrcs()">✕</button></div>').join("");
+}
+function addSrc(t,u){ cur.sources=cur.sources||[]; cur.sources.push({title:t||"",url:u||""}); touch(); renderSrcs(); }
+function safeUrl(u){ u=String(u||"").trim(); return /^https?:\/\//i.test(u)?u:""; }
+function renderSide(){
+  const l = cur;
+  document.getElementById("side").innerHTML =
+    '<div class="row2"><div class="fld"><label>מקצוע</label><select class="f" onchange="upd(\'subject\',this.value)">'+opts(Object.keys(SUBJECTS),l.subject)+'</select></div>'+
+    '<div class="fld"><label>שכבה</label><select class="f" onchange="upd(\'grade\',this.value)">'+opts(GRADES,l.grade)+'</select></div></div>'+
+    '<div class="row2"><div class="fld"><label>משך השיעור (דק׳)</label><input class="f" type="number" min="10" max="180" value="'+l.minutes+'" oninput="upd(\'minutes\',+this.value||45)"></div>'+
+    '<div class="fld"><label>מודל</label><select class="f" onchange="changeModel(this.value)">'+Object.keys(MODELS).map(k=>'<option value="'+k+'"'+(k===l.model?" selected":"")+'>'+esc(MODELS[k].n)+'</option>').join("")+'</select></div></div>'+
+    '<div class="fld"><label>מטרות השיעור — ׳התלמידים י...׳</label>'+l.goals.map((g,i)=>'<textarea class="f" rows="2" style="margin-bottom:6px;min-height:0" placeholder="מטרה '+(i+1)+'" oninput="cur.goals['+i+']=this.value;touch()">'+esc(g)+'</textarea>').join("")+
+    '<button class="btn sm" onclick="cur.goals.push(\'\');renderSide()">＋ מטרה</button></div>'+
+    '<div class="fld"><label>רמות חשיבה (בלום)</label><div class="bloom">'+BLOOM.map(b=>'<button class="chip'+((l.bloom||[]).includes(b)?" on":"")+'" onclick="toggleBloom(\''+b+'\')">'+b+'</button>').join("")+'</div></div>'+
+    '<div class="fld"><label>חומרים ועזרים</label><textarea class="f" oninput="upd(\'materials\',this.value)">'+esc(l.materials||"")+'</textarea></div>'+
+    '<div class="fld"><label>נושא בתוכנית הלימודים</label><input class="f" list="curList" placeholder="למשל: עקרונות הדמוקרטיה — שלטון החוק" value="'+esc(l.curriculum||"")+'" oninput="upd(\'curriculum\',this.value)"><datalist id="curList">'+curTopicsFor(l.subject,l.grade).map(t=>'<option value="'+esc(t)+'">').join("")+'</datalist>'+
+    '<a class="saved" style="display:inline-block;margin-top:4px" href="#web" onclick="webSubj=cur.subject">מקורות ומערכים ברשת למקצוע הזה ←</a></div>';
+}
+function toggleBloom(b){ cur.bloom=cur.bloom||[]; const i=cur.bloom.indexOf(b); if(i>=0) cur.bloom.splice(i,1); else cur.bloom.push(b); touch(); renderSide(); }
+function changeModel(m){
+  confirmBox("להחליף את מבנה השלבים למודל ׳"+MODELS[m].n+"׳? הפעילויות הקיימות יוחלפו בשלד חדש.", ()=>{ applyModel(cur,m); touch(); renderEditor(); });
+  renderSide();
+}
+function renderTimebar(){
+  const total = lessonMins(cur), lim = cur.minutes||45;
+  const scale = Math.max(total, lim);
+  let segs = cur.stages.map((st,i)=>{ const m=stageMins(st); return m?'<div title="'+esc(st.name)+' · '+m+' דק׳" style="width:'+(m/scale*100)+'%;background:'+STAGE_COLORS[i%STAGE_COLORS.length]+'"></div>':""; }).join("");
+  const diff = lim-total;
+  document.getElementById("timebar").innerHTML =
+    '<div class="lbl"><span>תכנון זמנים</span><b class="'+(diff<0?"over":"")+'">'+total+' / '+lim+' דקות '+(diff<0?"· חריגה של "+(-diff):diff>0?"· נותרו "+diff:"· מדויק ✓")+'</b></div>'+
+    '<div class="bar">'+segs+'</div>'+
+    '<div class="legend">'+cur.stages.map((st,i)=>'<span><i style="background:'+STAGE_COLORS[i%STAGE_COLORS.length]+'"></i>'+esc(st.name)+' '+stageMins(st)+'׳</span>').join("")+'</div>';
+}
+function renderStages(){
+  renderTimebar();
+  document.getElementById("stages").innerHTML = cur.stages.map((st,si)=>{
+    const col = STAGE_COLORS[si%STAGE_COLORS.length];
+    return '<div class="stage"><div class="stage-h"><span class="num" style="background:'+col+'">'+(si+1)+'</span>'+
+      '<input value="'+esc(st.name)+'" oninput="cur.stages['+si+'].name=this.value;touch();renderTimebar()">'+
+      '<span class="mins">'+stageMins(st)+' דק׳</span>'+
+      '<div class="ctl" style="flex-direction:row"><button title="למעלה" onclick="mvStage('+si+',-1)">▲</button><button title="למטה" onclick="mvStage('+si+',1)">▼</button><button title="מחיקת שלב" onclick="rmStage('+si+')">✕</button></div></div>'+
+      '<div class="acts-list">'+st.activities.map((a,ai)=>actHtml(si,ai,a)).join("")+'</div>'+
+      '<div class="stage-f"><button class="btn sm" onclick="addAct('+si+')">＋ פעילות</button><button class="btn sm" onclick="pickStrat('+si+')">＋ מבנק האסטרטגיות</button></div></div>';
+  }).join("");
+}
+function actHtml(si,ai,a){
+  const T = TYPES[a.type]||TYPES.explain;
+  return '<div class="act"><div class="ic">'+T.i+'</div><div>'+
+    '<div class="top-r"><input class="f t" value="'+esc(a.title)+'" placeholder="שם הפעילות" oninput="setAct('+si+','+ai+',\'title\',this.value)">'+
+    '<select class="f" onchange="setAct('+si+','+ai+',\'type\',this.value);renderStages()">'+Object.keys(TYPES).map(k=>'<option value="'+k+'"'+(k===a.type?" selected":"")+'>'+TYPES[k].n+'</option>').join("")+'</select>'+
+    '<input class="f m" type="number" min="1" max="120" value="'+(+a.minutes||0)+'" title="דקות" oninput="setAct('+si+','+ai+',\'minutes\',+this.value||0);renderTimebar()"></div>'+
+    '<textarea class="f" placeholder="מה המורה עושה? מה התלמידים עושים? מה התוצר?" oninput="setAct('+si+','+ai+',\'instructions\',this.value)">'+esc(a.instructions)+'</textarea></div>'+
+    '<div class="ctl"><button title="למעלה" onclick="mvAct('+si+','+ai+',-1)">▲</button><button title="למטה" onclick="mvAct('+si+','+ai+',1)">▼</button><button title="מחיקה" onclick="rmAct('+si+','+ai+')">✕</button></div></div>';
+}
+function setAct(si,ai,k,v){ cur.stages[si].activities[ai][k]=v; touch(); }
+function addAct(si, a){ cur.stages[si].activities.push(a||A("explain","",5,"")); touch(); renderStages(); }
+function rmAct(si,ai){ cur.stages[si].activities.splice(ai,1); touch(); renderStages(); }
+function mvAct(si,ai,d){
+  const arr = cur.stages[si].activities, j = ai+d;
+  if(j<0||j>=arr.length){ // move across stages
+    const sj = si+d; if(sj<0||sj>=cur.stages.length) return;
+    const [x] = arr.splice(ai,1); if(d<0) cur.stages[sj].activities.push(x); else cur.stages[sj].activities.unshift(x);
+  } else { [arr[ai],arr[j]]=[arr[j],arr[ai]]; }
+  touch(); renderStages();
+}
+function addStage(){ cur.stages.push(S("שלב חדש",[A("explain","",5,"")])); touch(); renderStages(); }
+function rmStage(si){ confirmBox("למחוק את השלב ׳"+cur.stages[si].name+"׳ על כל הפעילויות שבו?", ()=>{ cur.stages.splice(si,1); touch(); renderStages(); }); }
+function mvStage(si,d){ const j=si+d; if(j<0||j>=cur.stages.length) return; [cur.stages[si],cur.stages[j]]=[cur.stages[j],cur.stages[si]]; touch(); renderStages(); }
+
+function renderQs(){
+  document.getElementById("qs").innerHTML = cur.questions.length? cur.questions.map((q,i)=>
+    '<div class="qrow"><select class="f" onchange="cur.questions['+i+'].level=this.value;touch()">'+opts(BLOOM,q.level)+'</select>'+
+    '<input class="f" value="'+esc(q.q)+'" oninput="cur.questions['+i+'].q=this.value;touch()">'+
+    '<button class="btn sm ghost" onclick="cur.questions.splice('+i+',1);touch();renderQs()">✕</button></div>').join("")
+    : '<div class="saved">עוד אין שאלות. הוסיפו ידנית או בקשו מהעוזר החכם.</div>';
+}
+function addQ(){ cur.questions.push({level:"הבנה",q:""}); touch(); renderQs(); }
+
+/* strategy picker */
+function pickStrat(si){
+  modal('<h3>הוספה מבנק האסטרטגיות</h3><div class="tb">'+STRATS.map((s,i)=>
+    '<div class="strat"><div class="hd"><div class="ic">'+TYPES[s.t].i+'</div><div><h4>'+esc(s.n)+'</h4><span class="saved">'+s.m+' דק׳ · '+esc(s.c)+'</span></div></div><p>'+esc(s.d)+'</p>'+
+    '<div class="ft"><span class="sp"></span><button class="btn sm pri" onclick="insertStrat('+i+','+si+')">הוספה</button></div></div>').join("")+
+    '</div><div class="ft"><button class="btn" onclick="closeModal()">סגירה</button></div>');
+}
+function insertStrat(i, si){
+  const s = STRATS[i];
+  if(!cur){ toast("פתחו מערך קודם"); return; }
+  if(si===undefined||si===null||!cur.stages[si]) si = Math.max(0,cur.stages.length-1);
+  if(!cur.stages.length) cur.stages.push(S("שלב 1",[]));
+  cur.stages[si].activities.push(A(s.t,s.n,s.m,s.d));
+  touch(); closeModal();
+  if((location.hash||"").slice(1)==="edit") renderStages(); else toast("נוסף ל׳"+(cur.title||"המערך")+"׳");
+}
+
+/* ============ TOOLBOX ============ */
+function renderToolbox(){
+  const cats = [...new Set(STRATS.map(s=>s.c))];
+  document.getElementById("tbChips").innerHTML = '<button class="chip'+(tbFilter===""?" on":"")+'" onclick="tbFilter=\'\';renderToolbox()">הכל</button>'+
+    cats.map(c=>'<button class="chip'+(tbFilter===c?" on":"")+'" data-c="'+esc(c)+'" onclick="tbFilter=this.dataset.c;renderToolbox()">'+esc(c)+'</button>').join("");
+  document.getElementById("tbGrid").innerHTML = STRATS.map((s,i)=>({s,i})).filter(o=>!tbFilter||o.s.c===tbFilter).map(({s,i})=>
+    '<div class="strat"><div class="hd"><div class="ic">'+TYPES[s.t].i+'</div><div><h4>'+esc(s.n)+'</h4><span class="saved">'+s.m+' דק׳ · '+esc(s.c)+'</span></div></div>'+
+    '<p>'+esc(s.d)+'</p><div class="why"><b>למה זה עובד:</b> '+esc(s.w)+'</div>'+
+    '<div class="ft"><span class="sp"></span><button class="btn sm" onclick="addStratFromBank('+i+')">'+(cur?"הוספה למערך הפתוח":"מערך חדש עם זה")+'</button></div></div>').join("");
+}
+function addStratFromBank(i){
+  if(!cur || !lessons.includes(cur)){ newLesson(); setTimeout(()=>{ insertStrat(i,0); },80); return; }
+  modal('<h3>לאיזה שלב להוסיף?</h3>'+cur.stages.map((st,si)=>'<button class="btn" style="margin:4px" onclick="insertStrat('+i+','+si+')">'+esc(st.name)+'</button>').join("")+'<div class="ft"><button class="btn" onclick="closeModal()">ביטול</button></div>');
+}
+
+/* ============ WEB DIRECTORY ============ */
+/* s = מקצוע · k = סוג · g = שכבות · st = jh/hs/all · v = נבדק בפועל */
+const POP = "https://pop.education.gov.il/", MEY = "https://meyda.education.gov.il/files/";
+const WEB = [
+  /* --- כללי --- */
+  {s:"כללי",t:"פרקטיקות להוראה איכותית",u:POP+"teaching-tools/teaching-practices/",o:"משרד החינוך · מרחב פדגוגי",k:"פדגוגיה",g:"ז׳–י״ב",d:"מאגר פרקטיקות הוראה לפי קטגוריות (תכנון הוראה, מענה מותאם אישית, הערכה ומשוב), שאפשר לסנן לפי שלב ותחום.",v:1},
+  {s:"כללי",t:"מאגר יחידות הוראה מתוקשבות",u:POP+"tchumey_daat/teaching-units-stock/",o:"משרד החינוך · מרחב פדגוגי",k:"יחידת הוראה",g:"ז׳–י״ב",d:"יחידות הוראה דיגיטליות שאפשר לסנן לפי שכבה, מקצוע, נושא ושפה.",v:1},
+  {s:"כללי",t:"דגמי הוראה דיגיטליים",u:POP+"teaching-tools/teaching-models/",o:"משרד החינוך · מרחב פדגוגי",k:"פדגוגיה",g:"ז׳–י״ב",d:"קטלוג דגמי הוראה שאפשר לסנן לפי שלב, מטרת למידה, תחום דעת ומיומנויות דיגיטליות.",v:1},
+  {s:"כללי",t:"תפיסות ומגמות — למידה",u:POP+"perceptions-trends/learning/",o:"משרד החינוך · מרחב פדגוגי",k:"פדגוגיה",g:"ז׳–י״ב",d:"תפיסת הלמידה המתחדשת: עקרונות מקדמי למידה, רעיונות גדולים וסביבות למידה.",v:1},
+  {s:"כללי",t:"ראמ״ה — מאגר כלי הערכה פנימיים",u:"https://rama.gov.il/",o:"ראמ״ה",k:"הערכה",g:"ז׳–י״ב",d:"כלי הערכה פנימיים, מבחנים ומשימות ביצוע לפי מקצוע ושכבה.",v:1},
+  {s:"כללי",t:"תל״ם בחנ״מ — מדריך פדגוגי לצוותים",u:POP+"special-education/pedagogical-guide-educational-teams/",o:"משרד החינוך · אגף חינוך מיוחד",k:"פדגוגיה",g:"ז׳–י״ב",d:"עקרונות וכלי תכנון להוראה מותאמת ולמידה משמעותית בחינוך המיוחד ובשילוב.",v:1},
+  {s:"כללי",t:"הערכה חלופית — תמ״ר",u:POP+"tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/tamar/",o:"משרד החינוך · מרחב פדגוגי",k:"הערכה",g:"י׳–י״ב",d:"מודל של הוראה, למידה והערכה חלופית שמשולבת בתהליך הלמידה (דוגמה מאזרחות שאפשר להחיל על מקצועות אחרים).",v:1},
+  {s:"כללי",t:"בינה מלאכותית בחינוך",u:POP+"teaching-tools/ai-education/",o:"משרד החינוך · מרחב פדגוגי",k:"פדגוגיה",g:"ז׳–י״ב",d:"הנחיות ומשאבים לשילוב כלי בינה מלאכותית בהוראה.",v:0},
+  /* --- אנגלית --- */
+  {s:"אנגלית",t:"English Curriculum 2020",u:POP+"tchumey_daat/english/chativa-elyona/english-pedagogy/curriculum/",o:"הפיקוח על הוראת האנגלית",k:"תוכנית לימודים",g:"ז׳–י״ב",d:"תוכנית הלימודים המלאה (Can-do, Lexical/Grammar Bands), כולל גרסה לתלמידים עם צרכים מיוחדים.",v:1},
+  {s:"אנגלית",t:"Curriculum Components — Junior High",u:POP+"tchumey_daat/english/chativat-beynayim/curriculum/components/",o:"משרד החינוך · מרחב פדגוגי",k:"תוכנית לימודים",g:"ז׳–ט׳",d:"רכיבי התוכנית לחט״ב, פרקטיקות הוראה והיגדי Can-do ברמה A2.",v:1},
+  {s:"אנגלית",t:"Teaching & Learning Materials — Junior High",u:POP+"tchumey_daat/english/chativat-beynayim/study_topics/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–ט׳",d:"חומרי הוראה ויחידות מקוונות שאפשר לסנן לפי כיתה ונושא.",v:1},
+  {s:"אנגלית",t:"English — High School (Modules, Rubrics)",u:POP+"tchumey_daat/english/chativa-elyona/",o:"משרד החינוך · מרחב פדגוגי",k:"הכנה לבגרות",g:"י׳–י״ב",d:"קישורים למיקוד, למחווני כתיבה, לספרים מאושרים ולאוצר המילים של מודולים.",v:1},
+  {s:"אנגלית",t:"Bagrut Exams Archive",u:POP+"tchumey_daat/english/chativa-elyona/bagrut-exam/bagrut-archives/",o:"משרד החינוך · מרחב פדגוגי",k:"הכנה לבגרות",g:"י׳–י״ב",d:"ארכיון בחינות בגרות עם קובצי שמע ומפתחות תשובות.",v:1},
+  /* --- גיאוגרפיה --- */
+  {s:"גיאוגרפיה",t:"תוכנית הלימודים — גאוגרפיה אדם וסביבה, חט״ב",u:POP+"tchumey_daat/geography_adam_sviva/chativat-beynayim/pedagogya-geo-hatav/geography-curriculum",o:"הפיקוח על הוראת הגאוגרפיה",k:"תוכנית לימודים",g:"ז׳–ט׳",d:"התוכנית לכל שכבה, הישגים נדרשים, תוכנית מותאמת, למידת חקר בקהילה ושינויי אקלים לכיתה ח׳.",v:1},
+  {s:"גיאוגרפיה",t:"תוכנית הלימודים — חטיבה עליונה",u:POP+"tchumey_daat/geography_adam_sviva/chativa-elyona/pedagogya-geo-hata/syllabus/",o:"משרד החינוך · מרחב פדגוגי",k:"תוכנית לימודים",g:"י׳–י״ב",d:"יחידות החובה וההתמחות, השכלה כללית ומבנה הבגרות (60% חיצוני ו-40% בית-ספרי).",v:1},
+  {s:"גיאוגרפיה",t:"חומרי הוראה ולמידה — חטיבה עליונה",u:POP+"tchumey_daat/geography_adam_sviva/chativa-elyona/noseem_nilmadim/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"י׳–י״ב",d:"חומרי הוראה ויחידות מתוקשבות לפי כיתה ונושא.",v:1},
+  {s:"גיאוגרפיה",t:"הערכה בית-ספרית 40%",u:POP+"tchumey_daat/geography_adam_sviva/chativa-elyona/bhinot-bagrut-aaraha/school-assessment-40/",o:"משרד החינוך · מרחב פדגוגי",k:"הערכה",g:"י׳–י״ב",d:"הנחיות לרכיב ההערכה הבית-ספרית בבגרות.",v:0},
+  {s:"גיאוגרפיה",t:"חינוך לערכים בגאוגרפיה",u:POP+"tchumey_daat/geography_adam_sviva/chativa-elyona/pedagogya-geo-hata/values-education/",o:"משרד החינוך · מרחב פדגוגי",k:"פדגוגיה",g:"ז׳–י״ב",d:"חומרים לשילוב חינוך לערכים בהוראת הגאוגרפיה.",v:1},
+  /* --- ערבית --- */
+  {s:"ערבית",t:"תוכנית הלימודים בערבית — חט״ב",u:POP+"tchumey_daat/arabic-for-hebrew-speakers/junior-high/pedagogy/curriculum/",o:"הפיקוח על הוראת הערבית",k:"תוכנית לימודים",g:"ז׳–ט׳",d:"עקרונות התוכנית ותוכניות עבודה שנתיות לכיתות ז׳–ט׳.",v:1},
+  {s:"ערבית",t:"תוכניות הלימודים — חטיבה עליונה",u:POP+"tchumey_daat/arabic-for-hebrew-speakers/high-school/pedagogy/curriculum/",o:"משרד החינוך · מרחב פדגוגי",k:"תוכנית לימודים",g:"י׳–י״ב",d:"התוכנית החדשה (2025), ערבית מדוברת, פריסה חודשית ותוכניות עבודה.",v:1},
+  {s:"ערבית",t:"חומרי הוראה ולמידה — חט״ב",u:POP+"tchumey_daat/arabic-for-hebrew-speakers/junior-high/teaching-materials/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–ט׳",d:"חומרים ויחידות מתוקשבות לפי כיתה ונושא.",v:1},
+  {s:"ערבית",t:"פדגוגיה — ערבית בחט״ב",u:POP+"tchumey_daat/arabic-for-hebrew-speakers/junior-high/pedagogy/",o:"משרד החינוך · מרחב פדגוגי",k:"מאגר מקורות",g:"ז׳–ט׳",d:"קישורים לעיתון ׳ערביתון׳, לקהילת המורים ולאתר המפמ״ר.",v:1},
+  {s:"ערבית",t:"מאמרי המפמ״ר — בגרות ודקדוק",u:POP+"tchumey_daat/arabic-for-hebrew-speakers/high-school/pedagogy/articles/",o:"משרד החינוך · מרחב פדגוגי",k:"הכנה לבגרות",g:"י׳–י״ב",d:"מאמרים ותרגולים לבגרות ובדקדוק.",v:0}
+  ,
+  /* --- לשון --- */
+  {s:"לשון",t:"עברית: הבנה, הבעה ולשון — המרחב הפדגוגי",u:POP+"tchumey_daat/ivrit_havana_habaa_lashon/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–י״ב",d:"דף הבית של התחום: נושאים ומיומנויות, מבחנים ומשימות, מעגל השנה ותוכנית שלהבת, לחט״ב ולחטיבה העליונה.",v:1},
+  {s:"לשון",t:"לשון — נושאים נלמדים, חטיבה עליונה",u:POP+"tchumey_daat/ivrit_havana_habaa_lashon/chativa-elyona/noseem_nilmadim/lashon",o:"משרד החינוך · מרחב פדגוגי",k:"יחידת הוראה",g:"י׳–י״ב",d:"חומרי הוראה בנושאי הלשון לבגרות (תחביר, מערכת הצורות, שם המספר ועוד).",v:1},
+  {s:"לשון",t:"בחינות בגרות ומשימות — עברית",u:POP+"tchumey_daat/ivrit_havana_habaa_lashon/chativa-elyona/bhinot-bagrut-umesimot/",o:"משרד החינוך · מרחב פדגוגי",k:"הכנה לבגרות",g:"י׳–י״ב",d:"בחינות בגרות קודמות ומשימות הערכה.",v:0},
+  {s:"לשון",t:"תוכנית הלימודים: הבנה, הבעה ולשון ז׳–י״ב (PDF)",u:MEY+"Curriculum/hebrew-7-12.pdf",o:"המזכירות הפדגוגית",k:"תוכנית לימודים",g:"ז׳–י״ב",d:"התוכנית הרשמית לרצף השש-שנתי. הדגשים העדכניים מופיעים בחוזרי המפמ״ר.",v:1},
+  {s:"לשון",t:"חוזר המפמ״ר לעברית — על-יסודי (PDF)",u:MEY+"Mazkirut_Pedagogit/Ivrit/hozermafmaralyesodi2023_2024.pdf",o:"הפיקוח על הוראת העברית",k:"תוכנית לימודים",g:"ז׳–י״ב",d:"דגשים שנתיים, הרצף השש-שנתי והנחיות הערכה.",v:1},
+  /* --- ספרות --- */
+  {s:"ספרות",t:"ספרות — חומרי הוראה, חט״ב",u:POP+"tchumey_daat/safrut/chativat-beynayim/noseem_nilmadim/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–ט׳",d:"חומרי הוראה ליצירות ולנושאים הנלמדים בחטיבת הביניים, כולל יחידות מתוקשבות.",v:1},
+  {s:"ספרות",t:"ספרות — חומרי הוראה, חטיבה עליונה",u:POP+"tchumey_daat/safrut/chativa-elyona/noseem_nilmadim/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"י׳–י״ב",d:"חומרי הוראה ליצירות החובה ולנושאי הבגרות.",v:1},
+  {s:"ספרות",t:"החברה הישראלית: שבר ואיחוי",u:POP+"tchumey_daat/safrut/chativa-elyona/noseem_nilmadim/hevra-israelit-shever-ihuy/",o:"משרד החינוך · מרחב פדגוגי",k:"יחידת הוראה",g:"י׳–י״ב",d:"יחידה עם יצירות של סופרים יוצאי ארצות המזרח ושירת ימי הביניים, וחומרי הוראה.",v:1},
+  {s:"ספרות",t:"אתרים ומאגרים להוראת ספרות",u:POP+"tchumey_daat/safrut/chativa-elyona/pedagogia-safrut2/atarim-maagarim-hta/",o:"משרד החינוך · מרחב פדגוגי",k:"מאגר מקורות",g:"י׳–י״ב",d:"רשימה מומלצת של אתרים ומאגרי טקסטים.",v:1},
+  {s:"ספרות",t:"תוכנית הלימודים בספרות — חטיבה עליונה (PDF)",u:MEY+"Mazkirut_Pedagogit/sifrut/chativa_elyona_tochnit.pdf",o:"הפיקוח על הוראת הספרות",k:"תוכנית לימודים",g:"י׳–י״ב",d:"מסלול בסיס ומסלול מורחב, והיקף היצירות הנדרש (סיפורים, מחזה, רומן או נובלה).",v:1},
+  /* --- תנ״ך --- */
+  {s:"תנ״ך",t:"תנ״ך ממלכתי — המרחב הפדגוגי",u:POP+"tchumey_daat/tanach_mamlachti/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–י״ב",d:"פדגוגיה וחומרי הוראה, בנפרד לחט״ב ולחטיבה העליונה.",v:1},
+  {s:"תנ״ך",t:"רעיונות לפתיחת שנה בתנ״ך",u:POP+"tchumey_daat/tanach_mamlachti/chativa-elyona/noseem_nilmadim/rayonot-ptihat-shana-tanach/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"י׳–י״ב",d:"פעילויות לשיעורי הפתיחה של השנה.",v:1},
+  {s:"תנ״ך",t:"שיר על הפרק (929 וגלגלצ)",u:POP+"tchumey_daat/tanach_mamlachti/chativa-elyona/pedagogy-state-bible-junior-high/song-about-episode/",o:"משרד החינוך ו-929",k:"יחידת הוראה",g:"ז׳–י״ב",d:"70 שירים שמחוברים לפרקי תנ״ך, ולכל שיר פעילות לתלמידים.",v:1},
+  {s:"תנ״ך",t:"תוכנית הלימודים בתנ״ך ממלכתי",u:POP+"tchumey_daat/tanach_mamlachti/chativa-elyona/pedagogy-state-bible-junior-high/curriculum/",o:"משרד החינוך",k:"תוכנית לימודים",g:"י׳–י״ב",d:"דף תוכנית הלימודים בתנ״ך ממלכתי לחטיבה העליונה.",v:1},
+  {s:"תנ״ך",t:"חוזר מפמ״ר תנ״ך תשפ״ז (PDF)",u:MEY+"Mazkirut_Pedagogit/tanach/tanach2027/HOZER_MAFMAR_2027.PDF",o:"הפיקוח על הוראת התנ״ך",k:"תוכנית לימודים",g:"ז׳–י״ב",d:"דגשים, פרקי חובה והנחיות לשנה הנוכחית.",v:1},
+  {s:"תנ״ך",t:"מפרט בגרות בתנ״ך 2027 (PDF)",u:MEY+"Rama/Mifrat_tanach_6_M_2027.pdf",o:"משרד החינוך",k:"הכנה לבגרות",g:"י׳–י״ב",d:"מפרט החומר לבחינה.",v:1},
+  /* --- היסטוריה --- */
+  {s:"היסטוריה",t:"היסטוריה — חומרי הוראה, חט״ב",u:POP+"tchumey_daat/historya/chativat-beynayim/noseem_nilmadim/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–ט׳",d:"חומרי הוראה ויחידות מתוקשבות שאפשר לסנן לפי כיתה ונושא מרכזי.",v:1},
+  {s:"היסטוריה",t:"היסטוריה — חומרי הוראה, חטיבה עליונה",u:POP+"tchumey_daat/historya/chativa-elyona/noseem_nilmadim/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"י׳–י״ב",d:"חומרי הוראה ליחידות הנלמדות בחטיבה העליונה.",v:0},
+  {s:"היסטוריה",t:"תוכנית הלימודים בהיסטוריה — חט״ב",u:POP+"learning-plans/history/junior-high/",o:"משרד החינוך",k:"תוכנית לימודים",g:"ז׳–ט׳",d:"יחידות ושעות לכל כיתה, עם קישור לתוכנית המלאה.",v:1},
+  {s:"היסטוריה",t:"תוכנית הלימודים בהיסטוריה תשפ״ז (PDF)",u:MEY+"Pop/0files/historya/edi/high-school/tochnit-2027.pdf",o:"הפיקוח על הוראת ההיסטוריה",k:"תוכנית לימודים",g:"ז׳–י״ב",d:"התוכנית המעודכנת לשנת תשפ״ז (ממלכתי).",v:1},
+  {s:"היסטוריה",t:"בגרות וחלופות הערכה בהיסטוריה",u:POP+"tchumey_daat/historya/chativa-elyona/pedagogia-historia/bhinot-bagrut-halofot-haraha/",o:"משרד החינוך · מרחב פדגוגי",k:"הכנה לבגרות",g:"י׳–י״ב",d:"מבנה הבגרות וחלופות ההערכה.",v:1},
+  {s:"היסטוריה",t:"יד ושם — מערכי שיעור",u:"https://www.yadvashem.org/education/educational-materials/lesson-plans.html",o:"יד ושם · בית הספר הבינלאומי להוראת השואה",k:"מערכי שיעור",g:"ז׳–י״ב",d:"מערכי שיעור ויחידות על השואה, עם עדויות ומקורות (באתר יש גם גרסה בעברית).",v:1},
+  /* --- אזרחות --- */
+  {s:"אזרחות",t:"תוכנית הלימודים באזרחות — ט׳",u:POP+"tchumey_daat/citizenship/junior-high/citizenship-pedagogy/curriculum/",o:"משרד החינוך · מרחב פדגוגי",k:"תוכנית לימודים",g:"ט׳",d:"נושאי ליבה, יחידות העמקה וספרי לימוד מאושרים.",v:1},
+  {s:"אזרחות",t:"אזרחות — יחידות מתוקשבות, חט״ב",u:POP+"tchumey_daat/citizenship/junior-high/e-learning-units/",o:"משרד החינוך · מרחב פדגוגי",k:"יחידת הוראה",g:"ט׳",d:"יחידות הוראה דיגיטליות באזרחות.",v:0},
+  {s:"אזרחות",t:"תוכנית הלימודים באזרחות — חטיבה עליונה",u:POP+"tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/curriculum/",o:"משרד החינוך · מרחב פדגוגי",k:"תוכנית לימודים",g:"י׳–י״ב",d:"נושאי ליבה, חמישה אשכולות בחירה ונושאים נוספים לחמש יחידות לימוד.",v:1},
+  {s:"אזרחות",t:"משטר מדינת ישראל — חומרי הוראה",u:POP+"tchumey_daat/citizenship/citizenship-high-school/teaching-materials/state-of-israel-regime",o:"משרד החינוך · מרחב פדגוגי",k:"יחידת הוראה",g:"י׳–י״ב",d:"חומרי הוראה לנושא מבנה השלטון בישראל.",v:1},
+  {s:"אזרחות",t:"בחינת הבגרות באזרחות",u:POP+"tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/bagrut-exam/",o:"משרד החינוך · מרחב פדגוגי",k:"הכנה לבגרות",g:"י״א–י״ב",d:"סמלי השאלונים ומבנה הבחינה לשנה הנוכחית.",v:1},
+  /* --- מחשבת ישראל / תרבות יהודית-ישראלית --- */
+  {s:"מחשבת ישראל",t:"תרבות יהודית-ישראלית — תוכנית לכיתה ט׳",u:POP+"tchumey_daat/israeli-jewish-culture/junior-high/curriculum/grade9/",o:"משרד החינוך · מרחב פדגוגי",k:"תוכנית לימודים",g:"ט׳",d:"שלושה מוקדי תוכן ומספר השיעורים המומלץ לכל אחד.",v:1},
+  {s:"מחשבת ישראל",t:"תרבות יהודית-ישראלית — עקרונות פדגוגיים",u:POP+"tchumey_daat/israeli-jewish-culture/junior-high/curriculum/principles/",o:"משרד החינוך · מרחב פדגוגי",k:"תוכנית לימודים",g:"ז׳–ט׳",d:"מבנה ספירלי לשלוש שנים, סביב הציר זהות, שייכות ומורשת.",v:1},
+  {s:"מחשבת ישראל",t:"עדכון התוכנית בתרבות יהודית-ישראלית",u:POP+"complete-story-program/applied-program-curriculum/israeli-jewish-culture/",o:"משרד החינוך",k:"תוכנית לימודים",g:"ז׳–ט׳",d:"התוכנית המותאמת והמעודכנת.",v:1},
+  {s:"מחשבת ישראל",t:"מחשבת ישראל ממלכתי — תוכנית, חטיבה עליונה",u:POP+"tchumey_daat/machshevet-israel-mamlachti/high-school/pedagogy/curriculum/",o:"משרד החינוך · מרחב פדגוגי",k:"תוכנית לימודים",g:"י׳–י״ב",d:"הרכב ההערכה (30% חיצוני, 70% פנימי), נושאי הבחינה וחלופות הערכה.",v:1},
+  {s:"מחשבת ישראל",t:"מחשבת ישראל (ממלכתי-דתי) — תוכנית לימודים",u:POP+"tchumey_daat/machshevet-israel/high-school/pedagogy/curriculum",o:"משרד החינוך · מרחב פדגוגי",k:"תוכנית לימודים",g:"י׳–י״ב",d:"קישורים לבחינות ולחלופות הערכה.",v:1},
+  /* --- חינוך (שעת חינוך) --- */
+  {s:"חינוך",t:"שעת חינוך — המרחב הפדגוגי",u:POP+"tchumey_daat/hinuch-hevrati/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–י״ב",d:"חומרי הוראה, ימי לוח ואירועים ופדגוגיה של שעת חינוך.",v:1},
+  {s:"חינוך",t:"שעת חינוך — חומרים לחטיבה העליונה",u:POP+"tchumey_daat/hinuch-hevrati/high-school/teaching-materials/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"י׳–י״ב",d:"פעילויות לשעת חינוך בתיכון.",v:0},
+  {s:"חינוך",t:"זיכרון השואה — שעת חינוך, חט״ב",u:POP+"tchumey_daat/hinuch-hevrati/chativat-beynayim/noseem_nilmadim/holocaust-memory",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–ט׳",d:"פעילויות לשעת חינוך בנושא זיכרון השואה.",v:1},
+  {s:"חינוך",t:"ימי לוח ואירועים",u:POP+"tchumey_daat/hinuch-hevrati/calendar-events/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–י״ב",d:"פעילויות לימים מיוחדים במעגל השנה.",v:0},
+  {s:"חינוך",t:"מיפוי ערכים בתוכניות הלימודים",u:POP+"headquarters-civil-education-coexistence/mapping-values-high/",o:"מטה חינוך אזרחי וחיים משותפים",k:"מאגר מקורות",g:"י׳–י״ב",d:"סוגיות ערכיות שעולות בפרקי תוכניות הלימודים, לפי מקצוע.",v:1}
+  ,
+  /* --- מתמטיקה --- */
+  {s:"מתמטיקה",t:"תוכניות לימודים ופריסות הוראה — חט״ב",u:POP+"tchumey_daat/matmatika/chativat-beynayim/teaching-mathematics/tohnit-limudim/",o:"הפיקוח על הוראת המתמטיקה",k:"תוכנית לימודים",g:"ז׳–ט׳",d:"פריסות הוראה לתשפ״ז לכל שכבה (רגילה ומצומצמת), רצפי הוראה, עדכוני תוכנית לפי תחום ומקבצי שאלות.",v:1},
+  {s:"מתמטיקה",t:"הוראת המתמטיקה בחט״ב — מרחב פדגוגי",u:POP+"tchumey_daat/matmatika/chativat-beynayim/teaching-mathematics/",o:"משרד החינוך · מרחב פדגוגי",k:"מאגר מקורות",g:"ז׳–ט׳",d:"מרחבי למידה לכל שכבה, משימות אוריינות ויחידות הוראה מתוקשבות.",v:1},
+  {s:"מתמטיקה",t:"תוכנית הלימודים החדשה — חטיבה עליונה",u:POP+"tchumey_daat/matmatika/chativa-elyona/teaching-mathematics/new-curriculum/",o:"הפיקוח על הוראת המתמטיקה",k:"תוכנית לימודים",g:"י׳–י״ב",d:"התוכנית לפי שכבה ולפי 3, 4 או 5 יח״ל, המלצות הוראה, מבנה בגרות, נוסחאונים וספרים מאושרים.",v:1},
+  {s:"מתמטיקה",t:"הערכה ובחינות בגרות במתמטיקה",u:POP+"tchumey_daat/matmatika/chativa-elyona/teaching-mathematics/examination-evaluation/",o:"משרד החינוך · מרחב פדגוגי",k:"הכנה לבגרות",g:"י׳–י״ב",d:"שאלוני בגרות ונוסחאונים.",v:1},
+  {s:"מתמטיקה",t:"המרכז הארצי למורים למתמטיקה בעל-יסודי",u:"http://newhighmath.haifa.ac.il/index.php/home",o:"אוניברסיטת חיפה",k:"מערכי שיעור",g:"ז׳–י״ב",d:"חומרי הוראה, יישומונים דינמיים, סרטוני הדגמה, בעיית החודש והעלון על״ה.",v:1},
+  /* --- מדעים --- */
+  {s:"מדעים",t:"תוכנית הלימודים במדע וטכנולוגיה — חט״ב",u:POP+"tchumey_daat/mada-tehnologia/chativat-beynayim/mada-technologia-pedagogia/curriculum",o:"הפיקוח על מדע וטכנולוגיה",k:"תוכנית לימודים",g:"ז׳–ט׳",d:"מפרטי תוכן לתשפ״ז לכיתות ז׳–ט׳, התוכנית החתומה ועקרונות פדגוגיים.",v:1},
+  {s:"מדעים",t:"מערכי שיעור בשגרה ובחירום — מדע וטכנולוגיה",u:POP+"tchumey_daat/mada-tehnologia/chativat-beynayim/mada-technologia-pedagogia/emergency-learning/",o:"משרד החינוך · מרחב פדגוגי",k:"מערכי שיעור",g:"ז׳–ט׳",d:"מערכי שיעור התנסותיים לכל שכבה, וחוברות למידה עם מדריך למורה.",v:1},
+  {s:"מדעים",t:"אנרגיה — חומרי הוראה",u:POP+"tchumey_daat/mada-tehnologia/chativat-beynayim/noseem_nilmadim/energy-mot/",o:"משרד החינוך · מרחב פדגוגי",k:"יחידת הוראה",g:"ז׳–ט׳",d:"יחידות דיגיטליות, סימולציות PhET, תפיסות שגויות והדגמות בציוד פשוט.",v:1},
+  {s:"מדעים",t:"חקר מדעי ופתרון בעיות",u:POP+"tchumey_daat/mada-tehnologia/chativat-beynayim/noseem_nilmadim/scientific-research-problem-solving",o:"משרד החינוך · מרחב פדגוגי",k:"יחידת הוראה",g:"ז׳–ט׳",d:"הובלת עבודות חקר ותכן הנדסי, כולל הכנה לירידי מדע.",v:1},
+  {s:"מדעים",t:"המרכז הארצי למורי מדע וטכנולוגיה (מוט״נט)",u:"https://www.weizmann.ac.il/ScienceTeaching/he/research-and-development/science-technology-junior-high-school/projects/national-center-science",o:"מכון ויצמן",k:"מאגר מקורות",g:"ז׳–ט׳",d:"השתלמויות, קהילות מורים וחומרי הוראה.",v:0},
+  /* --- ביולוגיה --- */
+  {s:"ביולוגיה",t:"תוכנית הלימודים בביולוגיה — מגמה (5 יח״ל)",u:POP+"tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/",o:"הפיקוח על הוראת הביולוגיה",k:"תוכנית לימודים",g:"י׳–י״ב",d:"מבנה התוכנית, נושאי ליבה והעמקה, פעילויות, מיקוד 2027, ביוחקר ומעבדה.",v:1},
+  {s:"ביולוגיה",t:"פתיחת שנה — ביולוגיה",u:POP+"tchumey_daat/biologya/chativa-elyona/noseem-nilmadim/ptihat-shana/",o:"משרד החינוך · מרחב פדגוגי",k:"מאגר מקורות",g:"י׳–י״ב",d:"הנחיות ועדכונים מהפיקוח לפתיחת השנה.",v:1},
+  {s:"ביולוגיה",t:"קורסי הכנה לבגרות בביולוגיה",u:POP+"tchumey_daat/biologya/chativa-elyona/biology-pedagogy/preparatory-courses-biology-matriculation/",o:"משרד החינוך / קמפוס IL",k:"הכנה לבגרות",g:"י״א–י״ב",d:"קורסים מקוונים להכנה לבגרות.",v:1},
+  {s:"ביולוגיה",t:"המרכז הארצי למורי ביולוגיה ומדעי הסביבה",u:POP+"tchumey_daat/biologya/chativa-elyona/biology-pedagogy/national-center-biology-environment-studies-teachers",o:"מכון ויצמן",k:"מאגר מקורות",g:"י׳–י״ב",d:"פרטי המרכז ומידע על פיתוח מקצועי.",v:1},
+  {s:"ביולוגיה",t:"חומרי הוראה — מדעי החיים",u:"https://www.weizmann.ac.il/ScienceTeaching/he/research-and-development/life/resources",o:"מכון ויצמן · המחלקה להוראת המדעים",k:"יחידת הוראה",g:"ז׳–י״ב",d:"יחידות כמו ׳מבט לתא החי׳ וסביבות למידה בביולוגיה.",v:0},
+  /* --- פיזיקה --- */
+  {s:"פיזיקה",t:"תוכנית הלימודים בפיזיקה",u:POP+"tchumey_daat/physics/high-school/pedagogy/curriculum/",o:"הפיקוח על הוראת הפיזיקה",k:"תוכנית לימודים",g:"י׳–י״ב",d:"התוכנית המלאה (מכניקה, חשמל ומגנטיות, קרינה וחומר), כולל שעות מומלצות ופיזיקה בגישה חוקרת.",v:1},
+  {s:"פיזיקה",t:"חומרי הוראה בפיזיקה",u:POP+"tchumey_daat/physics/high-school/pedagogy/teaching-materials/",o:"משרד החינוך · מרחב פדגוגי",k:"מאגר מקורות",g:"י׳–י״ב",d:"ספרי לימוד, הנחיות מפמ״ר וקורסי הכנה לבגרות.",v:1},
+  {s:"פיזיקה",t:"בחינות בגרות בפיזיקה",u:POP+"tchumey_daat/physics/high-school/pedagogy/matriculation-exams/",o:"משרד החינוך · מרחב פדגוגי",k:"הכנה לבגרות",g:"י״א–י״ב",d:"התאמות בבחינה וחוקי מענה לשאלונים.",v:1},
+  {s:"פיזיקה",t:"המרכז הארצי למורי הפיזיקה",u:"http://ptc.weizmann.ac.il/?CategoryID=1422",o:"מכון ויצמן",k:"מערכי שיעור",g:"י׳–י״ב",d:"חומרי הוראה בכל נושאי התוכנית, מעבדה, הערכה חלופית ובגרויות (חלק מהחומרים דורשים התחברות).",v:1},
+  {s:"פיזיקה",t:"סימולציות PhET",u:"https://phet.colorado.edu/",o:"University of Colorado",k:"סימולציות",g:"ז׳–י״ב",d:"סימולציות אינטראקטיביות בפיזיקה, כימיה ומתמטיקה. רבות מהן זמינות בעברית דרך בורר השפה.",v:0},
+  /* --- כימיה --- */
+  {s:"כימיה",t:"המרכז הארצי למורי הכימיה",u:"https://chemistry-tc.education.gov.il/?CategoryID=156",o:"המרכז הארצי למורי הכימיה",k:"יחידת הוראה",g:"י׳–י״ב",d:"חומרי הוראה לפי נושא (אנרגיה, חומצות ובסיסים, חמצון-חיזור, אורגנית) וניתוחי בגרויות.",v:1},
+  {s:"כימיה",t:"אוריינות מדעית-כימית — מבוא לכימיה",u:POP+"tchumey_daat/chemistry/high-school/pedagogy/chemical-scientific-literacy/",o:"הפיקוח על הוראת הכימיה",k:"תוכנית לימודים",g:"י׳",d:"מטרות הקורס המבואי בכימיה וחומרים להוראתו.",v:1},
+  {s:"כימיה",t:"הערכה בכימיה",u:POP+"tchumey_daat/chemistry/high-school/pedagogy/assessment/",o:"משרד החינוך · מרחב פדגוגי",k:"הכנה לבגרות",g:"י׳–י״ב",d:"הנחיות להערכה ולהערכה חלופית.",v:1},
+  {s:"כימיה",t:"תוכנית הלימודים בכימיה (PDF, 2011)",u:MEY+"Mazkirut_Pedagogit/AgafMadaim/TochnitLimudim_Chimya_2011.pdf",o:"המזכירות הפדגוגית",k:"תוכנית לימודים",g:"י׳–י״ב",d:"מסמך התוכנית הרשמי. העדכונים מופיעים בהנחיות המפמ״ר.",v:1},
+  {s:"כימיה",t:"חומרי הוראה — כימיה",u:"https://www.weizmann.ac.il/ScienceTeaching/he/research-and-development/chemistry/resources",o:"מכון ויצמן · המחלקה להוראת המדעים",k:"יחידת הוראה",g:"ז׳–י״ב",d:"יחידות כמו ׳כימיה והחיים׳ ו׳מדעי החומר לחט״ב׳.",v:0},
+  /* --- מדעי המחשב --- */
+  {s:"מדעי המחשב",t:"מדעי המחשב — נתיב עיוני (5 יח״ל)",u:POP+"tchumey_daat/computer-science-software-engineering-cyber/high-school/pedagogy-of/high-school-theoretical-path/",o:"הפיקוח על מדעי המחשב",k:"תוכנית לימודים",g:"י׳–י״ב",d:"יחידות הליבה, תוכניות העמקה (בינה מלאכותית, מונחה עצמים ועוד), מטלות ביצוע ומיקוד 2027.",v:1},
+  {s:"מדעי המחשב",t:"מדעי המחשב, תוכנה וסייבר — תיכון",u:POP+"tchumey_daat/computer-science-software-engineering-cyber/high-school/",o:"משרד החינוך · מרחב פדגוגי",k:"מאגר מקורות",g:"י׳–י״ב",d:"נתיב עיוני, מגמת הנדסת תוכנה, סייבר, בגרויות ויחידות מתוקשבות.",v:1},
+  {s:"מדעי המחשב",t:"מדעי המחשב בחטיבת הביניים",u:POP+"tchumey_daat/computer-science-software-engineering-cyber/junior-high/",o:"משרד החינוך · מרחב פדגוגי",k:"מאגר מקורות",g:"ז׳–ט׳",d:"דף המקצוע לחט״ב.",v:1},
+  {s:"מדעי המחשב",t:"מחשבה — מרכז המורים הארצי למדעי המחשב",u:"https://cse.net.technion.ac.il/",o:"הטכניון",k:"מערכי שיעור",g:"ז׳–י״ב",d:"חומרים לכל יחידות התוכנית, דוגמאות שיעורים, חדרי בריחה ו-AI בהוראה.",v:1},
+  {s:"מדעי המחשב",t:"חומרי הוראה — מדעי המחשב",u:"https://www.weizmann.ac.il/ScienceTeaching/he/research-and-development/computer/resources",o:"מכון ויצמן · המחלקה להוראת המדעים",k:"יחידת הוראה",g:"ז׳–י״ב",d:"ספרים וחומרים, כולל מדעי המחשב לחט״ב בסביבת Scratch.",v:0}
+];
+/* נושאי תוכנית הלימודים: מקצוע → [{g:"תווית", gr:[שכבות], t:[נושאים], src}] */
+const CURRIC = {
+  "אנגלית":[{g:"רכיבי תוכנית 2020",gr:GRADES,t:["Reading comprehension & HOTS","Listening comprehension","Spoken interaction","Written production","Mediation","Vocabulary (Lexical Bands)","Grammar (Grammar Bands)","Literature & culture"],src:POP+"tchumey_daat/english/chativat-beynayim/curriculum/components/"}],
+  "גיאוגרפיה":[
+    {g:"ז׳: האדם וסביבתו",gr:["ז׳"],t:["כפר עולמי","אוכלוסייה והגירה","עיור","פיתוח בר-קיימא"]},
+    {g:"ח׳: מדעי כדור הארץ",gr:["ח׳"],t:["מבנה כדור הארץ","אקלים ומזג אוויר","שינויי אקלים","תהליכים מעצבי נוף"]},
+    {g:"ט׳: ישראל — אדם, חברה וסביבה",gr:["ט׳"],t:["משאבי מים בישראל","אזורי הארץ","התיישבות ועיור בישראל","חקר גאוגרפי בקהילה"]},
+    {g:"חטיבה עליונה",gr:["י׳","י״א","י״ב"],t:["גאוגרפיה של ארץ ישראל","גאוגרפיה של המזרח התיכון","ניתוח תופעות ייחודיות במרחב (נתי״ב)","כדור הארץ והסביבה","פיתוח ותכנון המרחב","קיימות בעדשה גאוגרפית","אסונות טבע"]}],
+  "ערבית":[{g:"דגשי התוכנית",gr:GRADES,t:["אוצר מילים","קריאה והבנה","הבנת הנשמע","הבעה בעל פה ובכתב","דקדוק פונקציונלי","פתגמים, ברכות ונוסחי פנייה","ערבית מדוברת"]}]
+  ,
+  "היסטוריה":[
+    {g:"ז׳: ימי הביניים והעת החדשה המוקדמת",gr:["ז׳"],t:["התגבשות אירופה — תרבות נוצרית ומשטר פאודלי","עליית האסלאם","מסעי הצלב","המגפה השחורה","הרנסאנס וההומניזם","שינויים בעולם הדעת","הרפורמציה"],src:POP+"learning-plans/history/junior-high/seven-grade/"},
+    {g:"ט׳: המאה ה-20",gr:["ט׳"],t:["המרוץ האימפריאליסטי","מלחמת העולם הראשונה והשלכותיה","דמוקרטיות במשבר בין המלחמות","ברית המועצות","ארץ ישראל בין מלחמות העולם","תשתית המדינה בדרך"],src:POP+"learning-plans/history/junior-high/grade-9/"}],
+  "אזרחות":[
+    {g:"חטיבה עליונה — ליבה",gr:["י׳","י״א","י״ב"],t:["הכרזת העצמאות ומדינה יהודית ודמוקרטית","עקרונות המשטר הדמוקרטי — שלטון החוק","הפרדת רשויות ואיזונים ובלמים","זכויות האדם והאזרח","משטר מדינת ישראל"]},
+    {g:"אשכולות בחירה",gr:["י׳","י״א","י״ב"],t:["העולם היהודי","מפלגות ובחירות","רשויות מקומיות","תקשורת","השתתפות אזרחים וביקורת על השלטון","דת, חברה ומדינה"],src:POP+"tchumey_daat/citizenship/citizenship-high-school/citizenship-pedagogy/curriculum/"}],
+  "מחשבת ישראל":[
+    {g:"ט׳: תרבות יהודית-ישראלית",gr:["ט׳"],t:["אגדות וספרות חז״ל — היחס לזולת","׳לפיכך נברא האדם יחידי׳ — כבוד האדם","חירות","לוח השנה — ראש השנה","צומות החורבן","המועדים הממלכתיים בניסן–אייר"],src:POP+"tchumey_daat/israeli-jewish-culture/junior-high/curriculum/grade9/"},
+    {g:"חטיבה עליונה — נושאי בחינה",gr:["י׳","י״א","י״ב"],t:["שמונה פרקים לרמב״ם","אהבה ושותפות בהגות היהודית","טוב ורע בהגות היהודית"],src:POP+"tchumey_daat/machshevet-israel-mamlachti/high-school/pedagogy/curriculum/"}],
+  "ספרות":[{g:"חטיבה עליונה — מבנה התוכנית",gr:["י׳","י״א","י״ב"],t:["סיפור קצר","שירה","מחזה","רומן / נובלה","החברה הישראלית: שבר ואיחוי","שירת ימי הביניים"]}],
+  "לשון":[{g:"מיומנויות ונושאים",gr:GRADES,t:["הבנת הנקרא — טקסט מידעי","כתיבה טיעונית","סיכום ומיזוג","תחביר — משפט מורכב ומאוחה","מערכת הצורות — בניינים ומשקלים","שם המספר","פיסוק ורצף"]}]
+  ,
+  "מתמטיקה":[
+    {g:"ז׳",gr:["ז׳"],t:["מספרים חיוביים ושליליים","חזקות ושורשים","ביטויים אלגבריים ומשתנים","משוואות ובעיות מילוליות","זוויות","שטחים","נפח קובייה ותיבה","טרנספורמציות","נקודות וגרפים","נתונים ותדירות יחסית","הסתברות"],src:MEY+"Pop/0files/matmatika/Chativat-Beynayim/tashpaz/prisa_7.pdf"},
+    {g:"ח׳",gr:["ח׳"],t:["יחס ופרופורציה","אחוזים","מבוא לפונקציות","פונקציה לינארית ושיפוע","משוואות לינאריות","מערכות משוואות","אי-שוויונות","ישרים מקבילים","משפט פיתגורס","מעגל","גליל וחרוט","מדדי מרכז","הסתברות"],src:MEY+"Pop/0files/matmatika/Chativat-Beynayim/tashpaz/prisa_8.pdf"}],
+  "מדעים":[{g:"ז׳ — מדע וטכנולוגיה",gr:["ז׳","ח׳","ט׳"],t:["אוריינות מדעית","חומרים ותכונותיהם","תהליכי שינוי בחומר","מבנה החומר — מודל החלקיקים","אנרגיה","התא","מערכות ותהליכים ביצורים חיים","מערכות אקולוגיות","תכן הנדסי","שינוי אקלים"],src:MEY+"Pop/0files/mada-technology/Chativat-Beynayim/mifrat-7th.docx"}],
+  "ביולוגיה":[{g:"5 יח״ל",gr:["י׳","י״א","י״ב"],t:["גוף האדם — הומאוסטזיס","התא — מבנה ותפקוד","אקולוגיה","בקרת ביטוי גנים והנדסה גנטית","פיזיולוגיה השוואתית","חיידקים ונגיפים בגוף האדם","ביוחקר וסיור אקולוגי","מעבדה"],src:POP+"tchumey_daat/biologya/chativa-elyona/biology-pedagogy/curriculum-specialize/"}],
+  "פיזיקה":[{g:"5 יח״ל",gr:["י׳","י״א","י״ב"],t:["קינמטיקה","דינמיקה — חוקי ניוטון","אנרגיה ותנע","תנועה מעגלית וכבידה","חשמל ומגנטיות","קרינה וחומר","מעבדה"],src:POP+"tchumey_daat/physics/high-school/pedagogy/curriculum/"}],
+  "כימיה":[{g:"חטיבה עליונה",gr:["י׳","י״א","י״ב"],t:["אוריינות מדעית-כימית","מבנה וקישור","חישובים כימיים","אנרגיה ודינמיקה","חומצות ובסיסים","חמצון-חיזור","כימיה אורגנית"]}],
+  "מדעי המחשב":[{g:"5 יח״ל — נתיב עיוני",gr:["י׳","י״א","י״ב"],t:["יסודות — אלגוריתמים, תנאים ולולאות","מערכים ומחרוזות","מבני נתונים","בסיסי נתונים","מבוא לבינה מלאכותית","מודלים חישוביים","תכנות מונחה עצמים","אלגוריתמים"],src:POP+"tchumey_daat/computer-science-software-engineering-cyber/high-school/pedagogy-of/high-school-theoretical-path/"}]
+};
+const WEB_KINDS = ["תוכנית לימודים","מערכי שיעור","יחידת הוראה","מאגר מקורות","הכנה לבגרות","הערכה","סימולציות","פדגוגיה"];
+let webSubj = "";
+function webStage(g){ const jh=/[זחט]׳/.test(g), hs=/י׳|י״א|י״ב/.test(g); return jh&&hs?"all":(hs?"hs":"jh"); }
+function hostOf(u){ try{ return new URL(u).hostname.replace(/^www\./,""); }catch(e){ return ""; } }
+function curTopicsFor(subj, grade){
+  const gs = CURRIC[subj]||[]; const fit = gs.filter(x=>!grade||(x.gr||[]).includes(grade));
+  return [...new Set((fit.length?fit:gs).flatMap(x=>x.t))];
+}
+function renderWeb(){
+  const wk = document.getElementById("wKind");
+  if(!wk.options.length) wk.innerHTML = opts(WEB_KINDS,"","כל הסוגים");
+  const q = document.getElementById("wq").value.trim().toLowerCase(), k = wk.value, stg = document.getElementById("wStage").value;
+  const subs = [...new Set(WEB.map(w=>w.s))].sort((a,b)=>a==="כללי"?-1:b==="כללי"?1:a.localeCompare(b,"he"));
+  const cnt = s=>WEB.filter(w=>w.s===s).length;
+  document.getElementById("wChips").innerHTML = '<button class="chip'+(webSubj===""?" on":"")+'" onclick="webSubj=\'\';renderWeb()">הכל · '+WEB.length+'</button>'+
+    subs.map(s=>'<button class="chip'+(webSubj===s?" on":"")+'" data-s="'+esc(s)+'" onclick="webSubj=this.dataset.s;renderWeb()">'+esc(s)+' · '+cnt(s)+'</button>').join("");
+  const tp = document.getElementById("wTopics");
+  const groups = (CURRIC[webSubj]||[]).filter(x=>!stg||(x.gr||GRADES).some(g=>webStage(g)===stg));
+  tp.innerHTML = groups.length ? '<div class="topics"><h3>נושאי תוכנית הלימודים · '+esc(webSubj)+'</h3><span class="saved">לחיצה על נושא פותחת את המחולל החכם עם הנושא, המקצוע והשכבה.</span>'+
+    groups.map((x,gi)=>'<div class="tg"><b>'+esc(x.g)+(x.src?' · <a href="'+esc(x.src)+'" target="_blank" rel="noopener">מקור</a>':'')+'</b>'+
+      x.t.map(t=>'<button class="chip" data-t="'+esc(t)+'" data-g="'+esc((x.gr||GRADES)[0])+'" onclick="topicToGen(this.dataset.t,this.dataset.g)">'+esc(t)+'</button>').join("")+'</div>').join("")+'</div>' : "";
+  const list = WEB.filter(w=>{
+    if(webSubj && w.s!==webSubj) return false;
+    if(k && w.k!==k) return false;
+    if(stg){ const ws=webStage(w.g); if(ws!=="all" && ws!==stg) return false; }
+    if(q && !(w.t+" "+w.d+" "+w.o+" "+w.s).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  document.getElementById("wGrid").innerHTML = list.length ? list.map(w=>{
+    const i = WEB.indexOf(w), c = subjColor(w.s);
+    return '<div class="strat wcard"><div class="meta" style="display:flex;gap:5px;flex-wrap:wrap"><span class="tag s" style="background:'+(w.s==="כללי"?"#475569":c)+'">'+esc(w.s)+'</span><span class="tag">'+esc(w.k)+'</span><span class="tag">'+esc(w.g)+'</span></div>'+
+      '<h4><a href="'+esc(w.u)+'" target="_blank" rel="noopener">'+esc(w.t)+'</a></h4><div class="org">'+esc(w.o)+'</div>'+
+      '<p>'+esc(w.d)+'</p><div class="host">'+esc(hostOf(w.u))+'</div>'+
+      '<div class="ft"><a class="btn sm pri" href="'+esc(w.u)+'" target="_blank" rel="noopener">פתיחה ↗</a><span class="sp"></span>'+
+      '<button class="btn sm" onclick="webToLesson('+i+')">'+(cur&&lessons.includes(cur)?"צירוף למערך הפתוח":"שמירה במערך חדש")+'</button></div></div>';
+  }).join("") : '<div class="empty" style="grid-column:1/-1">לא נמצאו מקורות לסינון הזה.</div>';
+}
+function topicToGen(topic, grade){
+  go("ai");
+  setTimeout(()=>{
+    document.getElementById("gTopic").value = topic;
+    if(webSubj && SUBJECTS[webSubj]) document.getElementById("gSubject").value = webSubj;
+    if(grade) document.getElementById("gGrade").value = grade;
+    const ex = document.getElementById("gExtra"); if(!ex.value) ex.value = "מותאם לנושא בתוכנית הלימודים של משרד החינוך: "+topic;
+    window._genCurric = topic;
+    document.getElementById("gTopic").focus();
+  },60);
+}
+function webToLesson(i){
+  const w = WEB[i]; if(!w) return;
+  if(!cur || !lessons.includes(cur)){
+    newLesson(); if(SUBJECTS[w.s]) cur.subject = w.s;
+  }
+  addSrc(w.t, w.u); if(location.hash!=="#edit") go("edit"); else renderEditor();
+  toast("הקישור נוסף למערך");
+}
+function pickWebSrc(){
+  const rel = WEB.map((w,i)=>({w,i})).filter(o=>o.w.s===cur.subject||o.w.s==="כללי");
+  modal('<h3>מקורות מהמאגר · '+esc(cur.subject)+'</h3><div style="max-height:55vh;overflow:auto">'+
+    rel.map(o=>'<div class="srcrow" style="grid-template-columns:1fr auto"><div><b>'+esc(o.w.t)+'</b><br><span class="saved">'+esc(o.w.k)+' · '+esc(o.w.g)+'</span></div><button class="btn sm" onclick="addSrc(WEB['+o.i+'].t,WEB['+o.i+'].u);toast(\'נוסף\')">הוספה</button></div>').join("")+
+    '</div><div class="ft"><button class="btn" onclick="closeModal()">סגירה</button></div>');
+}
+
+/* ============ AI ============ */
+let sampleFn = null, aiReady = false;
+(async function initAI(){
+  try{
+    if(window.claude && typeof window.claude.use==="function"){
+      sampleFn = await window.claude.use("sample");
+    }
+  }catch(e){ sampleFn=null; }
+  aiReady = true;
+  if(!sampleFn){
+    document.getElementById("gNote").hidden=false;
+    document.getElementById("aibar").classList.add("hidden");
+  }
+})();
+
+function lessonSchemaText(){
+  return '{"title":"string","goals":["string"],"bloom":["'+BLOOM.join('"|"')+'"],"materials":"string","stages":[{"name":"string","activities":[{"type":"'+Object.keys(TYPES).join("|")+'","title":"string","minutes":number,"instructions":"string"}]}],"diff":{"support":"string","core":"string","enrich":"string"},"questions":[{"level":"'+BLOOM.join("|")+'","q":"string"}],"exitTicket":"string","notes":"string"}';
+}
+async function askJSON(prompt){
+  let v;
+  if(typeof sampleFn.json==="function"){
+    try{ v = await sampleFn.json(prompt,{modelTier:"default"}); if(v && typeof v==="object") return v; }catch(e){ if(e&&(e.code==="not_granted"||e.code==="rate_limited")) throw e; }
+  }
+  const r = await sampleFn(prompt,{modelTier:"default"});
+  const t = (r&&r.text)||"";
+  const s = t.indexOf("{"), e2 = t.lastIndexOf("}");
+  if(s<0||e2<0) throw {code:"parse",message:"לא התקבל מבנה תקין"};
+  return JSON.parse(t.slice(s,e2+1));
+}
+function normalize(o, base){
+  const l = base || blankLesson(o.model);
+  l.title = o.title||l.title;
+  if(Array.isArray(o.goals)) l.goals = o.goals.filter(Boolean).map(String);
+  if(Array.isArray(o.bloom)) l.bloom = o.bloom.filter(b=>BLOOM.includes(b));
+  if(o.materials) l.materials = String(o.materials);
+  if(Array.isArray(o.stages) && o.stages.length){
+    l.stages = o.stages.map(st=>S(String(st.name||"שלב"), (st.activities||[]).map(a=>A(TYPES[a.type]?a.type:"explain", String(a.title||""), Math.max(1,Math.round(+a.minutes||5)), String(a.instructions||"")))));
+  }
+  if(o.diff) l.diff = {support:String(o.diff.support||""),core:String(o.diff.core||""),enrich:String(o.diff.enrich||"")};
+  if(Array.isArray(o.questions)) l.questions = o.questions.map(q=>({level:BLOOM.includes(q.level)?q.level:"הבנה",q:String(q.q||"")}));
+  if(o.exitTicket) l.exitTicket = String(o.exitTicket);
+  if(o.notes) l.notes = String(o.notes);
+  return l;
+}
+
+let gModel = "e5";
+function renderGenForm(){
+  document.getElementById("gSubject").innerHTML = opts(Object.keys(SUBJECTS),"לשון");
+  document.getElementById("gGrade").innerHTML = opts(GRADES,"ט׳");
+  document.getElementById("gModels").innerHTML = Object.keys(MODELS).map(k=>'<button class="model'+(k===gModel?" on":"")+'" onclick="gModel=\''+k+'\';renderGenModels()"><b>'+esc(MODELS[k].n)+'</b><span>'+esc(MODELS[k].d)+'</span></button>').join("");
+}
+function renderGenModels(){ document.querySelectorAll("#gModels .model").forEach((b,i)=>b.classList.toggle("on", Object.keys(MODELS)[i]===gModel)); }
+
+let genBusy = false;
+async function generate(){
+  if(genBusy) return;
+  const topic = document.getElementById("gTopic").value.trim();
+  if(!topic){ toast("כתבו נושא לשיעור"); document.getElementById("gTopic").focus(); return; }
+  const subject = document.getElementById("gSubject").value, grade = document.getElementById("gGrade").value;
+  const minutes = +document.getElementById("gMin").value, cls = document.getElementById("gClass").value, extra = document.getElementById("gExtra").value.trim();
+  const M = MODELS[gModel];
+  const out = document.getElementById("gOut");
+  if(!sampleFn){
+    const l = blankLesson(gModel); l.title = topic; l.subject=subject; l.grade=grade; l.minutes=minutes;
+    l.stages = M.st.map(([n,p],i)=>{
+      const m = Math.max(3,Math.round(minutes*p));
+      const pool = i===0? STRATS.filter(s=>s.c==="פתיחה"||s.t==="tps") : i===M.st.length-1? STRATS.filter(s=>s.c==="סיכום") : STRATS.filter(s=>s.c!=="פתיחה"&&s.c!=="סיכום");
+      const s = pool[(topic.length+i*7)%pool.length];
+      return S(n,[A(s.t,s.n,m,s.d+"\n\n[להתאים לנושא: "+topic+"]")]);
+    });
+    l.goals = ["התלמידים יבינו את "+topic,"",""];
+    showGenResult(l,true); return;
+  }
+  genBusy = true; document.getElementById("gBtn").disabled = true;
+  out.innerHTML = '<div class="loader"><span class="dots"><i></i><i></i><i></i></span> בונה מערך על ׳'+esc(topic)+'׳…</div>';
+  const prompt = "אתה מתכנן הוראה ותיק במערכת החינוך בישראל, מומחה להוראה פעילה בחטיבת הביניים ובתיכון.\n"+
+    "בנה מערך שיעור מלא בעברית.\n"+
+    "מקצוע: "+subject+"\nשכבה: כיתה "+grade+"\nנושא: "+topic+"\nמשך: "+minutes+" דקות\nאופי הכיתה: "+cls+"\n"+
+    "מודל פדגוגי: "+M.n+" — השלבים חייבים להיות בדיוק בסדר הזה ובשמות האלה: "+M.st.map(x=>x[0]).join(" | ")+"\n"+
+    (extra?"דגשים מהמורה: "+extra+"\n":"")+
+    "דרישות:\n- סכום דקות כל הפעילויות שווה בדיוק ל-"+minutes+".\n- לפחות שתי פעילויות שבהן התלמידים פעילים (זוגות, קבוצות, תנועה, כתיבה) — לא רק הסבר מורה.\n- פתיחה שמעוררת סקרנות וקשורה לעולמם של בני נוער.\n- הוראות מעשיות למורה: מה המורה עושה, מה התלמידים עושים, מה התוצר.\n- 3 מטרות בניסוח ׳התלמידים י...׳ מדידות.\n- 5-6 שאלות בפיזור על רמות בלום.\n- הבחנה לשלוש רמות.\n- אל תצטט טקסטים ארוכים מספרים או משירים מוגנים; הפנה אליהם בשמם.\n- התאם לתוכנית הלימודים של משרד החינוך ככל האפשר.\n"+
+    "החזר JSON תקין בלבד, בלי טקסט נוסף, לפי המבנה:\n"+lessonSchemaText();
+  try{
+    const o = await askJSON(prompt);
+    const l = normalize(o, blankLesson(gModel));
+    l.subject=subject; l.grade=grade; l.minutes=minutes; l.model=gModel;
+    if(!l.title) l.title=topic;
+    showGenResult(l,false);
+  }catch(e){
+    const msg = e&&e.code==="not_granted"?"לא ניתן אישור לשימוש בבינה המלאכותית.":e&&e.code==="rate_limited"?"יותר מדי בקשות — נסו שוב בעוד דקה.":"משהו השתבש ביצירה. נסו שוב.";
+    out.innerHTML = '<div class="note">'+msg+'</div>';
+  }finally{ genBusy=false; document.getElementById("gBtn").disabled=false; }
+}
+let pendingGen = null;
+function showGenResult(l, offline){
+  pendingGen = l;
+  const out = document.getElementById("gOut");
+  out.innerHTML = '<div class="prev">'+(offline?'<div class="note" style="margin-bottom:10px">זה שלד אוטומטי מבנק האסטרטגיות. את התוכן ממלאים בבונה.</div>':'')+
+    '<div class="meta" style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag s" style="background:'+subjColor(l.subject)+'">'+esc(l.subject)+'</span><span class="tag">כיתה '+esc(l.grade)+'</span><span class="tag">'+lessonMins(l)+' / '+l.minutes+' דק׳</span></div>'+
+    '<h2 style="margin:8px 0">'+esc(l.title)+'</h2>'+
+    '<h4>מטרות</h4><ul>'+l.goals.filter(Boolean).map(g=>'<li>'+esc(g)+'</li>').join("")+'</ul>'+
+    l.stages.map(st=>'<h4>'+esc(st.name)+' · '+stageMins(st)+' דק׳</h4><ul>'+st.activities.map(a=>'<li><b>'+esc(a.title)+'</b> ('+a.minutes+'׳, '+(TYPES[a.type]||TYPES.explain).n+')</li>').join("")+'</ul>').join("")+
+    '</div><div style="display:flex;gap:8px;margin-top:16px"><button class="btn pri" onclick="acceptGen()">פתיחה בבונה ועריכה</button><button class="btn" onclick="generate()">נסו שוב</button></div>';
+}
+function acceptGen(){ if(!pendingGen) return;
+  if(window._genCurric && !pendingGen.curriculum && document.getElementById("gTopic").value===window._genCurric) pendingGen.curriculum = window._genCurric;
+  lessons.unshift(pendingGen); cur=pendingGen; pendingGen=null; save(); go("edit"); toast("המערך נשמר בספרייה"); }
+
+let assistBusy = false;
+async function aiAssist(kind){
+  if(!sampleFn||!cur||assistBusy) return;
+  assistBusy = true;
+  const st = document.getElementById("aiStatus");
+  st.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>';
+  const ctx = "מערך שיעור: "+cur.title+"\nמקצוע: "+cur.subject+", כיתה "+cur.grade+", "+cur.minutes+" דקות\nמטרות: "+cur.goals.filter(Boolean).join("; ")+"\nשלבים: "+cur.stages.map(s=>s.name+": "+s.activities.map(a=>a.title).join(", ")).join(" | ")+"\n";
+  const P = {
+    hook:{ask:"הצע 3 פתיחות מסקרנות ושונות זו מזו (עד 7 דקות כל אחת) לשיעור הזה, שקשורות לעולמם של בני נוער בישראל. החזר JSON בלבד: {\"activities\":[{\"type\":\""+Object.keys(TYPES).join("|")+"\",\"title\":\"string\",\"minutes\":number,\"instructions\":\"string\"}]}"},
+    questions:{ask:"כתוב 6 שאלות לשיעור, אחת לכל רמה בטקסונומיית בלום: "+BLOOM.join(", ")+". החזר JSON בלבד: {\"questions\":[{\"level\":\"string\",\"q\":\"string\"}]}"},
+    diff:{ask:"כתוב הבחנה לשלוש רמות לשיעור הזה: תמיכה למתקשים, ליבה, העשרה למתקדמים. היה מעשי וקונקרטי. החזר JSON בלבד: {\"diff\":{\"support\":\"string\",\"core\":\"string\",\"enrich\":\"string\"}}"},
+    exit:{ask:"כתוב כרטיס יציאה של 2 שאלות קצרות שבודקות אם מטרות השיעור הושגו. החזר JSON בלבד: {\"exitTicket\":\"string\"}"}
+  }[kind];
+  try{
+    const o = await askJSON("אתה מתכנן הוראה ותיק בישראל. כתוב בעברית.\n"+ctx+P.ask);
+    if(kind==="hook" && o.activities){
+      const acts = o.activities.map(a=>A(TYPES[a.type]?a.type:"discuss",String(a.title||""),Math.max(1,Math.round(+a.minutes||5)),String(a.instructions||"")));
+      modal('<h3>בחרו פתיחה</h3>'+acts.map((a,i)=>'<div class="panel"><h3>'+esc(a.title)+' <span class="saved">'+a.minutes+' דק׳</span><span class="sp"></span><button class="btn sm pri" onclick="useHook('+i+')">שימוש</button></h3><p style="margin:0;white-space:pre-wrap">'+esc(a.instructions)+'</p></div>').join("")+'<div class="ft"><button class="btn" onclick="closeModal()">ביטול</button></div>');
+      window._hooks = acts;
+    }
+    if(kind==="questions" && o.questions){ o.questions.forEach(q=>cur.questions.push({level:BLOOM.includes(q.level)?q.level:"הבנה",q:String(q.q||"")})); renderQs(); toast("נוספו שאלות"); }
+    if(kind==="diff" && o.diff){ cur.diff={support:String(o.diff.support||""),core:String(o.diff.core||""),enrich:String(o.diff.enrich||"")}; renderEditor(); toast("עודכנה ההבחנה"); }
+    if(kind==="exit" && o.exitTicket){ cur.exitTicket=String(o.exitTicket); document.getElementById("eExit").value=cur.exitTicket; toast("נוסף כרטיס יציאה"); }
+    touch();
+    st.textContent="";
+  }catch(e){
+    st.textContent = e&&e.code==="rate_limited"?"נסו שוב בעוד דקה":e&&e.code==="not_granted"?"לא אושר":"לא הצליח, נסו שוב";
+  }finally{ assistBusy=false; }
+}
+function useHook(i){ const a = window._hooks&&window._hooks[i]; if(!a) return; if(!cur.stages.length) cur.stages.push(S("פתיחה",[])); cur.stages[0].activities.unshift(a); touch(); closeModal(); renderStages(); }
+
+/* ============ EXPORT / PRINT ============ */
+function lessonText(l){
+  let t = l.title+"\n"+l.subject+" · כיתה "+l.grade+" · "+l.minutes+" דקות · "+(MODELS[l.model]?MODELS[l.model].n:"")+"\n\n";
+  t += "מטרות:\n"+l.goals.filter(Boolean).map(g=>"• "+g).join("\n")+"\n";
+  if((l.bloom||[]).length) t += "רמות חשיבה: "+l.bloom.join(", ")+"\n";
+  if(l.materials) t += "חומרים: "+l.materials+"\n";
+  if(l.curriculum) t += "תוכנית הלימודים: "+l.curriculum+"\n";
+  l.stages.forEach((st,i)=>{ t += "\n"+(i+1)+". "+st.name+" ("+stageMins(st)+" דק׳)\n"; st.activities.forEach(a=>{ t += "   – "+a.title+" ["+(TYPES[a.type]||TYPES.explain).n+", "+a.minutes+"׳]\n"+(a.instructions?"     "+a.instructions.replace(/\n/g,"\n     ")+"\n":""); }); });
+  if(l.diff && (l.diff.support||l.diff.enrich)) t += "\nהבחנה:\nתמיכה: "+l.diff.support+"\nליבה: "+l.diff.core+"\nהעשרה: "+l.diff.enrich+"\n";
+  if((l.questions||[]).length) t += "\nשאלות:\n"+l.questions.map(q=>"• ["+q.level+"] "+q.q).join("\n")+"\n";
+  if(l.exitTicket) t += "\nכרטיס יציאה: "+l.exitTicket+"\n";
+  if(l.notes) t += "\nהערות: "+l.notes+"\n";
+  if((l.sources||[]).length) t += "\nמקורות:\n"+l.sources.filter(s=>s.url||s.title).map(s=>"• "+s.title+" "+s.url).join("\n")+"\n";
+  return t;
+}
+function copyText(){ if(cur) copy(lessonText(cur)); }
+function printLesson(){
+  const l = cur; if(!l) return;
+  document.getElementById("printArea").innerHTML =
+    '<h1>'+esc(l.title)+'</h1><div>'+esc(l.subject)+' · כיתה '+esc(l.grade)+' · '+l.minutes+' דקות · '+esc(MODELS[l.model]?MODELS[l.model].n:"")+'</div>'+
+    '<h2>מטרות</h2><ul>'+l.goals.filter(Boolean).map(g=>'<li>'+esc(g)+'</li>').join("")+'</ul>'+
+    (l.materials?'<p><b>חומרים:</b> '+esc(l.materials)+'</p>':'')+
+    (l.curriculum?'<p><b>תוכנית הלימודים:</b> '+esc(l.curriculum)+'</p>':'')+
+    '<h2>מהלך השיעור</h2><table><tr><th style="width:18%">שלב</th><th style="width:20%">פעילות</th><th>מהלך</th><th style="width:8%">דק׳</th></tr>'+
+    l.stages.map(st=>st.activities.map((a,i)=>'<tr>'+(i===0?'<td rowspan="'+st.activities.length+'"><b>'+esc(st.name)+'</b></td>':'')+'<td>'+esc(a.title)+'<br><small>'+(TYPES[a.type]||TYPES.explain).n+'</small></td><td style="white-space:pre-wrap">'+esc(a.instructions)+'</td><td>'+a.minutes+'</td></tr>').join("")).join("")+'</table>'+
+    (l.diff&&(l.diff.support||l.diff.enrich)?'<h2>הבחנה</h2><table><tr><th>תמיכה</th><th>ליבה</th><th>העשרה</th></tr><tr><td>'+esc(l.diff.support)+'</td><td>'+esc(l.diff.core)+'</td><td>'+esc(l.diff.enrich)+'</td></tr></table>':'')+
+    ((l.questions||[]).length?'<h2>שאלות</h2><ul>'+l.questions.map(q=>'<li><b>'+esc(q.level)+':</b> '+esc(q.q)+'</li>').join("")+'</ul>':'')+
+    (l.exitTicket?'<h2>כרטיס יציאה</h2><p>'+esc(l.exitTicket)+'</p>':'')+
+    (l.notes?'<h2>הערות למורה</h2><p>'+esc(l.notes)+'</p>':'')+
+    ((l.sources||[]).length?'<h2>מקורות</h2><ul>'+l.sources.filter(s=>s.url||s.title).map(s=>'<li>'+esc(s.title)+' — <span dir="ltr">'+esc(s.url)+'</span></li>').join("")+'</ul>':'');
+  try{ window.print(); }catch(e){}
+  setTimeout(()=>toast("אם חלון ההדפסה לא נפתח — השתמשו ב׳העתקה כטקסט׳ או פתחו את האתר בדפדפן"),600);
+}
+function openExportOne(){ if(!cur) return; exportDialog(JSON.stringify(cur,null,2), "ייצוא המערך"); }
+function openExportAll(){ exportDialog(JSON.stringify(lessons,null,2), "ייצוא כל המאגר ("+lessons.length+")"); }
+function exportDialog(json, title){
+  modal('<h3>'+esc(title)+'</h3><p class="saved">שמרו את הטקסט או שתפו עם מורה אחר — הוא מייבא אותו בכפתור ׳ייבוא׳ בספרייה.</p><textarea class="f" id="expTa" style="min-height:300px;direction:ltr;text-align:left;font-family:monospace;font-size:12px" readonly>'+esc(json)+'</textarea>'+
+    '<div class="ft"><button class="btn pri" onclick="copy(document.getElementById(\'expTa\').value)">העתקה</button><button class="btn" onclick="dl()">הורדת קובץ</button><button class="btn" onclick="closeModal()">סגירה</button></div>');
+}
+function dl(){
+  try{
+    const b = new Blob([document.getElementById("expTa").value],{type:"application/json"});
+    const a = document.createElement("a"); a.href=URL.createObjectURL(b); a.download="maarach-export.json"; document.body.appendChild(a); a.click(); a.remove();
+  }catch(e){ toast("ההורדה חסומה כאן — השתמשו בהעתקה"); }
+}
+function openImport(){
+  modal('<h3>ייבוא מערכים</h3><p class="saved">הדביקו כאן טקסט שיוצא מ׳מערך׳ (מערך בודד או מאגר שלם).</p><textarea class="f" id="impTa" style="min-height:240px;direction:ltr;text-align:left;font-family:monospace;font-size:12px"></textarea>'+
+    '<div class="ft"><button class="btn pri" onclick="doImport()">ייבוא</button><button class="btn" onclick="closeModal()">ביטול</button></div>');
+}
+function doImport(){
+  try{
+    let d = JSON.parse(document.getElementById("impTa").value);
+    if(!Array.isArray(d)) d=[d];
+    let n=0;
+    d.forEach(o=>{ if(o&&o.stages){ const l = normalize(o, blankLesson(o.model)); l.subject=SUBJECTS[o.subject]?o.subject:"אחר"; l.grade=GRADES.includes(o.grade)?o.grade:"ט׳"; l.minutes=+o.minutes||45; l.model=MODELS[o.model]?o.model:"classic"; l.id=uid(); l.updated=Date.now(); lessons.unshift(l); n++; } });
+    save(); closeModal(); renderLibrary(); toast("יובאו "+n+" מערכים");
+  }catch(e){ toast("הטקסט לא תקין"); }
+}
+
+/* ============ PRESENTER ============ */
+let P = null;
+function flatActs(l){ const out=[]; l.stages.forEach((st,si)=>st.activities.forEach((a,ai)=>out.push({si,ai,st,a}))); return out; }
+function startPresent(){
+  if(!cur) return;
+  const f = flatActs(cur); if(!f.length){ toast("אין פעילויות במערך"); return; }
+  P = {i:0, list:f, left:(+f[0].a.minutes||0)*60, run:false, t:null, done:new Set(), audio:null};
+  renderPres();
+  try{ document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{}); }catch(e){}
+  document.addEventListener("keydown", presKeys);
+}
+function stopPresent(){
+  if(!P) return; clearInterval(P.t); P=null;
+  document.getElementById("presRoot").innerHTML="";
+  document.removeEventListener("keydown", presKeys);
+  try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
+}
+function presKeys(e){
+  if(!P || document.querySelector(".tool")) { if(e.key==="Escape") closeTool(); return; }
+  if(e.key==="ArrowLeft") presGo(1);
+  else if(e.key==="ArrowRight") presGo(-1);
+  else if(e.key===" "){ e.preventDefault(); toggleTimer(); }
+  else if(e.key==="Escape") stopPresent();
+}
+function fmt(s){ const neg=s<0; s=Math.abs(s); return (neg?"-":"")+String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+function renderPres(){
+  const it = P.list[P.i], T = TYPES[it.a.type]||TYPES.explain;
+  let side = '<h4>'+esc(cur.title)+'</h4><div class="sub">'+esc(cur.subject)+' · כיתה '+esc(cur.grade)+'</div>';
+  let k=0;
+  cur.stages.forEach(st=>{
+    side += '<div class="st"><b>'+esc(st.name)+'</b>';
+    st.activities.forEach(a=>{ const idx=k++; side += '<button class="it'+(idx===P.i?" on":"")+(P.done.has(idx)&&idx!==P.i?" done":"")+'" onclick="presJump('+idx+')">'+T_ic(a)+' '+esc(a.title||"פעילות")+' · '+a.minutes+'׳</button>'; });
+    side += '</div>';
+  });
+  document.getElementById("presRoot").innerHTML = '<div class="pres"><aside>'+side+'</aside><div class="stagearea">'+
+    '<div class="ptop"><button class="pbtn" onclick="stopPresent()">✕ יציאה</button><span class="sp"></span>'+
+    '<button class="pbtn" onclick="toolPicker()">🎯 שולף שמות</button><button class="pbtn" onclick="toolGroups()">👥 חלוקה לקבוצות</button>'+
+    (cur.exitTicket?'<button class="pbtn" onclick="toolExit()">🎫 כרטיס יציאה</button>':'')+'</div>'+
+    '<div class="pstage">'+esc(it.st.name)+' · '+(P.i+1)+' מתוך '+P.list.length+'</div>'+
+    '<h1 class="ptitle">'+esc(it.a.title||T.n)+'</h1><div><span class="ptype">'+T.i+' '+T.n+'</span></div>'+
+    '<div class="pins">'+esc(it.a.instructions)+'</div>'+
+    '<div class="timer"><div class="clock'+(P.left<=0?" end":"")+'" id="clk">'+fmt(P.left)+'</div>'+
+    '<button class="pbtn hl" id="tbtn" onclick="toggleTimer()">'+(P.run?"⏸ השהיה":"▶ הפעלת טיימר")+'</button>'+
+    '<button class="pbtn" onclick="P.left+=60;tick(0)">+1 דק׳</button><button class="pbtn" onclick="resetTimer()">↺</button>'+
+    '<span style="flex:1"></span><button class="pbtn" onclick="presGo(-1)"'+(P.i===0?" disabled":"")+'>→ הקודם</button><button class="pbtn hl" onclick="presGo(1)">'+(P.i===P.list.length-1?"סיום ✓":"הבא ←")+'</button></div>'+
+    '</div></div>';
+}
+function T_ic(a){ return (TYPES[a.type]||TYPES.explain).i; }
+function presGo(d){
+  if(d>0 && P.i===P.list.length-1){ stopPresent(); toast("השיעור הסתיים. כל הכבוד!"); return; }
+  const j = P.i+d; if(j<0||j>=P.list.length) return;
+  P.done.add(P.i); presJump(j);
+}
+function presJump(j){ P.i=j; clearInterval(P.t); P.run=false; P.left=(+P.list[j].a.minutes||0)*60; renderPres(); }
+function toggleTimer(){
+  if(!P) return;
+  if(!P.audio){ try{ P.audio = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ P.audio=false; } }
+  P.run = !P.run;
+  clearInterval(P.t);
+  if(P.run) P.t = setInterval(()=>tick(-1),1000);
+  const b=document.getElementById("tbtn"); if(b) b.textContent = P.run?"⏸ השהיה":"▶ הפעלת טיימר";
+}
+function resetTimer(){ clearInterval(P.t); P.run=false; P.left=(+P.list[P.i].a.minutes||0)*60; renderPres(); }
+function tick(d){
+  P.left += d;
+  const c = document.getElementById("clk"); if(!c) return;
+  c.textContent = fmt(P.left); c.classList.toggle("end", P.left<=0);
+  if(P.left===0) beep();
+}
+function beep(){
+  try{ if(!P.audio) return; const o=P.audio.createOscillator(), g=P.audio.createGain(); o.frequency.value=880; o.connect(g); g.connect(P.audio.destination); g.gain.setValueAtTime(.2,P.audio.currentTime); g.gain.exponentialRampToValueAtTime(.001,P.audio.currentTime+1.2); o.start(); o.stop(P.audio.currentTime+1.2); }catch(e){}
+}
+/* tools */
+function names(){ return (lsGet(KEY_CLASS)||"").split(/\n|,/).map(s=>s.trim()).filter(Boolean); }
+function toolShell(inner){ const d=document.createElement("div"); d.className="tool"; d.onclick=e=>{ if(e.target===d) closeTool(); }; d.innerHTML='<div class="tbox">'+inner+'</div>'; document.body.appendChild(d); }
+function closeTool(){ document.querySelectorAll(".tool").forEach(x=>x.remove()); }
+function namesEditor(){ return '<details'+(names().length?'':' open')+'><summary style="cursor:pointer;color:#8d98b0">רשימת התלמידים ('+names().length+')</summary><textarea id="nmTa" placeholder="שם בכל שורה" oninput="lsSet(KEY_CLASS,this.value)">'+esc(lsGet(KEY_CLASS)||"")+'</textarea></details>'; }
+let pickedRecently = [];
+function toolPicker(){
+  toolShell('<div style="display:flex;align-items:center"><h2 style="margin:0;font-family:Secular One;font-weight:400">שולף שמות</h2><span style="flex:1"></span><button class="pbtn" onclick="closeTool()">✕</button></div>'+
+    '<div class="bigname" id="bn">?</div><div style="text-align:center;margin-bottom:16px"><button class="pbtn hl" style="font-size:20px;padding:12px 30px" onclick="spin()">🎯 שליפה</button></div>'+namesEditor());
+}
+function spin(){
+  const n = names(); const el=document.getElementById("bn");
+  if(!n.length){ el.textContent="הוסיפו שמות למטה"; return; }
+  let pool = n.filter(x=>!pickedRecently.includes(x)); if(!pool.length){ pickedRecently=[]; pool=n.slice(); }
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  let k=0; const iv=setInterval(()=>{ el.textContent=n[Math.floor(Math.random()*n.length)]; if(++k>14){ clearInterval(iv); el.textContent=pick; pickedRecently.push(pick); } },70);
+}
+function toolGroups(){
+  toolShell('<div style="display:flex;align-items:center;gap:10px"><h2 style="margin:0;font-family:Secular One;font-weight:400">חלוקה לקבוצות</h2><span style="flex:1"></span>מספר קבוצות <input id="gN" type="number" min="2" max="12" value="4" style="width:60px;background:#10151f;color:#fff;border:1px solid #2f3a52;border-radius:8px;padding:6px"><button class="pbtn hl" onclick="mkGroups()">חלוקה</button><button class="pbtn" onclick="closeTool()">✕</button></div>'+
+    '<div class="groups" id="grs"></div><div style="margin-top:16px">'+namesEditor()+'</div>');
+}
+function mkGroups(){
+  const n = names().slice(), k = Math.max(2,+document.getElementById("gN").value||4);
+  if(!n.length){ document.getElementById("grs").innerHTML='<div>הוסיפו שמות למטה</div>'; return; }
+  for(let i=n.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [n[i],n[j]]=[n[j],n[i]]; }
+  const g = Array.from({length:k},()=>[]); n.forEach((x,i)=>g[i%k].push(x));
+  document.getElementById("grs").innerHTML = g.map((m,i)=>'<div><b>קבוצה '+(i+1)+'</b>'+m.map(esc).join("<br>")+'</div>').join("");
+}
+function toolExit(){
+  toolShell('<div style="display:flex"><span style="flex:1"></span><button class="pbtn" onclick="closeTool()">✕</button></div><div style="font-size:16px;color:var(--amber);font-weight:700">🎫 כרטיס יציאה</div><div style="font-family:Secular One;font-size:40px;line-height:1.35;padding:20px 0">'+esc(cur.exitTicket)+'</div>');
+}
+
+/* ============ INIT ============ */
+function init(){
+  load();
+  document.getElementById("fGrade").innerHTML = opts(GRADES,"","כל השכבות");
+  document.getElementById("fModel").innerHTML = '<option value="">כל המודלים</option>'+Object.keys(MODELS).map(k=>'<option value="'+k+'">'+esc(MODELS[k].n)+'</option>').join("");
+  renderGenForm();
+  if(lessons.length) cur = lessons.slice().sort((a,b)=>(b.updated||0)-(a.updated||0))[0];
+  route();
+}
+init();
+</script>
+</body>
+</html>
