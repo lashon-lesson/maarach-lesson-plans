@@ -161,6 +161,115 @@ input.f:focus,select.f:focus,textarea.f:focus,.search input:focus{outline:2px so
 /* toolbox */
 .srcrow{display:grid;grid-template-columns:1fr 1.4fr auto auto;gap:6px;margin-bottom:6px;align-items:center}
 .curline{font-size:12.5px;color:var(--accent-d);margin:-2px 0 6px;font-weight:500}
+/* home */
+.home{max-width:940px;margin:0 auto;padding:10px 0 20px}
+.home h1{font-size:42px;line-height:1.15;margin:6px 0 10px}
+.home h1 em{font-style:normal;color:var(--accent)}
+.home .lead{font-size:17px;color:var(--ink2);margin:0 0 26px;max-width:720px}
+.step{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;margin:22px 0 12px}
+.sn{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:15px}
+.subjs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.scard{text-align:right;background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);transition:.15s;border-top:6px solid var(--c)}
+.scard:hover{border-color:var(--c);transform:translateY(-2px)}
+.scard.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 8%,var(--paper))}
+.scard b{font-size:30px;display:block}
+.scard h3{margin:6px 0 4px;font-size:24px}
+.scard p{margin:0;color:var(--ink2);font-size:14px}
+.scard.on h3::after{content:" ✓";color:var(--c)}
+.grades{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.gbtn{background:var(--paper);border:2px solid var(--line2);border-radius:14px;padding:14px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;transition:.15s}
+.gbtn b{font-family:"Secular One";font-weight:400;font-size:28px}
+.gbtn span{font-size:12px;color:var(--muted)}
+.gbtn:hover{border-color:var(--accent);background:var(--accent-l)}
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:30px 0 18px}
+.howto div{display:flex;gap:10px;align-items:flex-start;background:#fbf8f1;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px;color:var(--ink2)}
+.howto b{font-size:20px}
+.homelinks{display:flex;gap:18px;flex-wrap:wrap;font-size:14px}
+/* tools */
+.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.tcard{text-align:right;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:.15s;display:block}
+.tcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.tcard b{font-size:26px}
+.tcard h3{margin:6px 0 4px;font-size:20px}
+.tcard p{margin:0;color:var(--ink2);font-size:14px}
+details.more{position:relative}
+details.more>summary{list-style:none}
+details.more>summary::-webkit-details-marker{display:none}
+details.more .menu{position:absolute;left:0;top:44px;z-index:20;background:var(--paper);border:1px solid var(--line2);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);min-width:230px}
+/* year page, simplified */
+.ysel .yrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ylbl{font-weight:700;color:var(--ink2);min-width:46px}
+.ytop{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:10px}
+.ytop h2{margin:0 0 6px;font-size:30px}
+.yover{margin:0;color:var(--ink2);max-width:760px}
+details.req{margin:0 0 16px;font-size:14px}
+details.req>summary{cursor:pointer;color:var(--accent-d);font-weight:500;padding:4px 2px}
+details.req ul{color:var(--ink2);margin:6px 0 10px}
+.yhint{font-size:14px;color:var(--ink2);margin:0 0 12px}
+details.about{margin:12px 0 4px}
+details.about>summary{cursor:pointer;color:var(--accent-d);font-size:14px;font-weight:500}
+.llist{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.lrow{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:10px;font-size:14.5px;color:var(--ink2)}
+.lrow .ln{width:28px;flex-shrink:0;text-align:center;color:var(--muted);font-size:13px}
+.lrow .lt{flex:1;display:flex;flex-direction:column}
+.lrow .lt small{color:var(--muted);font-size:12.5px}
+.lrow.full{background:var(--accent-l);border:1px solid #b6ddd8;color:var(--ink);cursor:pointer}
+.lrow.full:hover{border-color:var(--accent)}
+.lrow.full .ln{color:var(--accent-d);font-weight:700}
+.lgo{background:var(--accent);color:#fff;border-radius:8px;padding:5px 12px;font-size:13px;white-space:nowrap;font-weight:500}
+/* read view */
+.rd{max-width:960px;margin:0 auto}
+.back{display:inline-block;margin-bottom:12px;text-decoration:none;font-size:14px}
+.rhead{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:14px}
+.rhead h1{font-size:34px;line-height:1.2;margin:4px 0 14px}
+.ractions{display:flex;gap:8px;flex-wrap:wrap}
+.ractions .btn{padding:10px 16px}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rcard,.rbox{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow)}
+.rcard h2{font-size:18px;margin:0 0 8px}
+.rcard ul{margin:0;padding-inline-start:20px}
+.rcard li{margin-bottom:4px}
+.rcard p{margin:0 0 6px;font-size:14px}
+.rh{font-size:22px;margin:24px 0 10px}
+.rstage{border-inline-start:5px solid var(--c);background:var(--paper);border-radius:12px;padding:12px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.rsh{display:flex;justify-content:space-between;align-items:center;font-size:17px;margin-bottom:6px;color:var(--c)}
+.rsh span{font-size:13px;color:var(--muted)}
+.ract{padding:10px 0;border-top:1px dashed var(--line)}
+.ract:first-of-type{border-top:none}
+.rah{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+.rah .ic{font-size:18px}
+.rah b{font-size:16px}
+.ract p{margin:0;white-space:pre-wrap;line-height:1.7;font-size:15px}
+.rdiff{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.rdiff>div{border-radius:12px;padding:12px;font-size:14px}
+.rdiff p{margin:4px 0 0}
+.rdiff .d1{background:var(--amber-l)}.rdiff .d2{background:var(--accent-l)}.rdiff .d3{background:#ede9fe}
+.rq{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 36px 14px 18px;margin:0}
+.rq li{margin-bottom:8px}
+.rbox{margin-top:14px}
+.rbox p{margin:6px 0 0;white-space:pre-wrap}
+.rbox.exit{background:var(--amber-l);border-color:#f3d9a8}
+.rnav{display:flex;justify-content:space-between;gap:10px;margin:24px 0 10px}
+.rnav .btn{flex-direction:column;align-items:flex-start;max-width:48%;text-decoration:none;color:var(--ink)}
+.rnav small{color:var(--muted);font-weight:400}
+@media (max-width:640px){
+  .subjs{grid-template-columns:1fr;gap:8px}
+  .scard{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;padding:12px 14px;border-top-width:2px;border-inline-start:6px solid var(--c)}
+  .scard b{grid-row:span 2;font-size:26px}
+  .scard h3{margin:0;font-size:20px}
+  .scard p{font-size:13px}
+  .grades{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:900px){
+  .home h1{font-size:30px}
+  .scard{padding:14px}
+  .scard p{font-size:13px}
+  .howto,.rgrid,.rdiff{grid-template-columns:1fr}
+  .ytop{flex-direction:column}
+  .rhead h1{font-size:26px}
+  .lgo{padding:4px 8px;font-size:12px}
+  .nav a{padding:8px 10px}
+}
 /* year plans */
 .ysel{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
 .ysel .chip{font-size:14px;padding:6px 14px}
@@ -294,39 +403,75 @@ input.f:focus,select.f:focus,textarea.f:focus,.search input:focus{outline:2px so
 <header class="top">
   <div class="brand"><b>מַעֲרָךְ</b><span>מערכי שיעור שמדליקים כיתה</span></div>
   <nav class="nav">
-    <a href="#library" data-v="library">הספרייה</a>
-    <a href="#edit" data-v="edit">בונה המערכים</a>
-    <a href="#ai" data-v="ai">מחולל חכם</a>
-    <a href="#toolbox" data-v="toolbox">בנק אסטרטגיות</a>
-    <a href="#year" data-v="year">תוכנית שנתית</a>
-    <a href="#web" data-v="web">מאגר ברשת</a>
+    <a href="#home" data-v="home">ראשי</a>
+    <a href="#year" data-v="year">תוכניות שנתיות</a>
+    <a href="#library" data-v="library">המערכים שלי</a>
+    <a href="#tools" data-v="tools">כלים למורה</a>
   </nav>
   <div class="sp"></div>
-  <button class="btn" onclick="newLesson()">＋ מערך חדש</button>
 </header>
 
 <main>
+  <!-- HOME -->
+  <section class="view" id="v-home">
+    <div class="home">
+      <h1>מערכי שיעור מוכנים <em>לכל השנה</em></h1>
+      <p class="lead">תנ״ך, ספרות ולשון לכיתות ז׳–י״ב, לפי תוכנית הלימודים של משרד החינוך. בוחרים מקצוע וכיתה, פותחים שיעור, ומלמדים או מדפיסים.</p>
+      <div class="step"><span class="sn">1</span>בחרו מקצוע</div>
+      <div class="subjs" id="hSubj"></div>
+      <div class="step"><span class="sn">2</span>בחרו כיתה</div>
+      <div class="grades" id="hGrade"></div>
+      <div class="howto">
+        <div><b>📅</b><span>רואים את כל השנה: יחידות ושיעורים מספטמבר עד יוני</span></div>
+        <div><b>📖</b><span>פותחים שיעור: מטרות, מהלך מפורט, שאלות וכרטיס יציאה</span></div>
+        <div><b>▶</b><span>מלמדים מהמסך עם טיימר, או מדפיסים</span></div>
+      </div>
+      <div class="homelinks">
+        <a href="#library">המערכים שלי <span id="hMyCount"></span></a>
+        <a href="#tools">כלים למורה: בניית מערך, מחולל, אסטרטגיות ומאגר קישורים</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- READ ONE LESSON -->
+  <section class="view" id="v-read"><div id="readBody"></div></section>
+
+  <!-- TOOLS -->
+  <section class="view" id="v-tools">
+    <div class="hero" style="grid-template-columns:1fr">
+      <div>
+        <h1>כלים <em>למורה</em></h1>
+        <p>כלים לבניית מערכים משלכם ולהעשרת השיעורים המוכנים.</p>
+      </div>
+    </div>
+    <div class="tools">
+      <button class="tcard" onclick="newLesson()"><b>✏️</b><h3>מערך חדש מאפס</h3><p>בונים מערך לפי מודל פדגוגי, עם שלבים, זמנים, הבחנה ושאלות.</p></button>
+      <a class="tcard" href="#ai"><b>✦</b><h3>מחולל חכם</h3><p>כותבים נושא, כיתה ומשך, ומקבלים טיוטת מערך לעריכה.</p></a>
+      <a class="tcard" href="#toolbox"><b>🧩</b><h3>בנק אסטרטגיות</h3><p>דרכי הוראה פעילות (ג׳יגסו, ארבע פינות ועוד) שנכנסות למערך בלחיצה.</p></a>
+      <a class="tcard" href="#web"><b>🌐</b><h3>מאגר ברשת</h3><p>קישורים לתוכניות הלימודים ולחומרי משרד החינוך ומרכזי המורים.</p></a>
+    </div>
+  </section>
   <!-- LIBRARY -->
   <section class="view" id="v-library">
     <div class="hero">
       <div>
-        <h1>שיעור טוב לא מתחיל ב<em>מצגת</em>.<br>הוא מתחיל בשאלה.</h1>
-        <p>מאגר אישי של מערכי שיעור לחטיבת הביניים ולתיכון: בונים לפי מודל פדגוגי, מאזנים זמנים, מבחינים לשלוש רמות, ומעבירים את השיעור על המסך עם טיימר, שולף שמות ומחלק קבוצות.</p>
+        <h1>המערכים <em>שלי</em></h1>
+        <p>כאן נשמרים מערכים ששמרתם מהתוכנית השנתית ומערכים שבניתם בעצמכם. כל מערך אפשר לערוך, להדפיס ולהעביר בכיתה. המערכים נשמרים בדפדפן במחשב הזה.</p>
       </div>
       <div class="stats" id="stats"></div>
     </div>
-    <a class="note" href="#year" style="display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit;margin-bottom:16px;background:var(--accent-l);border:1px solid #b6ddd8;border-radius:12px;padding:12px 16px">
-      <span style="font-size:22px">📅</span><span><b>חדש: תוכניות שנתיות בתנ״ך, ספרות ולשון לכיתות ז׳–י״ב</b><br><span style="font-size:13px;color:var(--ink2)">כל היחידות מספטמבר עד יוני לפי תוכנית הלימודים, רשימת השיעורים המלאה ומערכי שיעור מפורטים ←</span></span>
-    </a>
     <div class="filters">
       <div class="search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q"placeholder="חיפוש לפי נושא, מטרה או מילת מפתח…" oninput="renderLibrary()">
+        <input id="q" placeholder="חיפוש במערכים שלי…" oninput="renderLibrary()">
       </div>
       <select class="f" id="fGrade" onchange="renderLibrary()"></select>
-      <select class="f" id="fModel" onchange="renderLibrary()"></select>
-      <button class="btn" onclick="openImport()">ייבוא</button>
-      <button class="btn" onclick="openExportAll()">ייצוא הכל</button>
+      <button class="btn pri" onclick="newLesson()">＋ מערך חדש</button>
+      <details class="more"><summary class="btn">עוד ▾</summary><div class="menu">
+        <select class="f" id="fModel" onchange="renderLibrary()"></select>
+        <button class="btn" onclick="openImport()">ייבוא מערכים מקובץ</button>
+        <button class="btn" onclick="openExportAll()">ייצוא כל המערכים (גיבוי)</button>
+      </div></details>
     </div>
     <div class="chips" id="subjChips"></div>
     <div class="grid" id="libGrid"></div>
@@ -437,15 +582,9 @@ input.f:focus,select.f:focus,textarea.f:focus,.search input:focus{outline:2px so
 
   <!-- YEAR PLANS -->
   <section class="view" id="v-year">
-    <div class="hero" style="grid-template-columns:1fr">
-      <div>
-        <h1>תוכנית <em>שנתית</em></h1>
-        <p>תנ״ך, ספרות ולשון לכיתות ז׳–י״ב, מספטמבר עד יוני, לפי תוכנית הלימודים של משרד החינוך לשנת תשפ״ז (זרם ממלכתי). כל יחידה כוללת את רשימת השיעורים המלאה ומערכי שיעור מפורטים שאפשר להוסיף לספרייה, לערוך ולהעביר בכיתה.</p>
-      </div>
-    </div>
     <div class="ysel">
-      <div class="chips" id="ySubj" style="margin:0"></div>
-      <div class="chips" id="yGrade" style="margin:0"></div>
+      <div class="yrow"><span class="ylbl">מקצוע</span><div class="chips" id="ySubj" style="margin:0"></div></div>
+      <div class="yrow"><span class="ylbl">כיתה</span><div class="chips" id="yGrade" style="margin:0"></div></div>
     </div>
     <div id="yBody"></div>
   </section>
@@ -762,10 +901,14 @@ async function copy(text){
 
 /* ============ ROUTING ============ */
 function route(){
-  let v = (location.hash||"#library").slice(1);
-  if(!["library","edit","ai","toolbox","web","year"].includes(v)) v="library";
+  let v = decodeURIComponent((location.hash||"#home").slice(1));
+  if(v.indexOf("read:")===0){ const p=v.split(":"); readState={key:p[1],ui:+p[2],li:+p[3]}; v="read"; }
+  if(!["home","library","edit","ai","toolbox","web","year","tools","read"].includes(v)) v="home";
   document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on", x.id==="v-"+v));
-  document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("on", a.dataset.v===v));
+  const navOf = {edit:"tools",ai:"tools",toolbox:"tools",web:"tools",read:"year"};
+  document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("on", a.dataset.v===(navOf[v]||v)));
+  if(v==="home") renderHome();
+  if(v==="read") renderRead();
   if(v==="library") renderLibrary();
   if(v==="edit") renderEditor();
   if(v==="toolbox") renderToolbox();
@@ -1229,38 +1372,39 @@ function planCounts(p){
 }
 function planLid(p,ui,li){ return p.key+"#"+ui+"."+li; }
 function inLib(id){ return lessons.find(l=>l.fromPlan===id)||null; }
+function cleanOutline(o){ return String(o).replace(/^שיעור\s*\d+\s*[:.\-–]\s*/,""); }
 function planHtml(p){
   const c = planCounts(p), units = p.units||[];
-  const totalW = units.reduce((s,u)=>s+(+u.weeks||1),0)||1;
-  const added = units.reduce((s,u,ui)=>s+(u.lessons||[]).filter((x,li)=>inLib(planLid(p,ui,li))).length,0);
-  let h = '<div class="yhead"><div class="panel"><h2>'+esc(p.subject)+' · כיתה '+esc(p.grade)+'</h2>'+
-    '<div class="ykpis"><span class="tag">'+esc(p.stream||"ממלכתי")+' · '+esc(p.year||"")+'</span>'+(p.hoursPerWeek?'<span class="tag">'+esc(p.hoursPerWeek)+' ש״ש</span>':'')+
-    '<span class="tag">'+c.units+' יחידות</span><span class="tag">'+c.outl+' שיעורים בתוכנית</span><span class="tag s" style="background:var(--accent)">'+c.full+' מערכים מלאים</span></div>'+
-    '<p style="margin:0;color:var(--ink2)">'+esc(p.overview||"")+'</p>'+
-    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn pri" onclick="addAllPlan(\''+p.key+'\')">＋ הוספת כל '+c.full+' המערכים לספרייה'+(added?' ('+added+' כבר בספרייה)':'')+'</button>'+
-    '<button class="btn" onclick="printPlan(\''+p.key+'\')">הדפסת התוכנית השנתית</button></div></div>'+
-    '<div class="panel"><b>דרישות משרד החינוך</b><ul>'+(p.requirements||[]).map(r=>'<li>'+esc(r)+'</li>').join("")+'</ul>'+
-    ((p.sources||[]).length?'<b style="display:block;margin-top:10px">מקורות רשמיים</b><ul>'+p.sources.map(s=>safeUrl(s.url)?'<li><a href="'+esc(safeUrl(s.url))+'" target="_blank" rel="noopener">'+esc(s.title||s.url)+'</a></li>':'<li>'+esc(s.title)+'</li>').join("")+'</ul>':'')+'</div></div>';
+  let h = '<div class="ytop"><div><h2>'+esc(p.subject)+' · כיתה '+esc(p.grade)+'</h2>'+
+    '<p class="yover">'+esc(p.overview||"")+'</p>'+
+    '<div class="ykpis"><span class="tag">'+c.units+' יחידות</span><span class="tag">'+c.outl+' שיעורים בשנה</span><span class="tag s" style="background:var(--accent)">'+c.full+' מערכים מלאים מוכנים</span>'+(p.hoursPerWeek?'<span class="tag">'+esc(p.hoursPerWeek)+' שעות בשבוע</span>':'')+'</div></div>'+
+    '<div class="yacts"><button class="btn" onclick="printPlan(\''+p.key+'\')">🖨 הדפסת התוכנית</button></div></div>'+
+    '<details class="req"><summary>דרישות משרד החינוך ומקורות רשמיים ▾</summary><ul>'+(p.requirements||[]).map(r=>'<li>'+esc(r)+'</li>').join("")+'</ul>'+
+    ((p.sources||[]).length?'<b>מקורות:</b><ul>'+p.sources.map(s=>safeUrl(s.url)?'<li><a href="'+esc(safeUrl(s.url))+'" target="_blank" rel="noopener">'+esc(s.title||s.url)+'</a></li>':'<li>'+esc(s.title)+'</li>').join("")+'</ul>':'')+
+    '<button class="btn sm" onclick="addAllPlan(\''+p.key+'\')">שמירת כל '+c.full+' המערכים ב״המערכים שלי״</button></details>';
   h += '<div class="ytl">'+units.map((u,ui)=>'<a href="javascript:void 0" onclick="openUnit('+ui+')" title="'+esc(u.title)+' · '+esc(u.months||"")+'" style="flex:'+(+u.weeks||1)+';background:'+STAGE_COLORS[ui%STAGE_COLORS.length]+'">'+esc(u.title)+'</a>').join("")+'</div>'+
     '<div class="ymonths"><span>ספטמבר</span><span>אוקטובר</span><span>נובמבר</span><span>דצמבר</span><span>ינואר</span><span>פברואר</span><span>מרץ</span><span>אפריל</span><span>מאי</span><span>יוני</span></div>';
+  h += '<p class="yhint">לחצו על יחידה כדי לראות את השיעורים שלה. שיעור עם הכפתור <b>פתיחת המערך</b> כולל מערך מלא ומפורט.</p>';
   h += units.map((u,ui)=>{
-    const col = STAGE_COLORS[ui%STAGE_COLORS.length];
-    const fullIdx = {}; (u.lessons||[]).forEach((l,li)=>{ if(l.outlineIndex) fullIdx[l.outlineIndex]=li; });
+    const col = STAGE_COLORS[ui%STAGE_COLORS.length], L = u.lessons||[], outl = u.outline||[];
+    const byIdx = {}, used = {};
+    L.forEach((l,li)=>{ const k=+l.outlineIndex; if(k>=1 && k<=outl.length && byIdx[k]===undefined){ byIdx[k]=li; used[li]=1; } });
+    const row = (num, text, li)=>{
+      if(li===undefined) return '<li class="lrow"><span class="ln">'+num+'</span><span class="lt">'+esc(text)+'</span></li>';
+      const l=L[li];
+      return '<li class="lrow full" onclick="openRead(\''+p.key+'\','+ui+','+li+')"><span class="ln">'+num+'</span><span class="lt"><b>'+esc(l.title||text)+'</b>'+(l.title&&text&&l.title!==text?'<small>'+esc(text)+'</small>':'')+'</span><span class="lgo">פתיחת המערך ←</span></li>';
+    };
+    let rows = outl.map((o,oi)=>row(oi+1, cleanOutline(o), byIdx[oi+1])).join("");
+    L.forEach((l,li)=>{ if(!used[li]) rows += row("★", l.title, li); });
     return '<details class="unit" id="unit'+ui+'"'+(ui===0?' open':'')+'><summary><span class="num" style="background:'+col+'">'+(ui+1)+'</span><div><h3>'+esc(u.title)+'</h3>'+
-      '<div class="sub">'+esc(u.months||"")+(u.weeks?' · '+esc(u.weeks)+' שבועות':'')+' · '+(u.outline||[]).length+' שיעורים · '+(u.lessons||[]).length+' מערכים מלאים</div></div><span class="chev">▾</span></summary>'+
-      '<div class="ubody">'+(u.bigIdea?'<p class="big">💡 '+esc(u.bigIdea)+'</p>':'')+
+      '<div class="sub">'+esc(u.months||"")+' · '+outl.length+' שיעורים · '+L.length+' מערכים מלאים</div></div><span class="chev">▾</span></summary>'+
+      '<div class="ubody">'+
+      '<details class="about"><summary>על היחידה: מטרות, טקסטים והערכה ▾</summary>'+(u.bigIdea?'<p class="big">💡 '+esc(u.bigIdea)+'</p>':'')+
       '<div class="ugrid">'+
         '<div class="ubox"><b class="h">מה בתוכנית הלימודים</b>'+esc(u.curriculum||"")+((u.texts||[]).length?'<b class="h" style="margin-top:8px">טקסטים ויצירות</b><ul>'+u.texts.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul>':'')+'</div>'+
         '<div class="ubox"><b class="h">מטרות היחידה</b><ul>'+(u.goals||[]).map(g=>'<li>'+esc(g)+'</li>').join("")+'</ul>'+(u.assessment?'<b class="h" style="margin-top:8px">הערכה</b>'+esc(u.assessment):'')+'</div>'+
-      '</div>'+
-      ((u.outline||[]).length?'<h4 style="margin:16px 0 6px">רצף השיעורים</h4><ol class="outl">'+u.outline.map((o,oi)=>{ const li=fullIdx[oi+1];
-        return li!==undefined?'<li class="full"><a onclick="previewPlanLesson(\''+p.key+'\','+ui+','+li+')">'+esc(String(o).replace(/^שיעור\s*\d+\s*[:.\-–]\s*/,""))+'</a> ★</li>':'<li>'+esc(String(o).replace(/^שיעור\s*\d+\s*[:.\-–]\s*/,""))+'</li>'; }).join("")+'</ol><div class="saved">★ = יש מערך מלא</div>':'')+
-      ((u.lessons||[]).length?'<h4 style="margin:16px 0 0">מערכי שיעור מלאים</h4><div class="ylessons">'+u.lessons.map((l,li)=>{ const id=planLid(p,ui,li), inl=inLib(id);
-        return '<div class="yl'+(inl?" added":"")+'"><div style="display:flex;gap:5px;flex-wrap:wrap">'+(l.outlineIndex?'<span class="tag">שיעור '+esc(l.outlineIndex)+'</span>':'')+'<span class="tag">'+esc(l.minutes||45)+' דק׳</span>'+(MODELS[l.model]?'<span class="tag">'+esc(MODELS[l.model].n)+'</span>':'')+'</div>'+
-          '<h4>'+esc(l.title)+'</h4><div class="saved">'+esc((l.goals||[])[0]||"")+'</div>'+
-          '<div class="ft"><button class="btn sm" onclick="previewPlanLesson(\''+p.key+'\','+ui+','+li+')">צפייה</button>'+
-          (inl?'<button class="btn sm pri" onclick="openLesson(\''+inl.id+'\')">פתיחה בבונה</button>':'<button class="btn sm pri" onclick="addPlanLesson(\''+p.key+'\','+ui+','+li+',true)">＋ לספרייה ועריכה</button>')+
-          '<button class="btn sm" onclick="presentPlanLesson(\''+p.key+'\','+ui+','+li+')">▶ הצגה</button></div></div>'; }).join("")+'</div>':'')+
+      '</div></details>'+
+      '<ol class="llist">'+rows+'</ol>'+
       '</div></details>';
   }).join("");
   return h;
@@ -1292,15 +1436,66 @@ function addAllPlan(key){
   p.units.forEach((u,ui)=>(u.lessons||[]).forEach((x,li)=>{ if(!inLib(planLid(p,ui,li))){ const l=planLessonObj(key,ui,li); if(l){ lessons.push(l); n++; } } }));
   save(); renderYear(); toast(n?n+" מערכים נוספו לספרייה":"כל המערכים כבר בספרייה");
 }
-function previewPlanLesson(key,ui,li){
-  const l = planLessonObj(key,ui,li); if(!l) return;
-  modal('<div class="pv">'+lessonDoc(l)+'</div><div class="ft" style="position:sticky;bottom:-22px;background:var(--paper);padding:10px 0">'+
-    '<button class="btn pri" onclick="addPlanLesson(\''+key+'\','+ui+','+li+',true)">'+(inLib(l.fromPlan)?"פתיחה בבונה":"＋ לספרייה ועריכה")+'</button>'+
-    '<button class="btn" onclick="presentPlanLesson(\''+key+'\','+ui+','+li+')">▶ הצגה</button>'+
-    '<button class="btn" onclick="printHtml(lessonDoc(planLessonObj(\''+key+'\','+ui+','+li+')))">הדפסה</button>'+
-    '<button class="btn" onclick="closeModal()">סגירה</button></div>');
-  const b=document.querySelector("#modalRoot .box"); if(b){ b.style.maxWidth="980px"; b.scrollTop=0; }
+function previewPlanLesson(key,ui,li){ openRead(key,ui,li); }
+
+/* ============ READ VIEW (one ready lesson, full page) ============ */
+let readState = null;
+function openRead(key,ui,li){ go("read:"+key+":"+ui+":"+li); }
+function planOrder(p){
+  const a=[]; (p.units||[]).forEach((u,ui)=>(u.lessons||[]).forEach((l,li)=>a.push({ui,li,o:+l.outlineIndex||999})));
+  return a.sort((x,y)=>x.ui-y.ui||x.o-y.o||x.li-y.li);
 }
+function renderRead(){
+  const el=document.getElementById("readBody");
+  if(!readState||!readState.key){ go("year"); return; }
+  const key=readState.key, ui=readState.ui, li=readState.li;
+  if(!planFor(key)){
+    el.innerHTML='<div class="yload">טוען את המערך…</div>';
+    loadPlan(key,()=>{ if(planFor(key)) renderRead(); else el.innerHTML='<div class="empty">המערך לא נמצא. <a href="#year">חזרה לתוכנית השנתית</a></div>'; });
+    return;
+  }
+  const p=planFor(key), u=(p.units||[])[ui], l=planLessonObj(key,ui,li);
+  if(!u||!l){ el.innerHTML='<div class="empty">המערך לא נמצא. <a href="#year">חזרה לתוכנית השנתית</a></div>'; return; }
+  const raw=u.lessons[li];
+  ySel={s:p.subject,g:p.grade}; lsSet(KEY_YSEL, JSON.stringify(ySel));
+  const ord=planOrder(p), at=ord.findIndex(x=>x.ui===ui&&x.li===li), prev=ord[at-1], next=ord[at+1];
+  const nav=(x,lbl)=>x?'<a class="btn" href="#read:'+key+':'+x.ui+':'+x.li+'">'+lbl+'<small>'+esc(p.units[x.ui].lessons[x.li].title)+'</small></a>':'<span></span>';
+  const inl=inLib(l.fromPlan), A3="'"+key+"',"+ui+","+li;
+  let h='<div class="rd">'+
+    '<a class="back" href="#year" onclick="setTimeout(()=>openUnit('+ui+'),120)">→ חזרה לתוכנית: '+esc(p.subject)+' כיתה '+esc(p.grade)+' · יחידה '+(ui+1)+': '+esc(u.title)+'</a>'+
+    '<div class="rhead"><div class="ykpis">'+(raw.outlineIndex?'<span class="tag">שיעור '+esc(raw.outlineIndex)+' ביחידה</span>':'')+'<span class="tag">'+l.minutes+' דקות</span>'+(MODELS[l.model]?'<span class="tag">מבנה: '+esc(MODELS[l.model].n)+'</span>':'')+'</div>'+
+      '<h1>'+esc(l.title)+'</h1>'+
+      '<div class="ractions"><button class="btn pri" onclick="presentPlanLesson('+A3+')">▶ העברת השיעור בכיתה</button>'+
+      '<button class="btn" onclick="printHtml(lessonDoc(planLessonObj('+A3+')))">🖨 הדפסה</button>'+
+      '<button class="btn" onclick="addPlanLesson('+A3+',true)">'+(inl?'✏️ עריכה (שמור ב״המערכים שלי״)':'✏️ שמירה ב״המערכים שלי״ ועריכה')+'</button></div></div>'+
+    '<div class="rgrid"><section class="rcard"><h2>🎯 מטרות השיעור</h2><ul>'+l.goals.filter(Boolean).map(g=>'<li>'+esc(g)+'</li>').join("")+'</ul></section>'+
+      '<section class="rcard"><h2>🧰 הכנה לשיעור</h2>'+(l.materials?'<p><b>חומרים:</b> '+esc(l.materials)+'</p>':'')+(l.curriculum?'<p><b>תוכנית הלימודים:</b> '+esc(l.curriculum)+'</p>':'')+
+        (l.bloom.length?'<p><b>רמות חשיבה:</b> '+l.bloom.map(b=>'<span class="tag">'+esc(b)+'</span>').join(" ")+'</p>':'')+'</section></div>'+
+    '<h2 class="rh">מהלך השיעור · '+lessonMins(l)+' דקות</h2>'+
+    l.stages.map((st,si)=>'<div class="rstage" style="--c:'+STAGE_COLORS[si%STAGE_COLORS.length]+'"><div class="rsh"><b>'+(si+1)+'. '+esc(st.name)+'</b><span>'+stageMins(st)+' דק׳</span></div>'+
+      st.activities.map(a=>'<div class="ract"><div class="rah"><span class="ic">'+(TYPES[a.type]||TYPES.explain).i+'</span><b>'+esc(a.title)+'</b><span class="tag">'+esc((TYPES[a.type]||TYPES.explain).n)+'</span><span class="tag">'+a.minutes+' דק׳</span></div><p>'+esc(a.instructions)+'</p></div>').join("")+'</div>').join("")+
+    ((l.diff.support||l.diff.core||l.diff.enrich)?'<h2 class="rh">התאמה לתלמידים שונים</h2><div class="rdiff"><div class="d1"><b>תמיכה: למי שמתקשה</b><p>'+esc(l.diff.support)+'</p></div><div class="d2"><b>ליבה: לכלל הכיתה</b><p>'+esc(l.diff.core)+'</p></div><div class="d3"><b>העשרה: למי שמוכן ליותר</b><p>'+esc(l.diff.enrich)+'</p></div></div>':'')+
+    (l.questions.length?'<h2 class="rh">שאלות לדיון ולהערכה</h2><ol class="rq">'+l.questions.map(q=>'<li><span class="tag">'+esc(q.level)+'</span> '+esc(q.q)+'</li>').join("")+'</ol>':'')+
+    (l.exitTicket?'<div class="rbox exit"><b>🎫 כרטיס יציאה</b><p>'+esc(l.exitTicket)+'</p></div>':'')+
+    (raw.notes?'<div class="rbox"><b>📝 הערות למורה</b><p>'+esc(raw.notes)+'</p></div>':'')+
+    (l.sources.length?'<div class="rbox"><b>🔗 מקורות</b><ul>'+l.sources.map(s=>safeUrl(s.url)?'<li><a href="'+esc(safeUrl(s.url))+'" target="_blank" rel="noopener">'+esc(s.title||s.url)+'</a></li>':'<li>'+esc(s.title)+'</li>').join("")+'</ul></div>':'')+
+    '<div class="rnav">'+nav(next,'המערך הבא ←')+nav(prev,'→ המערך הקודם')+'</div></div>';
+  el.innerHTML=h;
+}
+
+/* ============ HOME ============ */
+const SUBJ_INFO = {
+  "תנ״ך":{i:"📜",d:"ספרי המקרא לפי תוכנית החובה, מכיתה ז׳ ועד הבגרות"},
+  "ספרות":{i:"📚",d:"סיפורים, שירה, מחזות ורומנים, מכיתה ז׳ ועד הבגרות"},
+  "לשון":{i:"✍️",d:"הבנת הנקרא, כתיבה ולשון, מכיתה ז׳ ועד הבגרות"}
+};
+function renderHome(){
+  document.getElementById("hSubj").innerHTML = YEAR_SUBJ.map(o=>'<button class="scard'+(ySel.s===o.s?" on":"")+'" style="--c:'+subjColor(o.s)+'" data-v="'+esc(o.s)+'" onclick="hPick(this.dataset.v)"><b>'+SUBJ_INFO[o.s].i+'</b><h3>'+esc(o.s)+'</h3><p>'+esc(SUBJ_INFO[o.s].d)+'</p></button>').join("");
+  document.getElementById("hGrade").innerHTML = GRADES.map(g=>'<button class="gbtn" data-v="'+esc(g)+'" onclick="hGo(this.dataset.v)"><b>'+esc(g)+'</b><span>'+(GRADE_NUM[g]<=9?"חטיבת ביניים":"תיכון")+'</span></button>').join("");
+  document.getElementById("hMyCount").textContent = lessons.length?"("+lessons.length+")":"";
+}
+function hPick(s){ ySel.s=s; lsSet(KEY_YSEL, JSON.stringify(ySel)); renderHome(); }
+function hGo(g){ ySel.g=g; lsSet(KEY_YSEL, JSON.stringify(ySel)); go("year"); }
 function printPlan(key){
   const p=planFor(key); if(!p) return;
   printHtml('<h1>תוכנית שנתית · '+esc(p.subject)+' · כיתה '+esc(p.grade)+'</h1><div>'+esc(p.stream||"")+' · '+esc(p.year||"")+(p.hoursPerWeek?' · '+esc(p.hoursPerWeek)+' ש״ש':'')+'</div>'+
