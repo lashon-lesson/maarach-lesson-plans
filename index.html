@@ -161,6 +161,49 @@ input.f:focus,select.f:focus,textarea.f:focus,.search input:focus{outline:2px so
 /* toolbox */
 .srcrow{display:grid;grid-template-columns:1fr 1.4fr auto auto;gap:6px;margin-bottom:6px;align-items:center}
 .curline{font-size:12.5px;color:var(--accent-d);margin:-2px 0 6px;font-weight:500}
+/* year plans */
+.ysel{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.ysel .chip{font-size:14px;padding:6px 14px}
+.yhead{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:16px}
+.yhead .panel{margin:0}
+.yhead h2{margin:0 0 6px;font-size:26px}
+.yhead ul{margin:6px 0 0;padding-inline-start:18px;font-size:13.5px;color:var(--ink2)}
+.yhead li{margin-bottom:4px}
+.ykpis{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.ytl{display:flex;height:34px;border-radius:10px;overflow:hidden;margin:0 0 6px;border:1px solid var(--line)}
+.ytl a{display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;text-decoration:none;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ymonths{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-bottom:18px;padding:0 2px}
+.unit{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden}
+.unit>summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;gap:12px;align-items:center}
+.unit>summary::-webkit-details-marker{display:none}
+.unit>summary .num{width:34px;height:34px;border-radius:10px;color:#fff;display:grid;place-items:center;font-family:"Secular One";font-size:17px;flex-shrink:0}
+.unit>summary h3{margin:0;font-size:19px}
+.unit>summary .sub{font-size:12.5px;color:var(--muted)}
+.unit>summary .chev{margin-inline-start:auto;transition:.2s;color:var(--muted)}
+.unit[open]>summary .chev{transform:rotate(180deg)}
+.ubody{padding:0 18px 16px;border-top:1px solid var(--line)}
+.ugrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.ubox{background:#fbf8f1;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px}
+.ubox b.h{display:block;font-size:12px;color:var(--ink2);margin-bottom:4px}
+.ubox ul,.ubox ol{margin:0;padding-inline-start:18px}
+.big{font-size:15px;color:var(--accent-d);font-weight:500;margin:12px 0 0}
+.outl{columns:2;column-gap:24px;font-size:13.5px;margin:0;padding-inline-start:22px}
+.outl li{break-inside:avoid;margin-bottom:3px}
+.outl li.full{font-weight:700;color:var(--accent-d)}
+.outl li.full a{color:inherit;cursor:pointer;text-decoration:underline dotted}
+.ylessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px}
+.yl{border:1px solid var(--line2);border-radius:12px;padding:12px;background:var(--paper);display:flex;flex-direction:column;gap:6px}
+.yl h4{margin:0;font-size:15.5px;line-height:1.3}
+.yl .ft{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.yl.added{border-color:var(--accent)}
+.pv{font-size:14px}
+.pv h1{font-size:26px;margin:0 0 4px}
+.pv h2{font-size:17px;margin:16px 0 6px;border-bottom:1px solid var(--line);padding-bottom:3px}
+.pv table{width:100%;border-collapse:collapse;font-size:13.5px}
+.pv td,.pv th{border:1px solid var(--line2);padding:6px;vertical-align:top;text-align:right}
+.pv th{background:#f3eee3}
+.yload{padding:40px;text-align:center;color:var(--muted)}
+@media (max-width:900px){.yhead,.ugrid{grid-template-columns:1fr}.outl{columns:1}}
 .wcard .org{font-size:12px;color:var(--muted)}
 .wcard h4 a{color:var(--ink);text-decoration:none}
 .wcard h4 a:hover{color:var(--accent);text-decoration:underline}
@@ -255,6 +298,7 @@ input.f:focus,select.f:focus,textarea.f:focus,.search input:focus{outline:2px so
     <a href="#edit" data-v="edit">בונה המערכים</a>
     <a href="#ai" data-v="ai">מחולל חכם</a>
     <a href="#toolbox" data-v="toolbox">בנק אסטרטגיות</a>
+    <a href="#year" data-v="year">תוכנית שנתית</a>
     <a href="#web" data-v="web">מאגר ברשת</a>
   </nav>
   <div class="sp"></div>
@@ -271,10 +315,13 @@ input.f:focus,select.f:focus,textarea.f:focus,.search input:focus{outline:2px so
       </div>
       <div class="stats" id="stats"></div>
     </div>
+    <a class="note" href="#year" style="display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit;margin-bottom:16px;background:var(--accent-l);border:1px solid #b6ddd8;border-radius:12px;padding:12px 16px">
+      <span style="font-size:22px">📅</span><span><b>חדש: תוכניות שנתיות בתנ״ך, ספרות ולשון לכיתות ז׳–י״ב</b><br><span style="font-size:13px;color:var(--ink2)">כל היחידות מספטמבר עד יוני לפי תוכנית הלימודים, רשימת השיעורים המלאה ומערכי שיעור מפורטים ←</span></span>
+    </a>
     <div class="filters">
       <div class="search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" placeholder="חיפוש לפי נושא, מטרה או מילת מפתח…" oninput="renderLibrary()">
+        <input id="q"placeholder="חיפוש לפי נושא, מטרה או מילת מפתח…" oninput="renderLibrary()">
       </div>
       <select class="f" id="fGrade" onchange="renderLibrary()"></select>
       <select class="f" id="fModel" onchange="renderLibrary()"></select>
@@ -386,6 +433,21 @@ input.f:focus,select.f:focus,textarea.f:focus,.search input:focus{outline:2px so
     </div>
     <div class="chips" id="tbChips"></div>
     <div class="tb" id="tbGrid"></div>
+  </section>
+
+  <!-- YEAR PLANS -->
+  <section class="view" id="v-year">
+    <div class="hero" style="grid-template-columns:1fr">
+      <div>
+        <h1>תוכנית <em>שנתית</em></h1>
+        <p>תנ״ך, ספרות ולשון לכיתות ז׳–י״ב, מספטמבר עד יוני, לפי תוכנית הלימודים של משרד החינוך לשנת תשפ״ז (זרם ממלכתי). כל יחידה כוללת את רשימת השיעורים המלאה ומערכי שיעור מפורטים שאפשר להוסיף לספרייה, לערוך ולהעביר בכיתה.</p>
+      </div>
+    </div>
+    <div class="ysel">
+      <div class="chips" id="ySubj" style="margin:0"></div>
+      <div class="chips" id="yGrade" style="margin:0"></div>
+    </div>
+    <div id="yBody"></div>
   </section>
 
   <!-- WEB DIRECTORY -->
@@ -701,13 +763,14 @@ async function copy(text){
 /* ============ ROUTING ============ */
 function route(){
   let v = (location.hash||"#library").slice(1);
-  if(!["library","edit","ai","toolbox","web"].includes(v)) v="library";
+  if(!["library","edit","ai","toolbox","web","year"].includes(v)) v="library";
   document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on", x.id==="v-"+v));
   document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("on", a.dataset.v===v));
   if(v==="library") renderLibrary();
   if(v==="edit") renderEditor();
   if(v==="toolbox") renderToolbox();
   if(v==="web") renderWeb();
+  if(v==="year") renderYear();
   window.scrollTo(0,0);
 }
 window.addEventListener("hashchange", route);
@@ -1130,6 +1193,125 @@ function pickWebSrc(){
     '</div><div class="ft"><button class="btn" onclick="closeModal()">סגירה</button></div>');
 }
 
+/* ============ YEAR PLANS ============ */
+/* הנתונים נטענים לפי דרישה מ-data/<slug>-<grade>.js וכל קובץ מוסיף אובייקט ל-window.YEAR_PLANS */
+const YEAR_SUBJ = [{s:"תנ״ך",slug:"tanach"},{s:"ספרות",slug:"sifrut"},{s:"לשון",slug:"lashon"}];
+const GRADE_NUM = {"ז׳":7,"ח׳":8,"ט׳":9,"י׳":10,"י״א":11,"י״ב":12};
+const DATA_V = "1";
+const KEY_YSEL = "maarach_v1_ysel";
+let ySel = (()=>{ try{ return JSON.parse(lsGet(KEY_YSEL))||{s:"תנ״ך",g:"ז׳"}; }catch(e){ return {s:"תנ״ך",g:"ז׳"}; } })();
+const planState = {}; /* key -> "loading" | "ok" | "missing" */
+function planKey(s,g){ const o=YEAR_SUBJ.find(x=>x.s===s); return o?o.slug+"-"+GRADE_NUM[g]:""; }
+function planFor(key){ return (window.YEAR_PLANS||[]).find(p=>p.key===key)||null; }
+function loadPlan(key, cb){
+  if(planFor(key)){ planState[key]="ok"; cb(); return; }
+  if(planState[key]==="missing"){ cb(); return; }
+  if(planState[key]==="loading") return;
+  planState[key]="loading";
+  const sc=document.createElement("script");
+  sc.src="data/"+key+".js?v="+DATA_V;
+  sc.onload=()=>{ planState[key]=planFor(key)?"ok":"missing"; cb(); };
+  sc.onerror=()=>{ planState[key]="missing"; cb(); };
+  document.head.appendChild(sc);
+}
+function ySet(k,v){ ySel[k]=v; lsSet(KEY_YSEL, JSON.stringify(ySel)); renderYear(); }
+function renderYear(){
+  document.getElementById("ySubj").innerHTML = YEAR_SUBJ.map(o=>'<button class="chip'+(ySel.s===o.s?" on":"")+'" data-v="'+esc(o.s)+'" onclick="ySet(\'s\',this.dataset.v)">'+esc(o.s)+'</button>').join("");
+  document.getElementById("yGrade").innerHTML = GRADES.map(g=>'<button class="chip'+(ySel.g===g?" on":"")+'" data-v="'+esc(g)+'" onclick="ySet(\'g\',this.dataset.v)">כיתה '+esc(g)+'</button>').join("");
+  const key = planKey(ySel.s, ySel.g), body = document.getElementById("yBody");
+  if(!planFor(key)) body.innerHTML = '<div class="yload">טוען את התוכנית…</div>';
+  loadPlan(key, ()=>{ if(planKey(ySel.s,ySel.g)!==key) return; const p=planFor(key);
+    body.innerHTML = p ? planHtml(p) : '<div class="empty">התוכנית ל'+esc(ySel.s)+' בכיתה '+esc(ySel.g)+' עדיין לא זמינה.</div>'; });
+}
+function planCounts(p){
+  let full=0, outl=0; (p.units||[]).forEach(u=>{ full+=(u.lessons||[]).length; outl+=(u.outline||[]).length; });
+  return {full, outl, units:(p.units||[]).length};
+}
+function planLid(p,ui,li){ return p.key+"#"+ui+"."+li; }
+function inLib(id){ return lessons.find(l=>l.fromPlan===id)||null; }
+function planHtml(p){
+  const c = planCounts(p), units = p.units||[];
+  const totalW = units.reduce((s,u)=>s+(+u.weeks||1),0)||1;
+  const added = units.reduce((s,u,ui)=>s+(u.lessons||[]).filter((x,li)=>inLib(planLid(p,ui,li))).length,0);
+  let h = '<div class="yhead"><div class="panel"><h2>'+esc(p.subject)+' · כיתה '+esc(p.grade)+'</h2>'+
+    '<div class="ykpis"><span class="tag">'+esc(p.stream||"ממלכתי")+' · '+esc(p.year||"")+'</span>'+(p.hoursPerWeek?'<span class="tag">'+esc(p.hoursPerWeek)+' ש״ש</span>':'')+
+    '<span class="tag">'+c.units+' יחידות</span><span class="tag">'+c.outl+' שיעורים בתוכנית</span><span class="tag s" style="background:var(--accent)">'+c.full+' מערכים מלאים</span></div>'+
+    '<p style="margin:0;color:var(--ink2)">'+esc(p.overview||"")+'</p>'+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn pri" onclick="addAllPlan(\''+p.key+'\')">＋ הוספת כל '+c.full+' המערכים לספרייה'+(added?' ('+added+' כבר בספרייה)':'')+'</button>'+
+    '<button class="btn" onclick="printPlan(\''+p.key+'\')">הדפסת התוכנית השנתית</button></div></div>'+
+    '<div class="panel"><b>דרישות משרד החינוך</b><ul>'+(p.requirements||[]).map(r=>'<li>'+esc(r)+'</li>').join("")+'</ul>'+
+    ((p.sources||[]).length?'<b style="display:block;margin-top:10px">מקורות רשמיים</b><ul>'+p.sources.map(s=>safeUrl(s.url)?'<li><a href="'+esc(safeUrl(s.url))+'" target="_blank" rel="noopener">'+esc(s.title||s.url)+'</a></li>':'<li>'+esc(s.title)+'</li>').join("")+'</ul>':'')+'</div></div>';
+  h += '<div class="ytl">'+units.map((u,ui)=>'<a href="javascript:void 0" onclick="openUnit('+ui+')" title="'+esc(u.title)+' · '+esc(u.months||"")+'" style="flex:'+(+u.weeks||1)+';background:'+STAGE_COLORS[ui%STAGE_COLORS.length]+'">'+esc(u.title)+'</a>').join("")+'</div>'+
+    '<div class="ymonths"><span>ספטמבר</span><span>אוקטובר</span><span>נובמבר</span><span>דצמבר</span><span>ינואר</span><span>פברואר</span><span>מרץ</span><span>אפריל</span><span>מאי</span><span>יוני</span></div>';
+  h += units.map((u,ui)=>{
+    const col = STAGE_COLORS[ui%STAGE_COLORS.length];
+    const fullIdx = {}; (u.lessons||[]).forEach((l,li)=>{ if(l.outlineIndex) fullIdx[l.outlineIndex]=li; });
+    return '<details class="unit" id="unit'+ui+'"'+(ui===0?' open':'')+'><summary><span class="num" style="background:'+col+'">'+(ui+1)+'</span><div><h3>'+esc(u.title)+'</h3>'+
+      '<div class="sub">'+esc(u.months||"")+(u.weeks?' · '+esc(u.weeks)+' שבועות':'')+' · '+(u.outline||[]).length+' שיעורים · '+(u.lessons||[]).length+' מערכים מלאים</div></div><span class="chev">▾</span></summary>'+
+      '<div class="ubody">'+(u.bigIdea?'<p class="big">💡 '+esc(u.bigIdea)+'</p>':'')+
+      '<div class="ugrid">'+
+        '<div class="ubox"><b class="h">מה בתוכנית הלימודים</b>'+esc(u.curriculum||"")+((u.texts||[]).length?'<b class="h" style="margin-top:8px">טקסטים ויצירות</b><ul>'+u.texts.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul>':'')+'</div>'+
+        '<div class="ubox"><b class="h">מטרות היחידה</b><ul>'+(u.goals||[]).map(g=>'<li>'+esc(g)+'</li>').join("")+'</ul>'+(u.assessment?'<b class="h" style="margin-top:8px">הערכה</b>'+esc(u.assessment):'')+'</div>'+
+      '</div>'+
+      ((u.outline||[]).length?'<h4 style="margin:16px 0 6px">רצף השיעורים</h4><ol class="outl">'+u.outline.map((o,oi)=>{ const li=fullIdx[oi+1];
+        return li!==undefined?'<li class="full"><a onclick="previewPlanLesson(\''+p.key+'\','+ui+','+li+')">'+esc(String(o).replace(/^שיעור\s*\d+\s*[:.\-–]\s*/,""))+'</a> ★</li>':'<li>'+esc(String(o).replace(/^שיעור\s*\d+\s*[:.\-–]\s*/,""))+'</li>'; }).join("")+'</ol><div class="saved">★ = יש מערך מלא</div>':'')+
+      ((u.lessons||[]).length?'<h4 style="margin:16px 0 0">מערכי שיעור מלאים</h4><div class="ylessons">'+u.lessons.map((l,li)=>{ const id=planLid(p,ui,li), inl=inLib(id);
+        return '<div class="yl'+(inl?" added":"")+'"><div style="display:flex;gap:5px;flex-wrap:wrap">'+(l.outlineIndex?'<span class="tag">שיעור '+esc(l.outlineIndex)+'</span>':'')+'<span class="tag">'+esc(l.minutes||45)+' דק׳</span>'+(MODELS[l.model]?'<span class="tag">'+esc(MODELS[l.model].n)+'</span>':'')+'</div>'+
+          '<h4>'+esc(l.title)+'</h4><div class="saved">'+esc((l.goals||[])[0]||"")+'</div>'+
+          '<div class="ft"><button class="btn sm" onclick="previewPlanLesson(\''+p.key+'\','+ui+','+li+')">צפייה</button>'+
+          (inl?'<button class="btn sm pri" onclick="openLesson(\''+inl.id+'\')">פתיחה בבונה</button>':'<button class="btn sm pri" onclick="addPlanLesson(\''+p.key+'\','+ui+','+li+',true)">＋ לספרייה ועריכה</button>')+
+          '<button class="btn sm" onclick="presentPlanLesson(\''+p.key+'\','+ui+','+li+')">▶ הצגה</button></div></div>'; }).join("")+'</div>':'')+
+      '</div></details>';
+  }).join("");
+  return h;
+}
+function openUnit(ui){ const d=document.getElementById("unit"+ui); if(!d) return; d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); }
+function planLessonObj(key,ui,li){
+  const p=planFor(key); if(!p) return null; const u=p.units[ui]; const s=u&&u.lessons&&u.lessons[li]; if(!s) return null;
+  const l = JSON.parse(JSON.stringify(s));
+  return {
+    id:uid(), fromPlan:planLid(p,ui,li), title:l.title||"", subject:p.subject, grade:p.grade, minutes:+l.minutes||45,
+    model:MODELS[l.model]?l.model:"classic", updated:Date.now(),
+    curriculum:l.curriculum||u.curriculum||"", goals:l.goals||[], bloom:(l.bloom||[]).filter(b=>BLOOM.includes(b)), materials:l.materials||"",
+    stages:(l.stages||[]).map(st=>S(st.name||"שלב",(st.activities||[]).map(a=>A(TYPES[a.type]?a.type:"explain",a.title||"",+a.minutes||0,a.instructions||"")))),
+    diff:Object.assign({support:"",core:"",enrich:""},l.diff||{}), questions:(l.questions||[]).map(q=>({level:BLOOM.includes(q.level)?q.level:"הבנה",q:q.q||""})),
+    exitTicket:l.exitTicket||"", notes:(l.notes||"")+(l.notes?"\n":"")+"מתוך התוכנית השנתית: "+p.subject+" כיתה "+p.grade+" · יחידה "+(ui+1)+": "+u.title,
+    sources:(l.sources||[]).filter(x=>x&&(x.url||x.title)).map(x=>({title:x.title||"",url:x.url||""}))
+  };
+}
+function addPlanLesson(key,ui,li,open){
+  const p=planFor(key); if(!p) return; const id=planLid(p,ui,li);
+  let l = inLib(id);
+  if(!l){ l = planLessonObj(key,ui,li); if(!l) return; lessons.unshift(l); save(); toast("המערך נוסף לספרייה"); }
+  if(open){ closeModal(); openLesson(l.id); } else if(location.hash==="#year") renderYear();
+  return l;
+}
+function presentPlanLesson(key,ui,li){ const l=addPlanLesson(key,ui,li,false); if(l){ closeModal(); openLesson(l.id,true); } }
+function addAllPlan(key){
+  const p=planFor(key); if(!p) return; let n=0;
+  p.units.forEach((u,ui)=>(u.lessons||[]).forEach((x,li)=>{ if(!inLib(planLid(p,ui,li))){ const l=planLessonObj(key,ui,li); if(l){ lessons.push(l); n++; } } }));
+  save(); renderYear(); toast(n?n+" מערכים נוספו לספרייה":"כל המערכים כבר בספרייה");
+}
+function previewPlanLesson(key,ui,li){
+  const l = planLessonObj(key,ui,li); if(!l) return;
+  modal('<div class="pv">'+lessonDoc(l)+'</div><div class="ft" style="position:sticky;bottom:-22px;background:var(--paper);padding:10px 0">'+
+    '<button class="btn pri" onclick="addPlanLesson(\''+key+'\','+ui+','+li+',true)">'+(inLib(l.fromPlan)?"פתיחה בבונה":"＋ לספרייה ועריכה")+'</button>'+
+    '<button class="btn" onclick="presentPlanLesson(\''+key+'\','+ui+','+li+')">▶ הצגה</button>'+
+    '<button class="btn" onclick="printHtml(lessonDoc(planLessonObj(\''+key+'\','+ui+','+li+')))">הדפסה</button>'+
+    '<button class="btn" onclick="closeModal()">סגירה</button></div>');
+  const b=document.querySelector("#modalRoot .box"); if(b){ b.style.maxWidth="980px"; b.scrollTop=0; }
+}
+function printPlan(key){
+  const p=planFor(key); if(!p) return;
+  printHtml('<h1>תוכנית שנתית · '+esc(p.subject)+' · כיתה '+esc(p.grade)+'</h1><div>'+esc(p.stream||"")+' · '+esc(p.year||"")+(p.hoursPerWeek?' · '+esc(p.hoursPerWeek)+' ש״ש':'')+'</div>'+
+    '<p>'+esc(p.overview||"")+'</p><h2>דרישות משרד החינוך</h2><ul>'+(p.requirements||[]).map(r=>'<li>'+esc(r)+'</li>').join("")+'</ul>'+
+    (p.units||[]).map((u,ui)=>'<h2>'+(ui+1)+'. '+esc(u.title)+' — '+esc(u.months||"")+(u.weeks?' ('+esc(u.weeks)+' שבועות)':'')+'</h2>'+
+      '<p><b>תוכנית הלימודים:</b> '+esc(u.curriculum||"")+'</p>'+(u.bigIdea?'<p><b>רעיון מרכזי:</b> '+esc(u.bigIdea)+'</p>':'')+
+      '<p><b>מטרות:</b> '+esc((u.goals||[]).join(" · "))+'</p>'+((u.texts||[]).length?'<p><b>טקסטים:</b> '+esc(u.texts.join(" · "))+'</p>':'')+
+      (u.assessment?'<p><b>הערכה:</b> '+esc(u.assessment)+'</p>':'')+
+      '<ol>'+(u.outline||[]).map(o=>'<li>'+esc(String(o).replace(/^שיעור\s*\d+\s*[:.\-–]\s*/,""))+'</li>').join("")+'</ol>').join(""));
+}
+
 /* ============ AI ============ */
 let sampleFn = null, aiReady = false;
 (async function initAI(){
@@ -1287,8 +1469,10 @@ function lessonText(l){
 function copyText(){ if(cur) copy(lessonText(cur)); }
 function printLesson(){
   const l = cur; if(!l) return;
-  document.getElementById("printArea").innerHTML =
-    '<h1>'+esc(l.title)+'</h1><div>'+esc(l.subject)+' · כיתה '+esc(l.grade)+' · '+l.minutes+' דקות · '+esc(MODELS[l.model]?MODELS[l.model].n:"")+'</div>'+
+  printHtml(lessonDoc(l));
+}
+function lessonDoc(l){
+  return '<h1>'+esc(l.title)+'</h1><div>'+esc(l.subject)+' · כיתה '+esc(l.grade)+' · '+l.minutes+' דקות · '+esc(MODELS[l.model]?MODELS[l.model].n:"")+'</div>'+
     '<h2>מטרות</h2><ul>'+l.goals.filter(Boolean).map(g=>'<li>'+esc(g)+'</li>').join("")+'</ul>'+
     (l.materials?'<p><b>חומרים:</b> '+esc(l.materials)+'</p>':'')+
     (l.curriculum?'<p><b>תוכנית הלימודים:</b> '+esc(l.curriculum)+'</p>':'')+
@@ -1299,6 +1483,9 @@ function printLesson(){
     (l.exitTicket?'<h2>כרטיס יציאה</h2><p>'+esc(l.exitTicket)+'</p>':'')+
     (l.notes?'<h2>הערות למורה</h2><p>'+esc(l.notes)+'</p>':'')+
     ((l.sources||[]).length?'<h2>מקורות</h2><ul>'+l.sources.filter(s=>s.url||s.title).map(s=>'<li>'+esc(s.title)+' — <span dir="ltr">'+esc(s.url)+'</span></li>').join("")+'</ul>':'');
+}
+function printHtml(html){
+  document.getElementById("printArea").innerHTML = html;
   try{ window.print(); }catch(e){}
   setTimeout(()=>toast("אם חלון ההדפסה לא נפתח — השתמשו ב׳העתקה כטקסט׳ או פתחו את האתר בדפדפן"),600);
 }
