@@ -1346,16 +1346,43 @@ let ySel = (()=>{ try{ return JSON.parse(lsGet(KEY_YSEL))||{s:"תנ״ך",g:"ז׳
 const planState = {}; /* key -> "loading" | "ok" | "missing" */
 function planKey(s,g){ const o=YEAR_SUBJ.find(x=>x.s===s); return o?o.slug+"-"+GRADE_NUM[g]:""; }
 function planFor(key){ return (window.YEAR_PLANS||[]).find(p=>p.key===key)||null; }
+/* טעינת סקריפט חד-פעמית */
+const scriptP = {};
+function loadScript(src){
+  if(!scriptP[src]) scriptP[src] = new Promise(res=>{ const sc=document.createElement("script"); sc.src=src; sc.onload=()=>res(true); sc.onerror=()=>res(false); document.head.appendChild(sc); });
+  return scriptP[src];
+}
+/* תוכנית בסיס: data/<key>.js · מערכים נוספים לכל יחידה: data/more/<key>-u<N>.js (רשומים ב-data/more/index.js) */
+const planWait = {};
 function loadPlan(key, cb){
-  if(planFor(key)){ planState[key]="ok"; cb(); return; }
-  if(planState[key]==="missing"){ cb(); return; }
+  if(planState[key]==="ok"||planState[key]==="missing"){ cb(); return; }
+  (planWait[key]=planWait[key]||[]).push(cb);
   if(planState[key]==="loading") return;
   planState[key]="loading";
-  const sc=document.createElement("script");
-  sc.src="data/"+key+".js?v="+DATA_V;
-  sc.onload=()=>{ planState[key]=planFor(key)?"ok":"missing"; cb(); };
-  sc.onerror=()=>{ planState[key]="missing"; cb(); };
-  document.head.appendChild(sc);
+  (async()=>{
+    await loadScript("data/"+key+".js?v="+DATA_V);
+    const p = planFor(key);
+    if(p){
+      await loadScript("data/more/index.js?v="+DATA_V);
+      const units = ((window.MORE_INDEX||{})[key])||[];
+      await Promise.all(units.map(n=>loadScript("data/more/"+key+"-u"+n+".js?v="+DATA_V)));
+      mergeMore(p);
+    }
+    planState[key] = p?"ok":"missing";
+    const w=planWait[key]||[]; planWait[key]=[]; w.forEach(f=>f());
+  })();
+}
+function mergeMore(p){
+  if(p._merged) return; p._merged = true;
+  const M = window.YEAR_MORE||{};
+  (p.units||[]).forEach((u,ui)=>{
+    const extra = M[p.key+"#"+(ui+1)]; if(!extra) return;
+    u.lessons = u.lessons||[];
+    const have = new Set(u.lessons.map(l=>+l.outlineIndex).filter(Boolean));
+    extra.slice().sort((a,b)=>(+a.outlineIndex||0)-(+b.outlineIndex||0)).forEach(l=>{
+      const k=+l.outlineIndex; if(k && have.has(k)) return; have.add(k); u.lessons.push(l);
+    });
+  });
 }
 function ySet(k,v){ ySel[k]=v; lsSet(KEY_YSEL, JSON.stringify(ySel)); renderYear(); }
 function renderYear(){
