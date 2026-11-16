@@ -42,7 +42,9 @@ a{color:var(--accent)}
 .btn.sm{padding:5px 10px;font-size:13px;border-radius:8px}
 .btn.warn{color:var(--red)}
 .btn:disabled{opacity:.5;cursor:default}
-.top .btn{background:var(--amber);border-color:var(--amber);color:#fff}
+.top .btn{background:var(--amber);border-color:var(--amber);color:#fff;white-space:nowrap;flex-shrink:0}
+.nav{scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
 
 main{max-width:1240px;margin:0 auto;padding:26px 22px 80px}
 .view{display:none}
