@@ -244,6 +244,46 @@ details.about>summary{cursor:pointer;color:var(--accent-d);font-size:14px;font-w
 .rdiff>div{border-radius:12px;padding:12px;font-size:14px}
 .rdiff p{margin:4px 0 0}
 .rdiff .d1{background:var(--amber-l)}.rdiff .d2{background:var(--accent-l)}.rdiff .d3{background:#ede9fe}
+/* slides */
+.slbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;padding:10px 12px;border-radius:12px;background:#eef4fb;border:1px solid #d5e3f3}
+.slbar b{margin-inline-end:auto}
+.slk{display:inline-flex;gap:4px;flex-wrap:wrap}
+.slk button{border:1px solid #c7d8ee;background:#eef4fb;color:#1d4b85;border-radius:999px;padding:2px 10px;font-size:12.5px}
+.slk button:hover{background:#dbe8f7}
+.sshow{position:fixed;inset:0;z-index:200;background:#0f1a2b;display:flex;flex-direction:column}
+.sshow .sbar{display:flex;align-items:center;gap:8px;padding:8px 12px;color:#c9d6ea;font-size:14px;flex-wrap:wrap}
+.sshow .sbar .sp{flex:1}
+.sshow .sbar button{background:rgba(255,255,255,.1);color:#fff;border:0;border-radius:8px;padding:8px 12px;min-height:40px}
+.sshow .sbar button:hover{background:rgba(255,255,255,.2)}
+.sshow .sarea{flex:1;display:flex;align-items:center;justify-content:center;padding:10px;min-height:0}
+.slide{background:#fff;color:#14213d;width:min(100%,calc((100vh - 130px)*16/9));aspect-ratio:16/9;border-radius:10px;padding:4.5% 6%;display:flex;flex-direction:column;overflow:auto;font-size:clamp(14px,2.3vw,30px);line-height:1.45;position:relative}
+.slide .sk{font-size:.55em;color:#5d6b85;font-weight:700;margin-bottom:.4em;letter-spacing:.02em}
+.slide h2{font-family:"Secular One",Heebo,sans-serif;font-weight:400;font-size:1.55em;line-height:1.2;margin:0 0 .5em;color:#0b2a55}
+.slide ul,.slide ol{margin:0;padding-inline-start:1.2em}
+.slide li{margin:.25em 0}
+.slide.s-title{justify-content:center;background:linear-gradient(135deg,#0b2a55,#1d4b85);color:#fff}
+.slide.s-title h2{color:#fff;font-size:2.1em}
+.slide.s-title p{font-size:1.1em;opacity:.9;margin:0}
+.slide.s-quote blockquote{margin:0;font-size:1.25em;line-height:1.6;border-inline-start:6px solid #f2b705;padding-inline-start:.8em;white-space:pre-wrap}
+.slide.s-quote cite{display:block;margin-top:.6em;font-size:.7em;color:#5d6b85;font-style:normal}
+.slide.s-question .qq{font-size:1.45em;font-weight:700;color:#0b2a55;margin:auto 0 .4em}
+.slide.s-question{background:#fff8dc}
+.slide.s-task{background:#eef7f1}
+.slide.s-task .who{display:inline-block;background:#1f7a4d;color:#fff;border-radius:999px;padding:.05em .7em;font-size:.6em;margin-inline-start:.5em;vertical-align:middle}
+.slide table{border-collapse:collapse;width:100%;font-size:.8em}
+.slide th,.slide td{border:2px solid #c9d3e3;padding:.35em .5em;text-align:right;vertical-align:top}
+.slide td:empty{height:1.6em}
+.slide th{background:#e6eefa}
+.slide .two{display:grid;grid-template-columns:1fr 1fr;gap:4%}
+.slide .two>div{background:#f2f6fc;border-radius:10px;padding:.6em .8em}
+.slide .two h3{margin:0 0 .3em;font-size:1em;color:#0b2a55}
+.slide.s-visual .vx{font-size:.9em}
+.slide.s-visual a{display:inline-block;margin-top:.6em;background:#1d4b85;color:#fff;text-decoration:none;border-radius:8px;padding:.3em .8em;font-size:.7em}
+.slide.s-exit{background:#fdeee6}
+.slide .snote{display:none}
+.sshow.notes .snote{display:block;position:absolute;bottom:.6em;inset-inline:6%;font-size:.5em;background:#fff3c4;color:#5a4500;border-radius:6px;padding:.3em .6em}
+@media (max-width:700px){.slide{aspect-ratio:auto;min-height:60vh;font-size:17px}.slide .two{grid-template-columns:1fr}}
+@media print{.pslide{page-break-after:always;break-after:page;border:2px solid #999;border-radius:8px;padding:24px;margin-bottom:12px;min-height:60vh}.pslide h2{margin-top:0}}
 .rq{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:14px 36px 14px 18px;margin:0}
 .rq li{margin-bottom:8px}
 .rbox{margin-top:14px}
@@ -1340,7 +1380,7 @@ function pickWebSrc(){
 /* הנתונים נטענים לפי דרישה מ-data/<slug>-<grade>.js וכל קובץ מוסיף אובייקט ל-window.YEAR_PLANS */
 const YEAR_SUBJ = [{s:"תנ״ך",slug:"tanach"},{s:"ספרות",slug:"sifrut"},{s:"לשון",slug:"lashon"}];
 const GRADE_NUM = {"ז׳":7,"ח׳":8,"ט׳":9,"י׳":10,"י״א":11,"י״ב":12};
-const DATA_V = "12";
+const DATA_V = "13";
 const KEY_YSEL = "maarach_v1_ysel";
 let ySel = (()=>{ try{ return JSON.parse(lsGet(KEY_YSEL))||{s:"תנ״ך",g:"ז׳"}; }catch(e){ return {s:"תנ״ך",g:"ז׳"}; } })();
 const planState = {}; /* key -> "loading" | "ok" | "missing" */
@@ -1494,13 +1534,13 @@ function renderRead(){
       '<h1>'+esc(l.title)+'</h1>'+
       '<div class="ractions"><button class="btn pri" onclick="presentPlanLesson('+A3+')">▶ העברת השיעור בכיתה</button>'+
       '<button class="btn" onclick="printHtml(lessonDoc(planLessonObj('+A3+')))">🖨 הדפסה</button>'+
-      '<button class="btn" onclick="addPlanLesson('+A3+',true)">'+(inl?'✏️ עריכה (שמור ב״המערכים שלי״)':'✏️ שמירה ב״המערכים שלי״ ועריכה')+'</button></div></div>'+
+      '<button class="btn" onclick="addPlanLesson('+A3+',true)">'+(inl?'✏️ עריכה (שמור ב״המערכים שלי״)':'✏️ שמירה ב״המערכים שלי״ ועריכה')+'</button></div><div id="slBar"></div></div>'+
     '<div class="rgrid"><section class="rcard"><h2>🎯 מטרות השיעור</h2><ul>'+l.goals.filter(Boolean).map(g=>'<li>'+esc(g)+'</li>').join("")+'</ul></section>'+
       '<section class="rcard"><h2>🧰 הכנה לשיעור</h2>'+(l.materials?'<p><b>חומרים:</b> '+esc(l.materials)+'</p>':'')+(l.curriculum?'<p><b>תוכנית הלימודים:</b> '+esc(l.curriculum)+'</p>':'')+
         (l.bloom.length?'<p><b>רמות חשיבה:</b> '+l.bloom.map(b=>'<span class="tag">'+esc(b)+'</span>').join(" ")+'</p>':'')+'</section></div>'+
     '<h2 class="rh">מהלך השיעור · '+lessonMins(l)+' דקות</h2>'+
     l.stages.map((st,si)=>'<div class="rstage" style="--c:'+STAGE_COLORS[si%STAGE_COLORS.length]+'"><div class="rsh"><b>'+(si+1)+'. '+esc(st.name)+'</b><span>'+stageMins(st)+' דק׳</span></div>'+
-      st.activities.map(a=>'<div class="ract"><div class="rah"><span class="ic">'+(TYPES[a.type]||TYPES.explain).i+'</span><b>'+esc(a.title)+'</b><span class="tag">'+esc((TYPES[a.type]||TYPES.explain).n)+'</span><span class="tag">'+a.minutes+' דק׳</span></div><p>'+esc(a.instructions)+'</p></div>').join("")+'</div>').join("")+
+      st.activities.map((a,ai)=>'<div class="ract"><div class="rah"><span class="ic">'+(TYPES[a.type]||TYPES.explain).i+'</span><b>'+esc(a.title)+'</b><span class="tag">'+esc((TYPES[a.type]||TYPES.explain).n)+'</span><span class="tag">'+a.minutes+' דק׳</span><span class="slk" data-sa="'+si+','+ai+'"></span></div><p>'+esc(a.instructions)+'</p></div>').join("")+'</div>').join("")+
     ((l.diff.support||l.diff.core||l.diff.enrich)?'<h2 class="rh">התאמה לתלמידים שונים</h2><div class="rdiff"><div class="d1"><b>תמיכה: למי שמתקשה</b><p>'+esc(l.diff.support)+'</p></div><div class="d2"><b>ליבה: לכלל הכיתה</b><p>'+esc(l.diff.core)+'</p></div><div class="d3"><b>העשרה: למי שמוכן ליותר</b><p>'+esc(l.diff.enrich)+'</p></div></div>':'')+
     (l.questions.length?'<h2 class="rh">שאלות לדיון ולהערכה</h2><ol class="rq">'+l.questions.map(q=>'<li><span class="tag">'+esc(q.level)+'</span> '+esc(q.q)+'</li>').join("")+'</ol>':'')+
     (l.exitTicket?'<div class="rbox exit"><b>🎫 כרטיס יציאה</b><p>'+esc(l.exitTicket)+'</p></div>':'')+
@@ -1508,6 +1548,101 @@ function renderRead(){
     (l.sources.length?'<div class="rbox"><b>🔗 מקורות</b><ul>'+l.sources.map(s=>safeUrl(s.url)?'<li><a href="'+esc(safeUrl(s.url))+'" target="_blank" rel="noopener">'+esc(s.title||s.url)+'</a></li>':'<li>'+esc(s.title)+'</li>').join("")+'</ul></div>':'')+
     '<div class="rnav">'+nav(next,'המערך הבא ←')+nav(prev,'→ המערך הקודם')+'</div></div>';
   el.innerHTML=h;
+  if(raw.outlineIndex) initSlides(key,ui,raw.outlineIndex,l);
+}
+/* ============ SLIDES (מצגת לכל שיעור) ============ */
+let SL={arr:[],i:0,title:"",lesson:null};
+const SL_KIND={title:"פתיחה",points:"על הלוח",quote:"קוראים יחד",question:"שאלה לדיון",task:"משימה",table:"טבלה",twocol:"השוואה",visual:"דימוי להקרנה",exit:"כרטיס יציאה"};
+function slidesFor(key,ui,oi){ const u=((window.YEAR_SLIDES||{})[key+"#"+(ui+1)])||{}; return u[String(oi)]||null; }
+async function initSlides(key,ui,oi,l){
+  const ok=await loadScript("data/slides/"+key+"-u"+(ui+1)+".js?v="+DATA_V);
+  const bar=document.getElementById("slBar"); if(!bar) return;
+  const arr=ok?slidesFor(key,ui,oi):null;
+  if(!arr||!arr.length){ bar.innerHTML=''; return; }
+  SL.arr=arr; SL.title=l.title; SL.lesson=l;
+  bar.innerHTML='<div class="slbar"><b>📽 מצגת לשיעור: '+arr.length+' שקפים מוכנים להקרנה</b>'+
+    '<button class="btn pri" onclick="openShow(0)">▶ הצגת המצגת</button>'+
+    '<button class="btn" onclick="downloadPptx()">⬇ הורדה כ-PowerPoint</button>'+
+    '<button class="btn" onclick="printSlides()">🖨 הדפסת השקפים</button></div>';
+  document.querySelectorAll(".slk").forEach(sp=>{
+    const idx=[]; arr.forEach((s,i)=>{ if(s.a&&(s.a[0]+","+s.a[1])===sp.dataset.sa) idx.push(i); });
+    sp.innerHTML=idx.map(i=>'<button title="הצגת השקף" onclick="openShow('+i+')">📽 שקף '+(i+1)+'</button>').join("");
+  });
+}
+function slideHtml(s,i,n){
+  const B=a=>'<ul>'+(a||[]).map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>';
+  const O=a=>'<ol>'+(a||[]).map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>';
+  const head='<div class="sk">'+esc(SL_KIND[s.k]||"")+' · '+(i+1)+'/'+n+'</div>';
+  let h="";
+  switch(s.k){
+    case "title": h='<h2>'+esc(s.t||SL.title)+'</h2>'+(s.s?'<p>'+esc(s.s)+'</p>':''); break;
+    case "points": h=head+'<h2>'+esc(s.t)+'</h2>'+B(s.b); break;
+    case "quote": h=head+(s.t?'<h2>'+esc(s.t)+'</h2>':'')+'<blockquote>'+esc(s.q)+'</blockquote><cite>'+esc(s.src||"")+'</cite>'; break;
+    case "question": h=head+(s.t?'<h2>'+esc(s.t)+'</h2>':'')+'<div class="qq">'+esc(s.q)+'</div>'+(s.b?B(s.b):''); break;
+    case "task": h=head+'<h2>'+esc(s.t)+(s.who?'<span class="who">'+esc(s.who)+'</span>':'')+(s.min?'<span class="who">'+esc(s.min)+' דק׳</span>':'')+'</h2>'+O(s.b); break;
+    case "table": h=head+'<h2>'+esc(s.t)+'</h2><table>'+(s.rows||[]).map((r,ri)=>'<tr>'+r.map(c=>ri?'<td>'+esc(c)+'</td>':'<th>'+esc(c)+'</th>').join("")+'</tr>').join("")+'</table>'; break;
+    case "twocol": h=head+'<h2>'+esc(s.t)+'</h2><div class="two">'+(s.cols||[]).map(c=>'<div><h3>'+esc(c.h)+'</h3>'+B(c.b)+'</div>').join("")+'</div>'; break;
+    case "visual": h=head+'<h2>'+esc(s.t)+'</h2><div class="vx">'+esc(s.x||"")+'</div><a href="'+commonsUrl(s)+'" target="_blank" rel="noopener">🔎 חיפוש תמונה בוויקישיתוף</a>'; break;
+    case "exit": h=head+'<h2>'+esc(s.t||"כרטיס יציאה")+'</h2>'+O(s.b); break;
+    default: h=head+'<h2>'+esc(s.t||"")+'</h2>'+B(s.b);
+  }
+  return '<div class="slide s-'+esc(s.k)+'">'+h+(s.n?'<div class="snote">למורה: '+esc(s.n)+'</div>':'')+'</div>';
+}
+function commonsUrl(s){ return "https://commons.wikimedia.org/w/index.php?search="+encodeURIComponent(s.img||s.t||"")+"&title=Special:MediaSearch&type=image"; }
+function stageOf(s){ const l=SL.lesson; if(!l||!s.a) return ""; const st=(l.stages||[])[s.a[0]]; const a=st&&st.activities[s.a[1]]; return st?(st.name+(a?" · "+a.title:"")):""; }
+function openShow(i){
+  let el=document.getElementById("sshow");
+  if(!el){ el=document.createElement("div"); el.id="sshow"; el.className="sshow"; el.setAttribute("role","dialog"); el.setAttribute("aria-label","מצגת השיעור"); document.body.appendChild(el); document.addEventListener("keydown",showKey); }
+  el.hidden=false; SL.i=Math.max(0,Math.min(i,SL.arr.length-1)); drawShow();
+}
+function drawShow(){
+  const el=document.getElementById("sshow"); if(!el) return; const s=SL.arr[SL.i], n=SL.arr.length;
+  el.innerHTML='<div class="sbar"><button onclick="closeShow()">✕ סגירה</button><span>'+esc(SL.title)+'</span><span class="sp"></span><span>'+esc(stageOf(s))+'</span>'+
+    '<button onclick="toggleNotes()">הערות למורה</button><button onclick="fullShow()">⛶ מסך מלא</button></div>'+
+    '<div class="sarea">'+slideHtml(s,SL.i,n)+'</div>'+
+    '<div class="sbar"><button onclick="showGo(-1)"'+(SL.i?'':' disabled')+'>→ הקודם</button><span class="sp"></span><span>'+(SL.i+1)+' / '+n+'</span><span class="sp"></span><button onclick="showGo(1)"'+(SL.i<n-1?'':' disabled')+'>הבא ←</button></div>';
+}
+function toggleNotes(){ const el=document.getElementById("sshow"); if(el) el.classList.toggle("notes"); }
+function showGo(d){ const n=SL.i+d; if(n<0||n>=SL.arr.length) return; SL.i=n; drawShow(); }
+function closeShow(){ const el=document.getElementById("sshow"); if(el) el.hidden=true; if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
+function fullShow(){ const el=document.getElementById("sshow"); if(!document.fullscreenElement&&el.requestFullscreen) el.requestFullscreen().catch(()=>{}); else if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); }
+function showKey(e){ const el=document.getElementById("sshow"); if(!el||el.hidden) return;
+  if(e.key==="ArrowLeft"||e.key===" "||e.key==="PageDown"){ e.preventDefault(); showGo(1); }
+  else if(e.key==="ArrowRight"||e.key==="PageUp"){ e.preventDefault(); showGo(-1); }
+  else if(e.key==="Escape") closeShow(); }
+function printSlides(){
+  const n=SL.arr.length;
+  printHtml('<h1>'+esc(SL.title)+' · שקפים</h1>'+SL.arr.map((s,i)=>'<div class="pslide">'+slideHtml(s,i,n)+'</div>').join(""));
+}
+async function downloadPptx(){
+  toast("מכין קובץ PowerPoint…");
+  const ok=await loadScript("https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js");
+  if(!ok||!window.PptxGenJS){ toast("לא הצלחתי לטעון את רכיב ה-PowerPoint. בדקו חיבור לאינטרנט ונסו שוב."); return; }
+  const P=new PptxGenJS(); P.layout="LAYOUT_WIDE"; P.rtlMode=true; P.title=SL.title;
+  const F="Arial", NAVY="0B2A55", T={fontFace:F,color:"14213D",rtlMode:true,align:"right"};
+  const bul=(a,o,num)=>(a||[]).map(x=>({text:String(x),options:Object.assign({bullet:num?{type:"number"}:true,breakLine:true},o||{})}));
+  SL.arr.forEach((s,i)=>{
+    const sl=P.addSlide(); const BG={question:"FFF8DC",task:"EEF7F1",exit:"FDEEE6"}[s.k];
+    if(s.k==="title"){
+      sl.background={color:NAVY};
+      sl.addText(s.t||SL.title,Object.assign({},T,{x:0.6,y:2.2,w:12.1,h:1.6,fontSize:40,bold:true,color:"FFFFFF"}));
+      if(s.s) sl.addText(s.s,Object.assign({},T,{x:0.6,y:3.9,w:12.1,h:1.2,fontSize:22,color:"DDE6F5"}));
+    } else {
+      if(BG) sl.background={color:BG};
+      sl.addText((SL_KIND[s.k]||"")+" · "+(i+1)+"/"+SL.arr.length,Object.assign({},T,{x:0.6,y:0.25,w:12.1,h:0.4,fontSize:12,color:"5D6B85"}));
+      if(s.t) sl.addText(s.t,Object.assign({},T,{x:0.6,y:0.65,w:12.1,h:0.9,fontSize:30,bold:true,color:NAVY}));
+      const box={x:0.6,y:1.7,w:12.1,h:5.3,valign:"top"};
+      if(s.k==="quote"){ sl.addText(s.q||"",Object.assign({},T,box,{h:4.4,fontSize:26})); sl.addText(s.src||"",Object.assign({},T,{x:0.6,y:6.2,w:12.1,h:0.5,fontSize:14,color:"5D6B85"})); }
+      else if(s.k==="question"){ sl.addText([{text:s.q||"",options:{bold:true,fontSize:30,color:NAVY,breakLine:true}}].concat(bul(s.b,{fontSize:20})),Object.assign({},T,box)); }
+      else if(s.k==="table"&&s.rows){ sl.addTable(s.rows.map((r,ri)=>r.map(c=>({text:String(c),options:{bold:!ri,fill:{color:ri?"FFFFFF":"E6EEFA"},align:"right",rtlMode:true}}))),{x:0.6,y:1.7,w:12.1,fontFace:F,fontSize:16,border:{type:"solid",color:"C9D3E3",pt:1},rowH:0.5}); }
+      else if(s.k==="twocol"&&s.cols){ s.cols.forEach((c,ci)=>sl.addText([{text:c.h,options:{bold:true,fontSize:22,color:NAVY,breakLine:true}}].concat(bul(c.b,{fontSize:18})),Object.assign({},T,{x:ci?0.6:6.75,y:1.7,w:5.95,h:5.3,valign:"top",fill:{color:"F2F6FC"}}))); }
+      else if(s.k==="visual"){ sl.addText([{text:s.x||"",options:{fontSize:22,breakLine:true}},{text:"חיפוש תמונה בוויקישיתוף: "+(s.img||""),options:{fontSize:16,color:"1D4B85",hyperlink:{url:commonsUrl(s)}}}],Object.assign({},T,box)); }
+      else sl.addText(bul(s.b,null,s.k==="task"||s.k==="exit"),Object.assign({},T,box,{fontSize:22}));
+    }
+    const note=[stageOf(s), s.n?("למורה: "+s.n):""].filter(Boolean).join("\n"); if(note) sl.addNotes(note);
+  });
+  const fname=(SL.title||"מצגת").replace(/[\\\/:*?"<>|]/g,"").slice(0,80);
+  try{ await P.writeFile({fileName:fname+".pptx"}); toast("הקובץ ירד: "+fname+".pptx"); }catch(e){ toast("שגיאה ביצירת הקובץ"); }
 }
 
 /* ============ HOME ============ */
