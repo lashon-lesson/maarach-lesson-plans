@@ -40,7 +40,7 @@ const V=[
  {f:"v4.html",n:"שלושה פרקים",d:"דף מגזיני בשלושה פרקים, אחד לכל מקצוע, כל פרק בצבע עמוק משלו. החתימה: ציטוט ענק מנוקד בפתיחת כל פרק (בראשית, ביאליק, משלי)."},
  {f:"v5.html",n:"מחברת",d:"מחברת משבצות שובבה: פתקים דביקים, מדבקות וסימונים בכתב יד. כחול קובלט, אלמוגי וירוק מרקר. החתימה: מרקר זוהר שנמרח על מה שנבחר."}
 ];
-const PICK=window.PICK||"";
+const PICK="v3.html";
 document.getElementById("g").innerHTML=V.map((v,i)=>'<div class="card'+(PICK===v.f?' pick':'')+'"><div class="frame"><iframe src="'+v.f+'" loading="lazy" title="'+v.n+'" tabindex="-1"></iframe></div><div class="info"><h2><span class="n">'+(i+1)+'</span>'+v.n+(PICK===v.f?' <span class="badge">ההמלצה שלי</span>':'')+'</h2><p>'+v.d+'</p><a href="'+v.f+'" target="_blank" rel="noopener">פתחו בגודל מלא ←</a></div></div>').join("");
 </script>
 </body>
