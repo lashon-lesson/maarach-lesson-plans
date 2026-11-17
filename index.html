@@ -940,9 +940,22 @@ async function copy(text){
 }
 
 /* ============ ROUTING ============ */
+/* ---- navigation memory: back/forward return to the same place ---- */
+let navPop=false, yearUnit=null;
+const scrollMem={};
+window.addEventListener("popstate",()=>{ navPop=true; });
+window.addEventListener("scroll",()=>{ scrollMem[location.hash||"#home"]=window.scrollY; },{passive:true});
+function restoreScroll(){
+  const h=location.hash||"#home", y=navPop?(scrollMem[h]||0):0; navPop=false;
+  let n=0; (function t(){ window.scrollTo(0,y); if(Math.abs(window.scrollY-y)>2 && n++<20) setTimeout(t,60); })();
+}
+function keyToSel(key){ const m=/^([a-z]+)-(\d+)$/.exec(key||""); if(!m) return null; const o=YEAR_SUBJ.find(x=>x.slug===m[1]); const g=Object.keys(GRADE_NUM).find(k=>GRADE_NUM[k]===+m[2]); return (o&&g)?{s:o.s,g:g}:null; }
 function route(){
   let v = decodeURIComponent((location.hash||"#home").slice(1));
   if(v.indexOf("read:")===0){ const p=v.split(":"); readState={key:p[1],ui:+p[2],li:+p[3]}; v="read"; }
+  yearUnit=null;
+  if(v.indexOf("year:")===0){ const p=v.split(":"); const sel=keyToSel(p[1]); if(sel){ ySel=sel; lsSet(KEY_YSEL, JSON.stringify(ySel)); } if(p[2]!==undefined&&p[2]!=="") yearUnit=+p[2]; v="year"; }
+  const sh=document.getElementById("sshow"); if(sh&&!sh.hidden){ sh.hidden=true; }
   if(!["home","library","edit","ai","toolbox","web","year","tools","read"].includes(v)) v="home";
   document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on", x.id==="v-"+v));
   const navOf = {edit:"tools",ai:"tools",toolbox:"tools",web:"tools",read:"year"};
@@ -954,7 +967,7 @@ function route(){
   if(v==="toolbox") renderToolbox();
   if(v==="web") renderWeb();
   if(v==="year") renderYear();
-  window.scrollTo(0,0);
+  else restoreScroll();
 }
 window.addEventListener("hashchange", route);
 function go(v){ if(location.hash==="#"+v) route(); else location.hash=v; }
@@ -1380,7 +1393,7 @@ function pickWebSrc(){
 /* הנתונים נטענים לפי דרישה מ-data/<slug>-<grade>.js וכל קובץ מוסיף אובייקט ל-window.YEAR_PLANS */
 const YEAR_SUBJ = [{s:"תנ״ך",slug:"tanach"},{s:"ספרות",slug:"sifrut"},{s:"לשון",slug:"lashon"}];
 const GRADE_NUM = {"ז׳":7,"ח׳":8,"ט׳":9,"י׳":10,"י״א":11,"י״ב":12};
-const DATA_V = "22";
+const DATA_V = "23";
 const KEY_YSEL = "maarach_v1_ysel";
 let ySel = (()=>{ try{ return JSON.parse(lsGet(KEY_YSEL))||{s:"תנ״ך",g:"ז׳"}; }catch(e){ return {s:"תנ״ך",g:"ז׳"}; } })();
 const planState = {}; /* key -> "loading" | "ok" | "missing" */
@@ -1424,15 +1437,21 @@ function mergeMore(p){
     });
   });
 }
-function ySet(k,v){ ySel[k]=v; lsSet(KEY_YSEL, JSON.stringify(ySel)); renderYear(); }
+function ySet(k,v){ ySel[k]=v; lsSet(KEY_YSEL, JSON.stringify(ySel)); go("year:"+planKey(ySel.s,ySel.g)); }
 function renderYear(){
   document.getElementById("ySubj").innerHTML = YEAR_SUBJ.map(o=>'<button class="chip'+(ySel.s===o.s?" on":"")+'" data-v="'+esc(o.s)+'" onclick="ySet(\'s\',this.dataset.v)">'+esc(o.s)+'</button>').join("");
   document.getElementById("yGrade").innerHTML = GRADES.map(g=>'<button class="chip'+(ySel.g===g?" on":"")+'" data-v="'+esc(g)+'" onclick="ySet(\'g\',this.dataset.v)">כיתה '+esc(g)+'</button>').join("");
   const key = planKey(ySel.s, ySel.g), body = document.getElementById("yBody");
   if(!planFor(key)) body.innerHTML = '<div class="yload">טוען את התוכנית…</div>';
   loadPlan(key, ()=>{ if(planKey(ySel.s,ySel.g)!==key) return; const p=planFor(key);
-    body.innerHTML = p ? planHtml(p) : '<div class="empty">התוכנית ל'+esc(ySel.s)+' בכיתה '+esc(ySel.g)+' עדיין לא זמינה.</div>'; });
+    body.innerHTML = p ? planHtml(p) : '<div class="empty">התוכנית ל'+esc(ySel.s)+' בכיתה '+esc(ySel.g)+' עדיין לא זמינה.</div>';
+    if(p && yearUnit!==null){ const d=document.getElementById("unit"+yearUnit); if(d) d.open=true; }
+    if(p) document.querySelectorAll("#yBody details.unit").forEach((d,ui)=>d.addEventListener("toggle",()=>{ if(d.open) setYearHash(key,ui); }));
+    if(navPop || yearUnit===null) restoreScroll();
+    else { navPop=false; const d=document.getElementById("unit"+yearUnit); if(d) setTimeout(()=>d.scrollIntoView({block:"start"}),30); }
+  });
 }
+function setYearHash(key,ui){ const h="#year:"+key+(ui!==undefined&&ui!==null?":"+ui:""); if(location.hash!==h) history.replaceState(null,"",h); }
 function planCounts(p){
   let full=0, outl=0; (p.units||[]).forEach(u=>{ full+=(u.lessons||[]).length; outl+=(u.outline||[]).length; });
   return {full, outl, units:(p.units||[]).length};
@@ -1476,7 +1495,7 @@ function planHtml(p){
   }).join("");
   return h;
 }
-function openUnit(ui){ const d=document.getElementById("unit"+ui); if(!d) return; d.open=true; d.scrollIntoView({behavior:"smooth",block:"start"}); }
+function openUnit(ui){ const d=document.getElementById("unit"+ui); if(!d) return; d.open=true; setYearHash(planKey(ySel.s,ySel.g),ui); d.scrollIntoView({behavior:"smooth",block:"start"}); }
 function planLessonObj(key,ui,li){
   const p=planFor(key); if(!p) return null; const u=p.units[ui]; const s=u&&u.lessons&&u.lessons[li]; if(!s) return null;
   const l = JSON.parse(JSON.stringify(s));
@@ -1529,7 +1548,7 @@ function renderRead(){
   const nav=(x,lbl)=>x?'<a class="btn" href="#read:'+key+':'+x.ui+':'+x.li+'">'+lbl+'<small>'+esc(p.units[x.ui].lessons[x.li].title)+'</small></a>':'<span></span>';
   const inl=inLib(l.fromPlan), A3="'"+key+"',"+ui+","+li;
   let h='<div class="rd">'+
-    '<a class="back" href="#year" onclick="setTimeout(()=>openUnit('+ui+'),120)">→ חזרה לתוכנית: '+esc(p.subject)+' כיתה '+esc(p.grade)+' · יחידה '+(ui+1)+': '+esc(u.title)+'</a>'+
+    '<a class="back" href="#year:'+key+':'+ui+'" onclick="return backToPlan(\''+key+'\','+ui+')">→ חזרה לתוכנית: '+esc(p.subject)+' כיתה '+esc(p.grade)+' · יחידה '+(ui+1)+': '+esc(u.title)+'</a>'+
     '<div class="rhead"><div class="ykpis">'+(raw.outlineIndex?'<span class="tag">שיעור '+esc(raw.outlineIndex)+' ביחידה</span>':'')+'<span class="tag">'+l.minutes+' דקות</span>'+(MODELS[l.model]?'<span class="tag">מבנה: '+esc(MODELS[l.model].n)+'</span>':'')+'</div>'+
       '<h1>'+esc(l.title)+'</h1>'+
       '<div class="ractions"><button class="btn pri" onclick="presentPlanLesson('+A3+')">▶ העברת השיעור בכיתה</button>'+
@@ -1593,8 +1612,15 @@ function stageOf(s){ const l=SL.lesson; if(!l||!s.a) return ""; const st=(l.stag
 function openShow(i){
   let el=document.getElementById("sshow");
   if(!el){ el=document.createElement("div"); el.id="sshow"; el.className="sshow"; el.setAttribute("role","dialog"); el.setAttribute("aria-label","מצגת השיעור"); document.body.appendChild(el); document.addEventListener("keydown",showKey); }
+  if(el.hidden!==false || !(history.state&&history.state.show)) history.pushState({show:1},"",location.href);
   el.hidden=false; SL.i=Math.max(0,Math.min(i,SL.arr.length-1)); drawShow();
 }
+/* back button closes the slideshow instead of leaving the lesson */
+window.addEventListener("popstate",()=>{ const el=document.getElementById("sshow"); if(el&&!el.hidden){ el.hidden=true; navPop=false; if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); } });
+/* "back to plan": use real history when the plan is the previous page, so its place is kept */
+let lastPlanHash="";
+window.addEventListener("hashchange",e=>{ try{ const o=new URL(e.oldURL).hash; if(o.indexOf("#year")===0) lastPlanHash=o; }catch(_){} });
+function backToPlan(key,ui){ if(lastPlanHash.indexOf("#year:"+key)===0){ history.back(); return false; } return true; }
 function drawShow(){
   const el=document.getElementById("sshow"); if(!el) return; const s=SL.arr[SL.i], n=SL.arr.length;
   el.innerHTML='<div class="sbar"><button onclick="closeShow()">✕ סגירה</button><span>'+esc(SL.title)+'</span><span class="sp"></span><span>'+esc(stageOf(s))+'</span>'+
@@ -1604,7 +1630,7 @@ function drawShow(){
 }
 function toggleNotes(){ const el=document.getElementById("sshow"); if(el) el.classList.toggle("notes"); }
 function showGo(d){ const n=SL.i+d; if(n<0||n>=SL.arr.length) return; SL.i=n; drawShow(); }
-function closeShow(){ const el=document.getElementById("sshow"); if(el) el.hidden=true; if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
+function closeShow(){ const el=document.getElementById("sshow"); if(el&&!el.hidden&&history.state&&history.state.show){ history.back(); return; } if(el) el.hidden=true; if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
 function fullShow(){ const el=document.getElementById("sshow"); if(!document.fullscreenElement&&el.requestFullscreen) el.requestFullscreen().catch(()=>{}); else if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); }
 function showKey(e){ const el=document.getElementById("sshow"); if(!el||el.hidden) return;
   if(e.key==="ArrowLeft"||e.key===" "||e.key==="PageDown"){ e.preventDefault(); showGo(1); }
@@ -1657,7 +1683,7 @@ function renderHome(){
   document.getElementById("hMyCount").textContent = lessons.length?"("+lessons.length+")":"";
 }
 function hPick(s){ ySel.s=s; lsSet(KEY_YSEL, JSON.stringify(ySel)); renderHome(); }
-function hGo(g){ ySel.g=g; lsSet(KEY_YSEL, JSON.stringify(ySel)); go("year"); }
+function hGo(g){ ySel.g=g; lsSet(KEY_YSEL, JSON.stringify(ySel)); go("year:"+planKey(ySel.s,ySel.g)); }
 function printPlan(key){
   const p=planFor(key); if(!p) return;
   printHtml('<h1>תוכנית שנתית · '+esc(p.subject)+' · כיתה '+esc(p.grade)+'</h1><div>'+esc(p.stream||"")+' · '+esc(p.year||"")+(p.hoursPerWeek?' · '+esc(p.hoursPerWeek)+' ש״ש':'')+'</div>'+
