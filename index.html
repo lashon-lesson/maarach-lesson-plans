@@ -1380,7 +1380,7 @@ function pickWebSrc(){
 /* הנתונים נטענים לפי דרישה מ-data/<slug>-<grade>.js וכל קובץ מוסיף אובייקט ל-window.YEAR_PLANS */
 const YEAR_SUBJ = [{s:"תנ״ך",slug:"tanach"},{s:"ספרות",slug:"sifrut"},{s:"לשון",slug:"lashon"}];
 const GRADE_NUM = {"ז׳":7,"ח׳":8,"ט׳":9,"י׳":10,"י״א":11,"י״ב":12};
-const DATA_V = "21";
+const DATA_V = "22";
 const KEY_YSEL = "maarach_v1_ysel";
 let ySel = (()=>{ try{ return JSON.parse(lsGet(KEY_YSEL))||{s:"תנ״ך",g:"ז׳"}; }catch(e){ return {s:"תנ״ך",g:"ז׳"}; } })();
 const planState = {}; /* key -> "loading" | "ok" | "missing" */
@@ -1389,7 +1389,7 @@ function planFor(key){ return (window.YEAR_PLANS||[]).find(p=>p.key===key)||null
 /* טעינת סקריפט חד-פעמית */
 const scriptP = {};
 function loadScript(src){
-  if(!scriptP[src]) scriptP[src] = new Promise(res=>{ const sc=document.createElement("script"); sc.src=src; sc.onload=()=>res(true); sc.onerror=()=>res(false); document.head.appendChild(sc); });
+  if(!scriptP[src]) scriptP[src] = new Promise(res=>{ const sc=document.createElement("script"); sc.src=src; sc.onload=()=>res(true); sc.onerror=()=>{ delete scriptP[src]; sc.remove(); res(false); }; document.head.appendChild(sc); });
   return scriptP[src];
 }
 /* תוכנית בסיס: data/<key>.js · מערכים נוספים לכל יחידה: data/more/<key>-u<N>.js (רשומים ב-data/more/index.js) */
