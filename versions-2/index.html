@@ -40,7 +40,7 @@ const V=[
  {f:"v4.html",num:9,n:"גדול וברור",d:"הכול גדול וברור: אריחי מקצוע ענקיים, טקסט בגודל 20, ניגודיות גבוהה וצהוב רך להדגשה. החתימה: ״מצב הוראה״, שלב אחד בכל מסך באותיות גדולות להקרנה בכיתה."},
  {f:"v5.html",num:10,n:"עונות",d:"פלטה טבעית רכה: מנטה, אקליפטוס ואפרסק, עם איורי עלים עדינים. השנה מחולקת לסתיו, חורף, אביב וקיץ. החתימה: פס עונתי שמראה שעכשיו סתיו, חשוון, ומה מלמדים בעונה הזו."}
 ];
-const PICK=window.PICK||"";
+const PICK="v1.html";
 document.getElementById("g").innerHTML=V.map((v,i)=>'<div class="card'+(PICK===v.f?' pick':'')+'"><div class="frame"><iframe src="'+v.f+'" loading="lazy" title="'+v.n+'" tabindex="-1"></iframe></div><div class="info"><h2><span class="n">'+v.num+'</span>'+v.n+(PICK===v.f?' <span class="badge">ההמלצה שלי</span>':'')+'</h2><p>'+v.d+'</p><a href="'+v.f+'" target="_blank" rel="noopener">פתחו בגודל מלא ←</a></div></div>').join("");
 </script>
 </body>
