@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מַעֲרָךְ · שולחן עבודה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef3f7; --panel:#fff; --line:#d8e2eb; --line2:#e7edf3;
+  --ink:#132a46; --ink2:#4a5d74; --ink3:#7a8a9d;
+  --accent:#2f6fa8; --accent-soft:#e3eef8;
+  --tanach:#5468c9; --sifrut:#2c9a8a; --lashon:#c4862c;
+  --hdr:56px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"IBM Plex Sans Hebrew",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;font-weight:400}
+.num,.min{font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+header.top{height:var(--hdr);display:flex;align-items:center;gap:24px;padding:0 20px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.brand{font-weight:700;font-size:20px;color:var(--ink);text-decoration:none;letter-spacing:.01em}
+nav.main{display:flex;gap:4px;overflow-x:auto}
+nav.main a{text-decoration:none;color:var(--ink2);padding:8px 12px;border-radius:6px;white-space:nowrap;min-height:40px;display:flex;align-items:center}
+nav.main a:hover{background:var(--bg)}
+nav.main a.on{color:var(--ink);font-weight:700;background:var(--accent-soft)}
+
+.intro{padding:14px 20px 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;color:var(--ink2)}
+.intro h1{font-size:17px;margin:0;color:var(--ink);font-weight:700}
+.intro .stats{font-size:14px}
+.intro .stats b{color:var(--ink);font-weight:700}
+.intro[hidden]{display:none}
+
+/* workspace */
+.ws{display:grid;grid-template-columns:230px 330px minmax(0,1fr);gap:12px;padding:12px 20px 20px;height:calc(100vh - var(--hdr));}
+body.home .ws{height:calc(100vh - var(--hdr) - 46px)}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:auto;min-height:0}
+.colhead{position:sticky;top:0;background:var(--panel);padding:12px 16px 8px;border-bottom:1px solid var(--line2);z-index:2}
+.colhead h2{font-size:12px;letter-spacing:.04em;color:var(--ink3);margin:0;font-weight:500}
+.colhead .big{font-size:17px;font-weight:700;color:var(--ink);margin-top:2px}
+
+/* col 1 */
+.pick{padding:8px}
+.grp{font-size:12px;color:var(--ink3);padding:12px 8px 4px}
+.subj{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;text-align:right;padding:10px;border-radius:7px;min-height:44px;cursor:pointer;font-weight:500}
+.subj:hover{background:var(--bg)}
+.subj.on{background:var(--accent-soft);font-weight:700}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block}
+.dot.tanach{background:var(--tanach)}.dot.sifrut{background:var(--sifrut)}.dot.lashon{background:var(--lashon)}
+.subj .c{margin-inline-start:auto;color:var(--ink3);font-size:13px;font-weight:400}
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 8px 8px}
+.gr{border:1px solid var(--line);background:var(--panel);border-radius:7px;min-height:44px;cursor:pointer;font-weight:500;font-size:16px}
+.gr:hover{border-color:var(--accent)}
+.gr.on{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:700}
+.planmeta{margin:12px 8px 8px;padding:12px;border-radius:8px;background:var(--bg);font-size:13px;color:var(--ink2)}
+.planmeta b{color:var(--ink)}
+.planmeta p{margin:6px 0 0}
+
+/* col 2 */
+.units{list-style:none;margin:0;padding:6px}
+.unit{border-radius:8px}
+.ubtn{display:grid;grid-template-columns:28px 1fr;gap:4px 8px;width:100%;border:0;background:none;text-align:right;padding:10px 8px;border-radius:8px;cursor:pointer;min-height:44px}
+.ubtn:hover{background:var(--bg)}
+.unit.on>.ubtn{background:var(--accent-soft)}
+.ubtn .n{font-weight:700;color:var(--ink3);font-size:14px;padding-top:1px}
+.ubtn .t{font-weight:700;font-size:14.5px;line-height:1.45}
+.ubtn .m{grid-column:2;font-size:12.5px;color:var(--ink2)}
+.lessons{list-style:none;margin:2px 0 8px;padding:0 0 0 0}
+.lbtn{display:flex;gap:10px;align-items:flex-start;width:100%;border:0;background:none;text-align:right;padding:8px 10px 8px 8px;padding-inline-start:36px;cursor:pointer;min-height:44px;border-radius:6px;font-size:14px;line-height:1.45;color:var(--ink2)}
+.lbtn:hover{background:var(--bg);color:var(--ink)}
+.lbtn .i{color:var(--ink3);flex:none;min-width:18px}
+.lbtn.on{color:var(--ink);font-weight:700;box-shadow:inset -3px 0 0 var(--accent);background:#f4f8fb}
+.muted{color:var(--ink3);font-size:13px;padding:10px 16px}
+
+/* col 3 lesson */
+.pane{position:relative}
+.lp{padding:0 28px 40px;max-width:860px}
+.lhead{padding:22px 0 10px}
+.crumb{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lhead h2{font-size:26px;line-height:1.3;margin:6px 0 8px;font-weight:700}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px;color:var(--ink2)}
+.facts b{color:var(--ink);font-weight:700}
+.curr{font-size:14px;color:var(--ink2);margin:8px 0 0}
+.actions{display:flex;gap:8px;margin:14px 0 0;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:0 14px;min-height:40px;cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover{background:#255d8f;color:#fff}
+
+/* signature: time bar */
+.tbwrap{position:sticky;top:0;z-index:3;background:var(--panel);padding:10px 0 12px;border-bottom:1px solid var(--line2);margin-bottom:6px}
+.tblab{display:flex;justify-content:space-between;font-size:12px;color:var(--ink3);margin-bottom:6px}
+.tbar{display:flex;gap:3px;height:44px;direction:rtl}
+.seg{flex:1 1 0;min-width:0;border:0;border-radius:5px;background:#dfe9f2;cursor:pointer;padding:0 8px;text-align:right;display:flex;flex-direction:column;justify-content:center;overflow:hidden;transition:background .15s}
+.seg:nth-child(even){background:#cfdeeb}
+.seg:hover{background:#bcd3e7}
+.seg.on{background:var(--ink);color:#fff}
+.seg .sn{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.seg .sm{font-size:11.5px;line-height:1.2;opacity:.8}
+.ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--ink3);margin-top:3px;direction:rtl}
+
+.sec{margin:22px 0 0}
+.sec h3{font-size:13px;color:var(--ink3);letter-spacing:.04em;margin:0 0 8px;font-weight:500}
+.sec ul{margin:0;padding-inline-start:20px}
+.sec li{margin:3px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:12px;background:var(--bg);border-radius:5px;padding:2px 8px;color:var(--ink2)}
+.stage{margin-top:26px;scroll-margin-top:132px}
+.stage>h3{display:flex;align-items:baseline;gap:10px;font-size:19px;color:var(--ink);font-weight:700;margin:0 0 10px;letter-spacing:0}
+.stage>h3 .min{font-size:13px;color:var(--ink2);font-weight:400}
+.act{border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin:0 0 10px}
+.act .ah{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.act h4{margin:0;font-size:15.5px;font-weight:700}
+.act .min{font-size:13px;color:var(--ink2);white-space:nowrap}
+.act p{margin:6px 0 0;white-space:pre-line}
+.diff{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.diff>div{background:var(--bg);border-radius:8px;padding:12px}
+.diff b{display:block;font-size:13px;margin-bottom:4px}
+.qs{list-style:none;padding:0;margin:0}
+.qs li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line2)}
+.lvl{flex:none;font-size:12px;border:1px solid var(--line);border-radius:5px;padding:0 7px;height:22px;line-height:20px;color:var(--ink2);margin-top:2px}
+.box{background:var(--bg);border-radius:8px;padding:12px 14px}
+.empty{padding:60px 28px;color:var(--ink2);text-align:center}
+.err{margin:16px;padding:14px;border-radius:8px;background:#fdf1f0;color:#7a2a22;font-size:14px}
+
+/* mobile back */
+.mback{display:none}
+
+@media (max-width:1100px){
+  .ws{grid-template-columns:200px 280px minmax(0,1fr)}
+  .lp{padding:0 18px 40px}
+}
+@media (max-width:860px){
+  header.top{gap:12px;padding:0 12px}
+  nav.main a{padding:8px 8px;font-size:14px}
+  .intro{padding:12px 14px 0}
+  .ws,body.home .ws{display:block;height:auto;padding:10px 12px 24px}
+  .col{display:none;overflow:visible;border-radius:10px}
+  body.step1 .c1, body.step2 .c2, body.step3 .c3{display:block}
+  .colhead{position:static}
+  .mback{display:flex;position:sticky;top:var(--hdr);z-index:15;background:var(--bg);padding:8px 12px;border-bottom:1px solid var(--line)}
+  body.step1 .mback{display:none}
+  .mback button{min-height:44px;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer}
+  .tbwrap{top:calc(var(--hdr) + 61px)}
+  .stage{scroll-margin-top:244px}
+  .lhead h2{font-size:22px}
+  .two,.diff{grid-template-columns:1fr}
+  .seg{padding:0 4px}
+  .seg .sn{font-size:11px}
+  .lbtn{padding-inline-start:12px}
+}
+@media (max-width:420px){
+  .brand{font-size:17px}
+  nav.main a{padding:6px 6px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;scroll-behavior:auto!important}
+}
+@media print{
+  header.top,.intro,.c1,.c2,.actions,.mback,.tbwrap .tblab{display:none!important}
+  body{background:#fff}
+  .ws{display:block;height:auto;padding:0}
+  .col{border:0;overflow:visible}
+  .c3{display:block!important}
+  .tbwrap{position:static}
+  .lp{max-width:none;padding:0}
+  .act{break-inside:avoid}
+}
+</style>
+</head>
+<body class="home step1">
+<header class="top">
+  <a class="brand" href="#">מַעֲרָךְ</a>
+  <nav class="main" aria-label="ניווט ראשי">
+    <a href="#" data-nav="home">ראשי</a>
+    <a href="#plan" data-nav="plan">תוכניות שנתיות</a>
+    <a href="../index.html#library">המערכים שלי</a>
+    <a href="../index.html#tools">כלים למורה</a>
+  </nav>
+</header>
+<div class="intro" id="intro">
+  <h1>בחרו מקצוע וכיתה, יחידה ושיעור. המערך המלא נפתח מיד, מוכן להוראה ולהדפסה.</h1>
+  <span class="stats"><b class="num">1,322</b> שיעורים · <b class="num">18</b> תוכניות שנתיות · תנ״ך <span class="num">409</span>, ספרות <span class="num">425</span>, לשון <span class="num">488</span></span>
+</div>
+<div class="mback"><button type="button" id="mback">→ חזרה</button></div>
+<main class="ws">
+  <section class="col c1" aria-label="מקצוע וכיתה">
+    <div class="colhead"><h2>מקצוע וכיתה</h2></div>
+    <div class="pick" id="pick"></div>
+  </section>
+  <section class="col c2" aria-label="יחידות ושיעורים">
+    <div class="colhead"><h2>תוכנית שנתית</h2><div class="big" id="planTitle"></div></div>
+    <div id="units"></div>
+  </section>
+  <section class="col c3 pane" id="pane" aria-label="שיעור" tabindex="-1"></section>
+</main>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+var SUBJ=[{s:"tanach",n:"תנ״ך",c:409},{s:"sifrut",n:"ספרות",c:425},{s:"lashon",n:"לשון",c:488}];
+var GR=[{g:7,n:"ז׳"},{g:8,n:"ח׳"},{g:9,n:"ט׳"},{g:10,n:"י׳"},{g:11,n:"י״א"},{g:12,n:"י״ב"}];
+var LEVELNAME={classic:"מבנה קלאסי",e5:"מודל 5E"};
+var UNITS=window.UNITS||{};
+var st={subj:"sifrut",grade:10,unit:0,lesson:0,view:"home"};
+var cache={}; // key -> {status, plan, units:[[lessons]]}
+var moreIndexState="idle", moreWaiters=[];
+
+function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function $(id){return document.getElementById(id);}
+function key(){return st.subj+"-"+st.grade;}
+function sName(s){for(var i=0;i<SUBJ.length;i++)if(SUBJ[i].s===s)return SUBJ[i].n;return "";}
+function gName(g){for(var i=0;i<GR.length;i++)if(GR[i].g===g)return GR[i].n;return "";}
+
+function loadScript(src,ok,fail){
+  var s=document.createElement("script");s.src=src;var done=false;
+  s.onload=function(){if(!done){done=true;ok();}};
+  s.onerror=function(){if(!done){done=true;fail();}};
+  document.head.appendChild(s);
+}
+function needMoreIndex(cb){
+  if(moreIndexState==="done"||moreIndexState==="fail"){cb();return;}
+  moreWaiters.push(cb);
+  if(moreIndexState==="loading")return;
+  moreIndexState="loading";
+  var fin=function(state){moreIndexState=state;var w=moreWaiters;moreWaiters=[];w.forEach(function(f){f();});};
+  loadScript("../data/more/index.js",function(){fin("done");},function(){fin("fail");});
+}
+function findPlan(k){var a=window.YEAR_PLANS||[];for(var i=0;i<a.length;i++)if(a[i]&&a[i].key===k)return a[i];return null;}
+function build(k){
+  var c=cache[k],p=c.plan,more=window.YEAR_MORE||{};
+  c.units=(p.units||[]).map(function(u,ui){
+    var all=(u.lessons||[]).concat(more[k+"#"+(ui+1)]||[]),seen={},out=[];
+    all.forEach(function(l,j){
+      if(!l)return;var oi=(l.outlineIndex!=null)?l.outlineIndex:(1000+j);
+      if(seen[oi])return;seen[oi]=1;out.push(l);
+    });
+    out.sort(function(a,b){return (a.outlineIndex||0)-(b.outlineIndex||0);});
+    return out;
+  });
+}
+function ensure(k,cb){
+  var c=cache[k];
+  if(c){ if(c.status==="loading")c.waiters.push(cb); else cb(); return; }
+  c=cache[k]={status:"loading",waiters:[cb]};
+  var finish=function(status){c.status=status;var w=c.waiters;c.waiters=[];w.forEach(function(f){try{f();}catch(e){console.warn(e);}});};
+  var afterPlan=function(){
+    c.plan=findPlan(k);
+    if(!c.plan){finish("fail");return;}
+    needMoreIndex(function(){
+      var idx=(window.MORE_INDEX&&window.MORE_INDEX[k])||[];
+      var left=idx.length;
+      if(!left){build(k);finish("ok");return;}
+      idx.forEach(function(n){
+        var one=function(){if(--left===0){build(k);finish("ok");}};
+        loadScript("../data/more/"+k+"-u"+n+".js",one,one);
+      });
+    });
+  };
+  if(findPlan(k))afterPlan(); else loadScript("../data/"+k+".js",afterPlan,function(){finish("fail");});
+}
+
+/* ---------- render: column 1 ---------- */
+function renderPick(){
+  var h='<div class="grp">מקצוע</div>';
+  SUBJ.forEach(function(x){
+    h+='<button type="button" class="subj'+(x.s===st.subj?' on':'')+'" data-subj="'+x.s+'" aria-pressed="'+(x.s===st.subj)+'"><span class="dot '+x.s+'"></span>'+x.n+'<span class="c num">'+x.c+'</span></button>';
+  });
+  h+='<div class="grp">חטיבת ביניים</div><div class="grades">';
+  GR.forEach(function(x,i){
+    if(i===3)h+='</div><div class="grp">תיכון</div><div class="grades">';
+    h+='<button type="button" class="gr'+(x.g===st.grade?' on':'')+'" data-grade="'+x.g+'" aria-pressed="'+(x.g===st.grade)+'">'+x.n+'</button>';
+  });
+  h+='</div>';
+  var c=cache[key()];
+  if(c&&c.status==="ok"&&c.plan){
+    var n=0;c.units.forEach(function(a){n+=a.length;});
+    h+='<div class="planmeta"><b>'+esc(sName(st.subj))+' '+esc(gName(st.grade))+'</b> · <span class="num">'+n+'</span> שיעורים · <span class="num">'+esc(c.plan.hoursPerWeek||"")+'</span> ש״ש'+
+       (c.plan.overview?'<p>'+esc(c.plan.overview)+'</p>':'')+'</div>';
+  }
+  $("pick").innerHTML=h;
+}
+
+/* ---------- render: column 2 ---------- */
+function renderUnits(){
+  var k=key(),quick=UNITS[k]||[],c=cache[k];
+  $("planTitle").innerHTML='<span class="dot '+st.subj+'"></span> '+esc(sName(st.subj))+' · כיתה '+esc(gName(st.grade));
+  var h='';
+  if(c&&c.status==="fail")h+='<div class="err">לא הצלחנו לטעון את השיעורים של התוכנית הזו. אפשר לרענן את הדף ולנסות שוב.</div>';
+  h+='<ol class="units">';
+  var list=(c&&c.status==="ok")?c.plan.units.map(function(u){return {t:u.title,m:u.months};}):quick.map(function(u){return {t:u.t,m:u.m};});
+  list.forEach(function(u,ui){
+    var on=ui===st.unit;
+    h+='<li class="unit'+(on?' on':'')+'"><button type="button" class="ubtn" data-unit="'+ui+'" aria-expanded="'+on+'"><span class="n num">'+(ui+1)+'</span><span class="t">'+esc(u.t)+'</span><span class="m">'+esc(u.m)+'</span></button>';
+    if(on){
+      if(c&&c.status==="ok"){
+        var ls=c.units[ui]||[];
+        h+='<ol class="lessons">';
+        ls.forEach(function(l,li){
+          h+='<li><button type="button" class="lbtn'+(li===st.lesson?' on':'')+'" data-lesson="'+li+'"><span class="i num">'+(li+1)+'</span><span>'+esc(l.title)+'</span></button></li>';
+        });
+        if(!ls.length)h+='<li class="muted">אין שיעורים ביחידה הזו.</li>';
+        h+='</ol>';
+      }else if(!c||c.status==="loading"){h+='<div class="muted">טוען שיעורים…</div>';}
+    }
+    h+='</li>';
+  });
+  h+='</ol>';
+  $("units").innerHTML=h;
+}
+
+/* ---------- render: column 3 ---------- */
+function stageMin(s){var m=0;(s.activities||[]).forEach(function(a){m+=(+a.minutes||0);});return m;}
+function list(arr){if(!arr||!arr.length)return "";return '<ul>'+arr.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>';}
+function renderLesson(){
+  var k=key(),c=cache[k],pane=$("pane");
+  if(!c||c.status==="loading"){pane.innerHTML='<div class="empty">טוען את המערך…</div>';return;}
+  if(c.status==="fail"){pane.innerHTML='<div class="err">לא הצלחנו לטעון את המערך. בדקו את החיבור ורעננו את הדף.</div>';return;}
+  var u=c.plan.units[st.unit],ls=c.units[st.unit]||[],l=ls[st.lesson];
+  if(!u||!l){pane.innerHTML='<div class="empty">בחרו שיעור מרשימת היחידה.</div>';return;}
+  var stages=l.stages||[],total=0;stages.forEach(function(s){total+=stageMin(s);});
+  var lessonMin=+l.minutes||45;
+  var h='<div class="lp">';
+  h+='<div class="lhead"><div class="crumb"><span class="dot '+st.subj+'"></span>'+esc(sName(st.subj))+' '+esc(gName(st.grade))+' · יחידה <span class="num">'+(st.unit+1)+'</span>: '+esc(u.title)+'</div>';
+  h+='<h2>'+esc(l.title)+'</h2>';
+  h+='<div class="facts"><span><b class="num">'+esc(lessonMin)+'</b> דקות</span><span>שיעור <span class="num">'+(st.lesson+1)+'</span> מתוך <span class="num">'+ls.length+'</span></span>'+(l.model?'<span>'+esc(LEVELNAME[l.model]||l.model)+'</span>':'')+(u.months?'<span>'+esc(u.months)+'</span>':'')+'</div>';
+  if(l.curriculum)h+='<p class="curr"><b>תוכנית לימודים:</b> '+esc(l.curriculum)+'</p>';
+  h+='<div class="actions"><button type="button" class="btn pri" id="printBtn">הדפסה</button><button type="button" class="btn" id="backPlan">חזרה לתוכנית</button>'+
+     (st.lesson>0?'<button type="button" class="btn" data-step="-1">→ שיעור קודם</button>':'')+
+     (st.lesson<ls.length-1?'<button type="button" class="btn" data-step="1">שיעור הבא ←</button>':'')+'</div></div>';
+
+  if(stages.length){
+    var base=Math.max(total,1),acc=0;
+    h+='<div class="tbwrap"><div class="tblab"><span>מהלך השיעור</span><span class="min">'+total+' דק׳</span></div><div class="tbar" role="list">';
+    stages.forEach(function(s,si){
+      var m=stageMin(s);
+      h+='<button type="button" role="listitem" class="seg" style="flex-grow:'+Math.max(m,2)+'" data-seg="'+si+'" title="'+esc(s.name)+' · '+m+' דק׳"><span class="sn">'+esc(s.name)+'</span><span class="sm min">'+m+' דק׳</span></button>';
+    });
+    h+='</div><div class="ticks min"><span>0</span>';
+    stages.forEach(function(s){acc+=stageMin(s);});
+    h+='<span>'+acc+'</span></div></div>';
+  }
+
+  h+='<div class="two">';
+  h+='<div class="sec"><h3>מטרות</h3>'+(list(l.goals)||'<p>—</p>')+(l.bloom&&l.bloom.length?'<div class="tags">'+l.bloom.map(function(b){return '<span class="tag">'+esc(b)+'</span>';}).join("")+'</div>':'')+'</div>';
+  h+='<div class="sec"><h3>חומרים</h3><p style="margin:0">'+esc(l.materials||"—")+'</p></div>';
+  h+='</div>';
+
+  stages.forEach(function(s,si){
+    h+='<section class="stage" id="stage-'+si+'"><h3>'+esc(s.name)+'<span class="min">'+stageMin(s)+' דק׳</span></h3>';
+    (s.activities||[]).forEach(function(a){
+      h+='<div class="act"><div class="ah"><h4>'+esc(a.title)+'</h4><span class="min">'+esc(a.minutes)+' דק׳</span></div><p>'+esc(a.instructions)+'</p></div>';
+    });
+    h+='</section>';
+  });
+
+  if(l.diff){
+    h+='<div class="sec"><h3>הבחנה</h3><div class="diff">'+
+      '<div><b>תמיכה</b>'+esc(l.diff.support||"—")+'</div>'+
+      '<div><b>ליבה</b>'+esc(l.diff.core||"—")+'</div>'+
+      '<div><b>העשרה</b>'+esc(l.diff.enrich||"—")+'</div></div></div>';
+  }
+  if(l.questions&&l.questions.length){
+    h+='<div class="sec"><h3>שאלות</h3><ol class="qs">'+l.questions.map(function(q){return '<li><span class="lvl">'+esc(q.level)+'</span><span>'+esc(q.q)+'</span></li>';}).join("")+'</ol></div>';
+  }
+  h+='<div class="two">';
+  if(l.exitTicket)h+='<div class="sec"><h3>כרטיס יציאה</h3><div class="box">'+esc(l.exitTicket)+'</div></div>';
+  if(l.notes)h+='<div class="sec"><h3>הערות למורה</h3><div class="box">'+esc(l.notes)+'</div></div>';
+  h+='</div></div>';
+  pane.innerHTML=h;
+  pane.scrollTop=0;
+  setupSegObserver();
+}
+
+var obs=null;
+function setupSegObserver(){
+  if(obs){obs.disconnect();obs=null;}
+  if(!("IntersectionObserver" in window))return;
+  var pane=$("pane"),mobile=window.matchMedia("(max-width:860px)").matches;
+  obs=new IntersectionObserver(function(ents){
+    ents.forEach(function(e){
+      if(e.isIntersecting){
+        var i=e.target.id.split("-")[1];
+        Array.prototype.forEach.call(document.querySelectorAll(".seg"),function(b){b.classList.toggle("on",b.getAttribute("data-seg")===i);});
+      }
+    });
+  },{root:mobile?null:pane,rootMargin:"-30% 0px -60% 0px"});
+  Array.prototype.forEach.call(document.querySelectorAll(".stage"),function(s){obs.observe(s);});
+}
+
+/* ---------- state / routing ---------- */
+function setHash(){
+  var h;
+  if(st.view==="lesson")h="#lesson/"+key()+"/"+(st.unit+1)+"/"+(st.lesson+1);
+  else if(st.view==="plan")h="#plan/"+key()+"/"+(st.unit+1);
+  else h="#";
+  if(location.hash!==h&&!(h==="#"&&!location.hash)){hist("replaceState",null,"",h==="#"?location.pathname+location.search:h);}
+}
+function applyBody(){
+  var b=document.body;
+  b.classList.toggle("home",st.view==="home");
+  $("intro").hidden=st.view!=="home";
+  b.classList.remove("step1","step2","step3");
+  b.classList.add(st.view==="lesson"?"step3":st.view==="plan"?"step2":"step1");
+  Array.prototype.forEach.call(document.querySelectorAll("nav.main a[data-nav]"),function(a){
+    var n=a.getAttribute("data-nav");a.classList.toggle("on",(n==="home"&&st.view==="home")||(n==="plan"&&st.view!=="home"));
+  });
+  $("mback").textContent=st.view==="lesson"?"→ חזרה ליחידות":"→ מקצוע וכיתה";
+}
+function renderAll(){applyBody();renderPick();renderUnits();renderLesson();setHash();}
+function refresh(){
+  renderAll();
+  var k=key();
+  ensure(k,function(){if(key()===k){clampSel();renderAll();}});
+}
+function clampSel(){
+  var c=cache[key()];if(!c||c.status!=="ok")return;
+  if(st.unit>=c.units.length)st.unit=0;
+  if(st.lesson>=(c.units[st.unit]||[]).length)st.lesson=0;
+}
+function parseHash(){
+  var h=decodeURIComponent(location.hash.replace(/^#/,"")),p=h.split("/");
+  var m=/^(tanach|sifrut|lashon)-(\d+)$/.exec(p[1]||"");
+  if((p[0]==="plan"||p[0]==="lesson")&&m){
+    st.subj=m[1];st.grade=+m[2];st.unit=Math.max(0,(+p[2]||1)-1);st.lesson=Math.max(0,(+p[3]||1)-1);st.view=p[0];
+  }else if(p[0]==="plan"){st.view="plan";}
+  else st.view="home";
+  if(GR.every(function(g){return g.g!==st.grade;}))st.grade=10;
+}
+function hist(m,a,b,u){try{history[m](a,b,u);}catch(e){}}
+function isMobile(){return window.matchMedia("(max-width:860px)").matches;}
+function go(view){st.view=view;if(view!=="home"&&location.hash==="")hist("pushState",null,"","#"+view);else if(isMobile())hist("pushState",null,"",location.href);refresh();if(isMobile())window.scrollTo(0,0);}
+
+document.addEventListener("click",function(e){
+  var t=e.target.closest("[data-subj],[data-grade],[data-unit],[data-lesson],[data-seg],[data-step],#printBtn,#backPlan,#mback,[data-nav]");
+  if(!t)return;
+  if(t.hasAttribute("data-nav")){e.preventDefault();var n=t.getAttribute("data-nav");st.view=n==="home"?"home":"plan";if(n==="home")hist("pushState",null,"",location.pathname+location.search);refresh();return;}
+  if(t.hasAttribute("data-subj")){st.subj=t.getAttribute("data-subj");st.unit=0;st.lesson=0;if(isMobile()){go("plan");return;}if(st.view==="home")st.view="home";refresh();return;}
+  if(t.hasAttribute("data-grade")){st.grade=+t.getAttribute("data-grade");st.unit=0;st.lesson=0;if(isMobile()){go("plan");return;}refresh();return;}
+  if(t.hasAttribute("data-unit")){var u=+t.getAttribute("data-unit");st.unit=u;st.lesson=0;if(st.view==="home"&&!isMobile())st.view="plan";if(isMobile()){st.view="plan";renderAll();return;}renderAll();return;}
+  if(t.hasAttribute("data-lesson")){st.lesson=+t.getAttribute("data-lesson");go("lesson");return;}
+  if(t.hasAttribute("data-step")){st.lesson+= +t.getAttribute("data-step");st.view="lesson";clampSel();renderAll();if(isMobile())window.scrollTo(0,0);return;}
+  if(t.hasAttribute("data-seg")){
+    var el=$("stage-"+t.getAttribute("data-seg"));
+    if(el){var rm=window.matchMedia("(prefers-reduced-motion: reduce)").matches;el.scrollIntoView({behavior:rm?"auto":"smooth",block:"start"});}
+    return;
+  }
+  if(t.id==="printBtn"){window.print();return;}
+  if(t.id==="backPlan"){st.view="plan";renderAll();if(isMobile())window.scrollTo(0,0);else{var on=document.querySelector(".unit.on .ubtn");if(on)on.focus();}return;}
+  if(t.id==="mback"){st.view=st.view==="lesson"?"plan":"home";renderAll();window.scrollTo(0,0);return;}
+});
+window.addEventListener("popstate",function(){parseHash();if(!location.hash&&!isMobile()){}refresh();});
+
+/* default */
+parseHash();
+if(!location.hash){st.subj="sifrut";st.grade=10;st.unit=0;st.lesson=0;st.view="home";}
+refresh();
+})();
+</script>
+</body>
+</html>

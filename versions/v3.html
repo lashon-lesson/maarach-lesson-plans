@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מַעֲרָךְ · ציר השנה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Varela+Round&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#3b82c4; --sky-ink:#23649f; --sky-50:#e6f1fb; --sky-100:#cfe3f5;
+  --sun:#f5b70a; --sun-50:#fff4cc; --sun-ink:#6b4e00;
+  --ink:#1d2b3a; --muted:#566778; --line:#dbe7f3; --bg:#ffffff;
+  --r:16px;
+  --head:"Varela Round", system-ui, sans-serif;
+  --body:"Assistant", system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;overflow-x:hidden}
+a{color:inherit}
+h1,h2,h3,h4{font-family:var(--head);font-weight:400;line-height:1.3;margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px;border-radius:8px}
+
+/* ---------- top nav ---------- */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1080px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo{font-family:var(--head);font-size:24px;text-decoration:none;color:var(--sky-ink);display:flex;align-items:center;gap:8px;min-height:44px}
+.logo i{width:14px;height:14px;border-radius:50%;background:var(--sun);display:inline-block;box-shadow:0 0 0 4px var(--sun-50)}
+.nav{display:flex;gap:2px;margin-inline-start:auto;flex-wrap:wrap}
+.nav a{text-decoration:none;font-weight:600;font-size:16px;color:var(--muted);padding:0 12px;min-height:44px;display:flex;align-items:center;border-radius:999px}
+.nav a:hover{background:var(--sky-50);color:var(--sky-ink)}
+.nav a.on{color:var(--sky-ink);background:var(--sky-50)}
+
+main{max-width:1080px;margin:0 auto;padding:24px 20px 64px}
+
+/* ---------- home ---------- */
+.hello{padding:20px 0 8px}
+.hello .date{color:var(--sky-ink);font-weight:600;font-size:16px}
+.hello h1{font-size:clamp(28px,5vw,40px);margin:4px 0 8px}
+.hello p{margin:0;color:var(--muted);max-width:640px}
+.hello p b{color:var(--ink)}
+
+.pickers{margin:22px 0 8px;display:flex;flex-direction:column;gap:14px}
+.seg{display:inline-flex;background:var(--sky-50);border-radius:999px;padding:4px;gap:4px;align-self:flex-start;max-width:100%}
+.seg button{border:0;background:transparent;min-height:44px;padding:0 22px;border-radius:999px;font-family:var(--head);font-size:18px;color:var(--sky-ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(29,43,58,.15)}
+.grades{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.ggroup{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ggroup small{color:var(--muted);font-size:14px;margin-inline-end:4px}
+.pill{border:1.5px solid var(--line);background:#fff;min-width:52px;min-height:44px;padding:0 14px;border-radius:999px;font-family:var(--head);font-size:18px;cursor:pointer;color:var(--ink)}
+.pill:hover{border-color:var(--sky)}
+.pill[aria-pressed="true"]{background:var(--sky);border-color:var(--sky);color:#fff}
+
+.year-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:30px 0 14px;scroll-margin-top:80px}
+.year-head h2{font-size:26px}
+.year-head .sub{color:var(--muted);font-size:15px}
+
+/* the road */
+.road{display:grid;column-gap:8px;position:relative}
+.m-lab{grid-column:1;align-self:start;font-family:var(--head);font-size:16px;padding-top:2px;color:var(--ink);text-align:start}
+.m-lab.past{color:#8a99a8}
+.spine{grid-column:2;grid-row:1 / -1;justify-self:center;width:14px;border-radius:999px;background:var(--sky-100);position:relative}
+.spine::after{content:"";position:absolute;inset:6px 6px;background:repeating-linear-gradient(to bottom,#fff 0 10px,transparent 10px 20px);border-radius:2px}
+.spine .done{position:absolute;inset-inline:0;top:0;border-radius:999px;background:var(--sky)}
+.m-dot{grid-column:2;justify-self:center;align-self:start;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--sky);margin-top:6px;z-index:1}
+
+.u-card{margin:4px 0;background:#fff;border:1.5px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;min-width:0;transition:border-color .15s, box-shadow .15s}
+.u-card:hover{border-color:var(--sky);box-shadow:0 4px 14px rgba(59,130,196,.12)}
+.u-card.past{background:#f7fafd}
+.u-link{display:block;text-decoration:none;padding:12px 14px;flex:1;min-height:44px}
+.u-top{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--muted)}
+.u-num{font-weight:700;color:var(--sky-ink)}
+.u-title{display:block;font-family:var(--head);font-size:18px;line-height:1.35;margin:4px 0 2px;overflow-wrap:anywhere}
+.u-meta{font-size:14px;color:var(--muted)}
+.u-card.now{border:2px solid var(--sun);background:var(--sun-50);box-shadow:0 6px 20px rgba(245,183,10,.22)}
+.now-box{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.now-flag{font-size:14px;font-weight:700;color:var(--sun-ink)}
+.btn-sun{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 18px;border-radius:999px;background:var(--sun);color:#2b2000;text-decoration:none;font-weight:700;font-size:16px;line-height:1.3;max-width:100%}
+.btn-sun:hover{background:#e6a900}
+.btn-sun span{overflow-wrap:anywhere}
+.btn-sun[aria-disabled="true"]{opacity:.6;pointer-events:none}
+.road.lanes .u-title{font-size:16px}
+.road.lanes .u-link{padding:10px}
+
+/* signature: "we are here" pin */
+.pin{grid-column:1 / -1;position:relative;pointer-events:none;z-index:0}
+.pin-t{grid-column:1 / 3;position:relative;pointer-events:none;z-index:5}
+.u-card{position:relative;z-index:1}
+.pin-line{position:absolute;inset-inline:0;height:0;border-top:2px dashed var(--sun)}
+.pin-tag{position:absolute;inset-inline-start:-4px;transform:translateY(-50%);background:var(--sun);color:#2b2000;font-weight:700;font-size:13px;line-height:1.2;padding:5px 9px;border-radius:999px;white-space:nowrap;box-shadow:0 2px 6px rgba(107,78,0,.25)}
+.pin-tag::after{content:"";position:absolute;inset-inline-end:-5px;top:50%;transform:translateY(-50%);border-block:6px solid transparent;border-inline-start:7px solid var(--sun)}
+.pin-tag small{display:block;font-weight:500;font-size:11px}
+
+/* ---------- shared bits ---------- */
+.crumbs{font-size:15px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;margin-bottom:14px}
+.crumbs a{color:var(--sky-ink);text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.crumbs a:hover{text-decoration:underline}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid var(--line);background:#fff;text-decoration:none;font-weight:600;font-size:16px;cursor:pointer;color:var(--ink)}
+.btn:hover{border-color:var(--sky);color:var(--sky-ink)}
+.btn.primary{background:var(--sky);border-color:var(--sky);color:#fff}
+.btn.primary:hover{background:var(--sky-ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:14px;padding:2px 10px;border-radius:999px;background:var(--sky-50);color:var(--sky-ink);font-weight:600}
+.chip.sun{background:var(--sun-50);color:var(--sun-ink)}
+.msg{padding:28px;border-radius:var(--r);background:var(--sky-50);text-align:center;color:var(--sky-ink)}
+.msg.err{background:var(--sun-50);color:var(--sun-ink)}
+.box{border:1.5px solid var(--line);border-radius:var(--r);padding:16px 18px;background:#fff}
+.box h3{font-size:18px;margin-bottom:8px;color:var(--sky-ink)}
+.box ul{margin:0;padding-inline-start:20px}
+.box li{margin:4px 0}
+.pre{white-space:pre-line}
+
+/* ---------- unit view ---------- */
+.uhead{background:var(--sky-50);border-radius:20px;padding:22px 22px 18px}
+.uhead .k{font-weight:700;color:var(--sky-ink);font-size:15px}
+.uhead h1{font-size:clamp(24px,4vw,32px);margin:4px 0 10px}
+.uhead .big{margin:12px 0 0;max-width:760px}
+details.more{margin-top:14px}
+details.more summary{cursor:pointer;min-height:44px;display:inline-flex;align-items:center;font-weight:700;color:var(--sky-ink);list-style:none}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"+";display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#fff;margin-inline-end:8px}
+details.more[open] summary::before{content:"–"}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:8px}
+
+.steps-h{font-size:22px;margin:28px 0 12px}
+.steps{list-style:none;margin:0;padding:0;position:relative}
+.steps::before{content:"";position:absolute;inset-inline-start:21px;top:12px;bottom:12px;width:6px;border-radius:6px;background:var(--sky-100)}
+.steps li{position:relative;padding-inline-start:60px;margin-bottom:10px}
+.steps .n{position:absolute;inset-inline-start:6px;top:12px;width:36px;height:36px;border-radius:50%;background:#fff;border:3px solid var(--sky);display:grid;place-items:center;font-family:var(--head);font-size:16px;color:var(--sky-ink)}
+.step{display:block;text-decoration:none;border:1.5px solid var(--line);border-radius:14px;padding:10px 14px;min-height:44px;background:#fff;transition:border-color .15s, transform .15s}
+a.step:hover{border-color:var(--sky);transform:translateX(-3px)}
+.step b{display:block;font-family:var(--head);font-weight:400;font-size:17px;line-height:1.4}
+.step small{color:var(--muted);font-size:14px}
+.step.none{color:var(--muted);background:#fafcfe}
+.steps li.here .n{background:var(--sun);border-color:var(--sun);color:#2b2000}
+.steps li.here .step{border-color:var(--sun)}
+.here-note{font-size:13px;font-weight:700;color:var(--sun-ink)}
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:24px}
+
+/* ---------- lesson view ---------- */
+.lbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.lhead{border-radius:20px;padding:22px;background:linear-gradient(180deg,var(--sky-50),#fff)}
+.lhead .k{font-weight:700;color:var(--sky-ink);font-size:15px}
+.lhead h1{font-size:clamp(24px,4.4vw,34px);margin:4px 0 12px}
+.lhead .cur{margin:12px 0 0;color:var(--muted);font-size:16px}
+.sec-h{font-size:22px;margin:30px 0 12px;display:flex;align-items:center;gap:10px}
+.sec-h::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--sun)}
+
+.story{list-style:none;margin:0;padding:0;position:relative}
+.story::before{content:"";position:absolute;inset-inline-start:23px;top:20px;bottom:20px;width:6px;border-radius:6px;background:var(--sky-100)}
+.stop{position:relative;padding-inline-start:66px;margin-bottom:22px}
+.stop-n{position:absolute;inset-inline-start:4px;top:0;width:44px;height:44px;border-radius:50%;background:var(--sky);color:#fff;display:grid;place-items:center;font-family:var(--head);font-size:20px;box-shadow:0 0 0 5px #fff}
+.stop-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-height:44px;padding-top:6px}
+.stop-h h3{font-size:20px}
+.stop-h span{color:var(--muted);font-size:15px}
+.act{border:1.5px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:10px;background:#fff}
+.act-h{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.act-h h4{font-size:17px;flex:1 1 200px}
+.act p{margin:8px 0 0}
+.diff{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.diff .box h3{display:flex;align-items:center;gap:8px}
+.diff .lv{width:12px;height:12px;border-radius:50%}
+.qs{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.qs li{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px}
+.qs .chip{flex:0 0 auto;margin-top:2px}
+.exit{background:var(--sun-50);border:2px solid var(--sun);border-radius:var(--r);padding:16px 18px}
+.exit h3{color:var(--sun-ink)}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:14px;text-align:center;padding:20px}
+
+@media (max-width:600px){
+  body{font-size:16px}
+  main{padding:16px 14px 48px}
+  .top-in{padding:6px 14px;gap:4px}
+  .nav{margin-inline-start:0;width:100%;justify-content:space-between}
+  .nav a{padding:0 8px;font-size:15px}
+  .seg{width:100%}
+  .seg button{flex:1;padding:0 8px}
+  .m-lab{font-size:14px}
+  .road{column-gap:5px}
+  .u-title{font-size:16px}
+  .road.lanes .u-title{font-size:15px}
+  .road.lanes .u-link{padding:8px}
+  .road.lanes .u-top{font-size:12px}
+  .pin-tag{font-size:12px;padding:4px 7px}
+  .uhead,.lhead{padding:18px 16px}
+  .stop{padding-inline-start:58px}
+  .act{padding:10px 12px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+@media print{
+  .top,.lbar,.pager,.no-print,footer,details.more summary::before{display:none!important}
+  body{font-size:12pt}
+  main{padding:0;max-width:none}
+  .lhead{background:none;padding:0}
+  .act,.box,.qs li,.exit{break-inside:avoid;box-shadow:none}
+  .stop-n{box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  a{text-decoration:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="logo" href="#/"><i aria-hidden="true"></i>מַעֲרָךְ</a>
+    <nav class="nav" aria-label="ניווט ראשי">
+      <a href="#/" id="nav-home">ראשי</a>
+      <a href="#/" id="nav-year">תוכניות שנתיות</a>
+      <a href="../index.html#library">המערכים שלי</a>
+      <a href="../index.html#tools">כלים למורה</a>
+    </nav>
+  </div>
+</header>
+<main id="app" tabindex="-1"><div class="msg">טוען…</div></main>
+<footer>מַעֲרָךְ · מערכי שיעור לתנ״ך, ספרות ולשון · שנת הלימודים תשפ״ז</footer>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+var SUBJ = {tanach:"תנ״ך", sifrut:"ספרות", lashon:"לשון"};
+var SUBJ_ORDER = ["tanach","sifrut","lashon"];
+var GR = {7:"ז׳",8:"ח׳",9:"ט׳",10:"י׳",11:"י״א",12:"י״ב"};
+var MONTHS = ["ספטמבר","אוקטובר","נובמבר","דצמבר","ינואר","פברואר","מרץ","אפריל","מאי","יוני"];
+var TODAY_POS = 2 + (17 - 1) / 30; /* 17 בנובמבר 2026 */
+var TYPES = {explain:"הסבר מורה",discuss:"דיון כיתתי",tps:"חשוב-זוג-שתף",group:"עבודה בקבוצות",read:"קריאה מודרכת",poll:"סקר / הצבעה",cloud:"ענן מילים",quiz:"חידון",game:"משחק",media:"וידאו / מדיה",write:"כתיבה אישית",exit:"כרטיס יציאה"};
+var MODELS = {classic:"פתיחה · גוף · סיכום",e5:"5E",release:"אני · אנחנו · אתם",inquiry:"למידת חקר",flipped:"כיתה הפוכה",debate:"דיון ומחלוקת"};
+var HIGH = {"ניתוח":1,"הערכה":1,"יצירה":1};
+
+var app = document.getElementById("app");
+var UNITS = window.UNITS || {};
+var state = {key:"sifrut-10"};
+var wantYearScroll = false;
+
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+  });
+}
+function splitKey(k){ var p = String(k).split("-"); return {subj:p[0], grade:+p[1]}; }
+function keyLabel(k){ var p = splitKey(k); return (SUBJ[p.subj]||"") + " · כיתה " + (GR[p.grade]||""); }
+function validKey(k){ return Object.prototype.hasOwnProperty.call(UNITS, k); }
+function stripOutline(s){ return String(s||"").replace(/^\s*שיעור\s*\d+\s*[:.–-]\s*/, ""); }
+
+/* ---------- months parsing ---------- */
+function parseMonths(s){
+  var parts = String(s||"").split(/\s*[–—-]\s*/).filter(Boolean);
+  if(!parts.length) return null;
+  function one(p, isEnd){
+    var off = isEnd ? 1 : 0; p = p.trim();
+    if(/^תחילת\s+/.test(p)){ off = isEnd ? 0.5 : 0; p = p.replace(/^תחילת\s+/, ""); }
+    else if(/^אמצע\s+/.test(p)){ off = 0.5; p = p.replace(/^אמצע\s+/, ""); }
+    else if(/^סוף\s+/.test(p)){ off = isEnd ? 1 : 0.5; p = p.replace(/^סוף\s+/, ""); }
+    for(var i=0;i<MONTHS.length;i++){ if(p.indexOf(MONTHS[i]) === 0) return i + off; }
+    return null;
+  }
+  var a = one(parts[0], false), b = one(parts[parts.length-1], true);
+  if(a == null || b == null) return null;
+  return {s:a, e:Math.max(b, a + 0.5)};
+}
+
+/* ---------- data loading (script tags, works from file://) ---------- */
+var scriptCache = {};
+function loadScript(src){
+  if(scriptCache[src]) return scriptCache[src];
+  scriptCache[src] = new Promise(function(res, rej){
+    var s = document.createElement("script");
+    s.src = src; s.async = true;
+    s.onload = function(){ res(); };
+    s.onerror = function(){ delete scriptCache[src]; rej(new Error(src)); };
+    document.head.appendChild(s);
+  });
+  return scriptCache[src];
+}
+function getPlan(key){
+  var arr = window.YEAR_PLANS || [];
+  for(var i=0;i<arr.length;i++) if(arr[i] && arr[i].key === key) return arr[i];
+  return null;
+}
+var planPromises = {};
+function loadPlan(key){
+  if(planPromises[key]) return planPromises[key];
+  planPromises[key] = (getPlan(key) ? Promise.resolve() : loadScript("../data/" + key + ".js"))
+    .then(function(){
+      if(!getPlan(key)) throw new Error("no plan");
+      return loadScript("../data/more/index.js").catch(function(){});
+    })
+    .then(function(){
+      var idx = (window.MORE_INDEX || {})[key] || [];
+      return Promise.all(idx.map(function(n){
+        return loadScript("../data/more/" + key + "-u" + n + ".js").catch(function(){});
+      }));
+    })
+    .then(function(){ return getPlan(key); })
+    .catch(function(e){ delete planPromises[key]; throw e; });
+  return planPromises[key];
+}
+function lessonsOf(key, plan, ui){
+  var u = plan.units[ui] || {};
+  var more = (window.YEAR_MORE || {})[key + "#" + (ui+1)] || [];
+  var map = {}, out = [];
+  (u.lessons || []).concat(more).forEach(function(l, i){
+    if(!l) return;
+    var oi = l.outlineIndex != null ? l.outlineIndex : 1000 + i;
+    if(map[oi]) return;
+    map[oi] = l; out.push(l);
+  });
+  out.sort(function(a,b){ return (a.outlineIndex||0) - (b.outlineIndex||0); });
+  return out;
+}
+/* steps of a unit: outline entries + any lesson outside the outline */
+function stepsOf(key, plan, ui){
+  var u = plan.units[ui] || {};
+  var ls = lessonsOf(key, plan, ui), byOi = {};
+  ls.forEach(function(l){ byOi[l.outlineIndex] = l; });
+  var steps = [], seen = {};
+  (u.outline || []).forEach(function(o, i){
+    steps.push({oi:i+1, outline:o, lesson:byOi[i+1] || null}); seen[i+1] = 1;
+  });
+  ls.forEach(function(l){ if(!seen[l.outlineIndex]) steps.push({oi:l.outlineIndex, outline:"", lesson:l}); });
+  steps.sort(function(a,b){ return a.oi - b.oi; });
+  return steps;
+}
+/* which lesson is "next" in the current unit, by elapsed share of the unit's months */
+function guessNext(key, plan, ui, range){
+  var steps = stepsOf(key, plan, ui).filter(function(s){ return s.lesson; });
+  if(!steps.length) return null;
+  var frac = (TODAY_POS - range.s) / (range.e - range.s);
+  var i = Math.max(0, Math.min(steps.length - 1, Math.floor(frac * steps.length)));
+  return steps[i];
+}
+function nowUnitIndex(key){
+  var us = UNITS[key] || [];
+  for(var i=0;i<us.length;i++){
+    var r = parseMonths(us[i].m);
+    if(r && r.s <= TODAY_POS && TODAY_POS < r.e) return i;
+  }
+  return -1;
+}
+
+function lessonHref(key, ui, oi){ return "#/k/" + key + "/u/" + (ui+1) + "/l/" + oi; }
+function unitHref(key, ui){ return "#/k/" + key + "/u/" + (ui+1); }
+
+function failMsg(){
+  return '<div class="msg err" role="alert"><h3>לא הצלחנו לטעון את המערכים כרגע</h3><p>אפשר לנסות לרענן את הדף. התוכנית השנתית עצמה עדיין זמינה בדף הבית.</p><p><a class="btn" href="#/k/' + esc(state.key) + '">חזרה לציר השנה</a></p></div>';
+}
+function setNav(which){
+  document.getElementById("nav-home").classList.toggle("on", which === "home");
+  document.getElementById("nav-year").classList.toggle("on", which === "plan");
+}
+
+/* =================== HOME =================== */
+function renderHome(){
+  setNav("home");
+  document.title = "מַעֲרָךְ · ציר השנה";
+  var p = splitKey(state.key);
+  var seg = SUBJ_ORDER.map(function(s){
+    return '<button type="button" data-subj="' + s + '" aria-pressed="' + (s === p.subj) + '">' + SUBJ[s] + '</button>';
+  }).join("");
+  function pills(list){ return list.map(function(g){
+    return '<button type="button" class="pill" data-grade="' + g + '" aria-pressed="' + (g === p.grade) + '" aria-label="כיתה ' + GR[g] + '">' + GR[g] + '</button>';
+  }).join(""); }
+
+  app.innerHTML =
+    '<section class="hello">' +
+      '<div class="date">יום שלישי, 17 בנובמבר 2026 · תשפ״ז</div>' +
+      '<h1>שלום! מה מלמדים היום?</h1>' +
+      '<p>בוחרים מקצוע וכיתה, והשנה נפרשת כדרך מספטמבר עד יוני. באתר <b>18 תוכניות שנתיות</b> ו-<b>1,322 שיעורים</b>, ולכל שיעור מערך מלא.</p>' +
+    '</section>' +
+    '<section class="pickers" aria-label="בחירת מקצוע וכיתה">' +
+      '<div class="seg" role="group" aria-label="מקצוע">' + seg + '</div>' +
+      '<div class="grades" role="group" aria-label="כיתה">' +
+        '<div class="ggroup"><small>חטיבת ביניים</small>' + pills([7,8,9]) + '</div>' +
+        '<div class="ggroup"><small>תיכון</small>' + pills([10,11,12]) + '</div>' +
+      '</div>' +
+    '</section>' +
+    '<section aria-labelledby="yh">' +
+      '<div class="year-head" id="year"><h2 id="yh">ציר השנה · ' + esc(keyLabel(state.key)) + '</h2><span class="sub" id="ysub"></span></div>' +
+      '<div id="roadwrap"></div>' +
+    '</section>';
+
+  app.querySelectorAll("[data-subj]").forEach(function(b){
+    b.addEventListener("click", function(){ choose(b.getAttribute("data-subj") + "-" + splitKey(state.key).grade); });
+  });
+  app.querySelectorAll("[data-grade]").forEach(function(b){
+    b.addEventListener("click", function(){ choose(splitKey(state.key).subj + "-" + b.getAttribute("data-grade")); });
+  });
+  drawRoad();
+  if(wantYearScroll){ wantYearScroll = false; document.getElementById("year").scrollIntoView({block:"start"}); }
+}
+function choose(key){
+  if(!validKey(key)) return;
+  state.key = key;
+  history.replaceState(null, "", "#/k/" + key);
+  var y = window.scrollY;
+  renderHome();
+  window.scrollTo(0, y);
+}
+
+function drawRoad(){
+  var key = state.key, us = UNITS[key] || [];
+  var wrap = document.getElementById("roadwrap");
+  if(!us.length){ wrap.innerHTML = '<div class="msg">אין עדיין תוכנית לכיתה הזו.</div>'; return; }
+  var plan = getPlan(key);
+  var nowI = nowUnitIndex(key);
+
+  /* place units on half-month rows, with lanes when they overlap */
+  var items = us.map(function(u, i){
+    var r = parseMonths(u.m) || {s:i, e:i+1};
+    return {u:u, i:i, r:r, a:Math.round(r.s*2), b:Math.max(Math.round(r.e*2), Math.round(r.s*2)+1)};
+  });
+  var laneEnds = [];
+  items.forEach(function(it){
+    var L = -1;
+    for(var l=0;l<laneEnds.length;l++){ if(laneEnds[l] <= it.a){ L = l; break; } }
+    if(L < 0){ L = laneEnds.length; laneEnds.push(0); }
+    laneEnds[L] = it.b; it.lane = L;
+  });
+  var lanes = laneEnds.length;
+  items.forEach(function(it){
+    it.solo = !items.some(function(o){ return o !== it && o.a < it.b && it.a < o.b; });
+  });
+
+  var h = [];
+  var cols = "minmax(58px,max-content) 22px repeat(" + lanes + ",minmax(0,1fr))";
+  h.push('<div class="road' + (lanes > 1 ? " lanes" : "") + '" style="grid-template-columns:' + cols + ';grid-template-rows:repeat(20,minmax(30px,auto))">');
+  var todayRow = Math.floor(TODAY_POS * 2), todayFrac = TODAY_POS * 2 - todayRow;
+  h.push('<div class="spine" aria-hidden="true"><div class="done" id="spdone"></div></div>');
+  MONTHS.forEach(function(m, mi){
+    var past = (mi + 1) <= TODAY_POS;
+    h.push('<div class="m-lab' + (past ? " past" : "") + '" style="grid-row:' + (mi*2+1) + ' / span 2">' + m + '</div>');
+    h.push('<div class="m-dot" aria-hidden="true" style="grid-row:' + (mi*2+1) + '"></div>');
+  });
+  items.forEach(function(it){
+    var col = it.solo || lanes === 1 ? "3 / -1" : String(3 + it.lane);
+    var isNow = it.i === nowI, past = it.r.e <= TODAY_POS;
+    var u = plan && plan.units[it.i];
+    var meta = [];
+    if(u && u.outline) meta.push(u.outline.length + " שיעורים");
+    if(u && u.weeks) meta.push(u.weeks + " שבועות");
+    h.push('<div class="u-card' + (isNow ? " now" : "") + (past ? " past" : "") + '" style="grid-column:' + col + ';grid-row:' + (it.a+1) + ' / ' + (it.b+1) + '">');
+    h.push('<a class="u-link" href="' + unitHref(key, it.i) + '">' +
+      '<span class="u-top"><span class="u-num">יחידה ' + (it.i+1) + '</span><span>' + esc(it.u.m) + '</span></span>' +
+      '<span class="u-title">' + esc(it.u.t) + '</span>' +
+      (meta.length ? '<span class="u-meta">' + esc(meta.join(" · ")) + '</span>' : "") +
+    '</a>');
+    if(isNow){
+      var btn;
+      if(plan){
+        var g = guessNext(key, plan, it.i, it.r);
+        btn = g ? '<a class="btn-sun" href="' + lessonHref(key, it.i, g.oi) + '"><span>לשיעור ' + g.oi + ': ' + esc(g.lesson.title || stripOutline(g.outline)) + '</span> ←</a>'
+                : '<a class="btn-sun" href="' + unitHref(key, it.i) + '">לשיעורי היחידה ←</a>';
+      } else {
+        btn = '<a class="btn-sun" aria-disabled="true" href="' + unitHref(key, it.i) + '">מאתרים את השיעור הבא…</a>';
+      }
+      h.push('<div class="now-box"><span class="now-flag">כנראה זה מה שמלמדים עכשיו</span>' + btn + '</div>');
+    }
+    h.push('</div>');
+  });
+  h.push('<div class="pin" aria-label="אנחנו כאן: 17 בנובמבר" style="grid-row:' + (todayRow+1) + '"><div class="pin-line" style="top:' + (todayFrac*100).toFixed(1) + '%"></div></div>');
+  h.push('<div class="pin-t" aria-hidden="true" style="grid-row:' + (todayRow+1) + '"><div class="pin-tag" style="top:' + (todayFrac*100).toFixed(1) + '%">אנחנו כאן<small>17 בנובמבר</small></div></div>');
+  h.push('</div>');
+  wrap.innerHTML = h.join("");
+
+  /* fill the travelled part of the spine up to today */
+  requestAnimationFrame(function(){
+    var road = wrap.querySelector(".road"), pin = wrap.querySelector(".pin-line"), done = document.getElementById("spdone");
+    if(!road || !pin || !done) return;
+    var top = pin.getBoundingClientRect().top - road.getBoundingClientRect().top;
+    done.style.height = Math.max(0, top) + "px";
+  });
+
+  var sub = document.getElementById("ysub");
+  if(plan){
+    sub.textContent = us.length + " יחידות" + (plan.hoursPerWeek ? " · " + plan.hoursPerWeek + " ש״ש" : "");
+  } else {
+    sub.textContent = us.length + " יחידות";
+    loadPlan(key).then(function(){ if(state.key === key && document.getElementById("roadwrap")) drawRoad(); })
+      .catch(function(){
+        if(state.key !== key || !document.getElementById("ysub")) return;
+        sub.textContent = "המערכים לא נטענו כרגע, הציר עדיין זמין";
+        var b = wrap.querySelector(".btn-sun[aria-disabled]");
+        if(b){ b.removeAttribute("aria-disabled"); b.textContent = "לשיעורי היחידה ←"; }
+      });
+  }
+}
+
+/* =================== UNIT =================== */
+function renderUnit(key, ui){
+  setNav("plan");
+  app.innerHTML = '<div class="msg">טוען את שיעורי היחידה…</div>';
+  loadPlan(key).then(function(plan){
+    if(currentRoute() !== "u" ) return;
+    var u = plan.units[ui];
+    if(!u){ app.innerHTML = '<div class="msg err">היחידה לא נמצאה. <a href="#/k/' + esc(key) + '">חזרה לציר השנה</a></div>'; return; }
+    document.title = (u.title || "יחידה") + " · מַעֲרָךְ";
+    var steps = stepsOf(key, plan, ui);
+    var r = parseMonths(u.months || (UNITS[key][ui] || {}).m);
+    var hereOi = -1;
+    if(ui === nowUnitIndex(key) && r){ var g = guessNext(key, plan, ui, r); if(g) hereOi = g.oi; }
+
+    var h = [];
+    h.push('<nav class="crumbs" aria-label="מיקום"><a href="#/k/' + key + '">' + esc(keyLabel(key)) + '</a><span aria-hidden="true">›</span><span>יחידה ' + (ui+1) + '</span></nav>');
+    h.push('<section class="uhead"><div class="k">יחידה ' + (ui+1) + ' מתוך ' + plan.units.length + '</div><h1>' + esc(u.title) + '</h1>');
+    h.push('<div class="chips">' + (u.months ? '<span class="chip sun">' + esc(u.months) + '</span>' : "") + (u.weeks ? '<span class="chip">' + esc(u.weeks) + ' שבועות</span>' : "") + '<span class="chip">' + steps.length + ' שיעורים</span></div>');
+    if(u.bigIdea) h.push('<p class="big">' + esc(u.bigIdea) + '</p>');
+    var hasMore = (u.goals && u.goals.length) || (u.texts && u.texts.length) || u.assessment || u.curriculum;
+    if(hasMore){
+      h.push('<details class="more"><summary>על היחידה: מטרות, טקסטים והערכה</summary><div class="grid2">');
+      if(u.curriculum) h.push('<div class="box"><h3>תוכנית הלימודים</h3><p class="pre" style="margin:0">' + esc(u.curriculum) + '</p></div>');
+      if(u.goals && u.goals.length) h.push('<div class="box"><h3>מטרות</h3><ul>' + u.goals.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + '</ul></div>');
+      if(u.texts && u.texts.length) h.push('<div class="box"><h3>טקסטים</h3><ul>' + u.texts.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("") + '</ul></div>');
+      if(u.assessment) h.push('<div class="box"><h3>הערכה</h3><p class="pre" style="margin:0">' + esc(u.assessment) + '</p></div>');
+      h.push('</div></details>');
+    }
+    h.push('</section>');
+    h.push('<h2 class="steps-h">השיעורים, צעד אחר צעד</h2><ol class="steps">');
+    steps.forEach(function(s){
+      var l = s.lesson, here = s.oi === hereOi;
+      var title = l && l.title ? l.title : stripOutline(s.outline);
+      var meta = [];
+      if(l && l.minutes) meta.push(l.minutes + " דק׳");
+      if(l && MODELS[l.model]) meta.push(MODELS[l.model]);
+      h.push('<li' + (here ? ' class="here"' : "") + '><span class="n" aria-hidden="true">' + s.oi + '</span>');
+      if(l){
+        h.push('<a class="step" href="' + lessonHref(key, ui, s.oi) + '">' + (here ? '<span class="here-note">כנראה השיעור הבא</span>' : "") + '<b>שיעור ' + s.oi + ': ' + esc(title) + '</b>' + (meta.length ? '<small>' + esc(meta.join(" · ")) + '</small>' : "") + '</a>');
+      } else {
+        h.push('<div class="step none"><b>שיעור ' + s.oi + ': ' + esc(title) + '</b><small>אין עדיין מערך מלא לשיעור הזה</small></div>');
+      }
+      h.push('</li>');
+    });
+    h.push('</ol>');
+    h.push('<div class="pager">' +
+      (ui > 0 ? '<a class="btn" href="' + unitHref(key, ui-1) + '">→ יחידה ' + ui + '</a>' : '<span></span>') +
+      '<a class="btn" href="#/k/' + key + '">לציר השנה</a>' +
+      (ui < plan.units.length-1 ? '<a class="btn" href="' + unitHref(key, ui+1) + '">יחידה ' + (ui+2) + ' ←</a>' : '<span></span>') +
+    '</div>');
+    app.innerHTML = h.join("");
+  }).catch(function(){ app.innerHTML = failMsg(); });
+}
+
+/* =================== LESSON =================== */
+function renderLesson(key, ui, oi){
+  setNav("plan");
+  app.innerHTML = '<div class="msg">טוען את מערך השיעור…</div>';
+  loadPlan(key).then(function(plan){
+    if(currentRoute() !== "l") return;
+    var u = plan.units[ui];
+    var ls = u ? lessonsOf(key, plan, ui) : [];
+    var idx = -1;
+    for(var i=0;i<ls.length;i++) if(ls[i].outlineIndex === oi){ idx = i; break; }
+    if(idx < 0){ app.innerHTML = '<div class="msg err">המערך לא נמצא. <a href="' + (u ? unitHref(key, ui) : "#/k/" + esc(key)) + '">חזרה לתוכנית</a></div>'; return; }
+    var L = ls[idx];
+    document.title = (L.title || "שיעור") + " · מַעֲרָךְ";
+    var total = (u.outline && u.outline.length) || ls.length;
+    var h = [];
+    h.push('<nav class="crumbs" aria-label="מיקום"><a href="#/k/' + key + '">' + esc(keyLabel(key)) + '</a><span aria-hidden="true">›</span><a href="' + unitHref(key, ui) + '">יחידה ' + (ui+1) + '</a><span aria-hidden="true">›</span><span>שיעור ' + oi + '</span></nav>');
+    h.push('<div class="lbar"><a class="btn" href="' + unitHref(key, ui) + '">→ חזרה לתוכנית</a><button type="button" class="btn primary" id="printb">הדפסה</button></div>');
+
+    h.push('<section class="lhead"><div class="k">' + esc(u.title) + ' · שיעור ' + oi + ' מתוך ' + total + '</div><h1>' + esc(L.title) + '</h1><div class="chips">');
+    if(L.minutes) h.push('<span class="chip sun">' + esc(L.minutes) + ' דקות</span>');
+    if(MODELS[L.model]) h.push('<span class="chip">' + esc(MODELS[L.model]) + '</span>');
+    (L.bloom || []).forEach(function(b){ h.push('<span class="chip">' + esc(b) + '</span>'); });
+    h.push('</div>');
+    if(L.curriculum) h.push('<p class="cur"><b>תוכנית לימודים:</b> ' + esc(L.curriculum) + '</p>');
+    h.push('</section>');
+
+    if((L.goals && L.goals.length) || L.materials){
+      h.push('<div class="grid2" style="margin-top:16px">');
+      if(L.goals && L.goals.length) h.push('<div class="box"><h3>מטרות</h3><ul>' + L.goals.map(function(g){ return "<li>" + esc(g) + "</li>"; }).join("") + '</ul></div>');
+      if(L.materials) h.push('<div class="box"><h3>חומרים</h3><p class="pre" style="margin:0">' + esc(L.materials) + '</p></div>');
+      h.push('</div>');
+    }
+
+    var stages = L.stages || [];
+    if(stages.length){
+      h.push('<h2 class="sec-h">מהלך השיעור</h2><ol class="story">');
+      stages.forEach(function(st, si){
+        var acts = st.activities || [];
+        var mins = acts.reduce(function(a, x){ return a + (+x.minutes || 0); }, 0);
+        h.push('<li class="stop"><span class="stop-n" aria-hidden="true">' + (si+1) + '</span><div class="stop-h"><h3>' + esc(st.name) + '</h3>' + (mins ? '<span>' + mins + ' דק׳</span>' : "") + '</div>');
+        acts.forEach(function(a){
+          h.push('<div class="act"><div class="act-h"><h4>' + esc(a.title) + '</h4>' +
+            (TYPES[a.type] ? '<span class="chip">' + esc(TYPES[a.type]) + '</span>' : "") +
+            (a.minutes ? '<span class="chip sun">' + esc(a.minutes) + ' דק׳</span>' : "") + '</div>' +
+            (a.instructions ? '<p class="pre">' + esc(a.instructions) + '</p>' : "") + '</div>');
+        });
+        h.push('</li>');
+      });
+      h.push('</ol>');
+    }
+
+    var d = L.diff || {};
+    if(d.support || d.core || d.enrich){
+      h.push('<h2 class="sec-h">הבחנה</h2><div class="diff">');
+      [["support","תמיכה","#9cc5ea"],["core","ליבה","#3b82c4"],["enrich","העשרה","#f5b70a"]].forEach(function(x){
+        if(d[x[0]]) h.push('<div class="box"><h3><span class="lv" style="background:' + x[2] + '"></span>' + x[1] + '</h3><p class="pre" style="margin:0">' + esc(d[x[0]]) + '</p></div>');
+      });
+      h.push('</div>');
+    }
+
+    if(L.questions && L.questions.length){
+      h.push('<h2 class="sec-h">שאלות</h2><ol class="qs">');
+      L.questions.forEach(function(q){
+        h.push('<li>' + (q.level ? '<span class="chip' + (HIGH[q.level] ? " sun" : "") + '">' + esc(q.level) + '</span>' : "") + '<span>' + esc(q.q) + '</span></li>');
+      });
+      h.push('</ol>');
+    }
+
+    if(L.exitTicket || L.notes){
+      h.push('<div class="grid2" style="margin-top:28px">');
+      if(L.exitTicket) h.push('<div class="exit"><h3>כרטיס יציאה</h3><p class="pre" style="margin:0">' + esc(L.exitTicket) + '</p></div>');
+      if(L.notes) h.push('<div class="box"><h3>הערות למורה</h3><p class="pre" style="margin:0">' + esc(L.notes) + '</p></div>');
+      h.push('</div>');
+    }
+
+    var prev = ls[idx-1], next = ls[idx+1];
+    h.push('<div class="pager">' +
+      (prev ? '<a class="btn" href="' + lessonHref(key, ui, prev.outlineIndex) + '">→ שיעור ' + prev.outlineIndex + '</a>' : '<span></span>') +
+      '<a class="btn" href="' + unitHref(key, ui) + '">כל שיעורי היחידה</a>' +
+      (next ? '<a class="btn" href="' + lessonHref(key, ui, next.outlineIndex) + '">שיעור ' + next.outlineIndex + ' ←</a>' : '<span></span>') +
+    '</div>');
+    app.innerHTML = h.join("");
+    document.getElementById("printb").addEventListener("click", function(){ window.print(); });
+  }).catch(function(){ app.innerHTML = failMsg(); });
+}
+
+/* =================== ROUTER =================== */
+function parseHash(){
+  var m = location.hash.match(/^#\/k\/([a-z]+-\d+)(?:\/u\/(\d+)(?:\/l\/(\d+))?)?/);
+  if(!m || !validKey(m[1])) return {view:"home", key:null};
+  if(m[3]) return {view:"l", key:m[1], ui:+m[2]-1, oi:+m[3]};
+  if(m[2]) return {view:"u", key:m[1], ui:+m[2]-1};
+  return {view:"home", key:m[1]};
+}
+function currentRoute(){ return parseHash().view; }
+function route(){
+  var r = parseHash();
+  if(r.key) state.key = r.key;
+  if(!wantYearScroll) window.scrollTo(0, 0);
+  if(r.view === "l") renderLesson(r.key, r.ui, r.oi);
+  else if(r.view === "u") renderUnit(r.key, r.ui);
+  else renderHome();
+}
+document.getElementById("nav-year").addEventListener("click", function(e){
+  e.preventDefault();
+  wantYearScroll = true;
+  var target = "#/k/" + state.key;
+  if(location.hash === target) { renderHome(); }
+  else location.hash = target;
+});
+document.getElementById("nav-home").addEventListener("click", function(e){
+  e.preventDefault();
+  var target = "#/k/" + state.key;
+  if(location.hash === target){ renderHome(); window.scrollTo(0,0); }
+  else location.hash = target;
+});
+window.addEventListener("hashchange", route);
+if(!window.UNITS){ app.innerHTML = '<div class="msg err">לא הצלחנו לטעון את רשימת התוכניות. נסו לרענן את הדף.</div>'; return; }
+route();
+})();
+</script>
+</body>
+</html>

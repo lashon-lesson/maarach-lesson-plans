@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מַעֲרָךְ · מערכי שיעור לתנ״ך, ספרות ולשון</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Heebo:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1a1d24; --muted:#5b6170; --line:#e3e5ea; --page:#ffffff; --soft:#f5f6f8;
+  --tanach:#1c2f6b; --tanach-acc:#e4cd8f;
+  --sifrut:#4a1838; --sifrut-acc:#f3c6d2;
+  --lashon:#123d33; --lashon-acc:#a9e8cf;
+  --c:var(--sifrut); --acc:var(--sifrut-acc);
+  --display:"Frank Ruhl Libre", "Times New Roman", system-ui, serif;
+  --body:"Heebo", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+a{color:inherit}
+button{font:inherit;color:inherit}
+.s-tanach{--c:var(--tanach);--acc:var(--tanach-acc)}
+.s-sifrut{--c:var(--sifrut);--acc:var(--sifrut-acc)}
+.s-lashon{--c:var(--lashon);--acc:var(--lashon-acc)}
+:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+
+/* top nav */
+.top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:20px;min-height:60px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-size:1.6rem;font-weight:700;text-decoration:none;letter-spacing:.01em}
+.nav{display:flex;gap:4px;flex-wrap:wrap;margin-inline-start:auto}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;text-decoration:none;font-size:.95rem;color:var(--muted);border-radius:6px}
+.nav a:hover{color:var(--ink);background:var(--soft)}
+.nav a[aria-current="page"]{color:var(--ink);font-weight:700}
+
+/* home */
+.intro{max-width:1180px;margin:0 auto;padding:56px 20px 48px}
+.intro h1{font-family:var(--display);font-weight:500;font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 14px;max-width:22ch}
+.intro p{margin:0;color:var(--muted);font-size:1.1rem;max-width:60ch}
+.stats{display:flex;gap:36px;flex-wrap:wrap;margin-top:28px;padding:0;list-style:none}
+.stats b{display:block;font-family:var(--display);font-size:2rem;font-weight:500;line-height:1.1}
+.stats span{color:var(--muted);font-size:.92rem}
+.toc{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.toc a{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;text-decoration:none;color:#fff;background:var(--c);font-weight:500}
+
+.chapter{scroll-margin-top:60px;background:var(--c);color:#fff;padding:clamp(56px,9vw,120px) 0 clamp(48px,7vw,88px)}
+.ch-in{max-width:1180px;margin:0 auto;padding:0 20px}
+.ch-label{font-size:.9rem;letter-spacing:.08em;color:var(--acc);margin:0 0 28px;display:flex;gap:12px;align-items:center}
+.ch-label::after{content:"";flex:0 0 48px;height:1px;background:currentColor;opacity:.6}
+.quote{margin:0}
+.quote blockquote{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(2.5rem,8.4vw,7.2rem);line-height:1.18;color:#fff;overflow-wrap:anywhere}
+.quote figcaption{margin-top:18px;color:var(--acc);font-size:1rem}
+.ch-name{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.2rem);font-weight:700;margin:56px 0 6px;color:var(--acc)}
+.ch-line{margin:0;max-width:58ch;color:rgba(255,255,255,.86);font-size:1.08rem}
+.ch-meta{margin:8px 0 0;color:rgba(255,255,255,.66);font-size:.95rem}
+.grades{list-style:none;padding:0;margin:36px 0 0;display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.grades a{display:flex;flex-direction:column;min-height:132px;padding:16px 16px 14px;border:1px solid rgba(255,255,255,.28);border-radius:10px;text-decoration:none;color:#fff;transition:background .2s,border-color .2s}
+.grades a:hover{background:rgba(255,255,255,.08);border-color:var(--acc)}
+.g-letter{font-family:var(--display);font-size:2.6rem;line-height:1;font-weight:500}
+.g-stage{font-size:.82rem;color:rgba(255,255,255,.7);margin-top:auto}
+.g-units{font-size:.95rem;color:var(--acc)}
+.foot{max-width:1180px;margin:0 auto;padding:36px 20px 48px;color:var(--muted);font-size:.9rem}
+
+/* reading pages */
+.read{max-width:1080px;margin:0 auto;padding:36px 20px 80px}
+.col{max-width:68ch}
+.crumbs{font-size:.92rem;color:var(--muted);margin:0 0 10px}
+.crumbs a{color:var(--c)}
+.pick{display:flex;flex-direction:column;gap:12px;margin:0 0 36px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row .lab{font-size:.85rem;color:var(--muted);min-width:56px}
+.chip{min-height:44px;min-width:44px;padding:0 14px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;font-size:.98rem}
+.chip:hover{border-color:var(--c)}
+.chip[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff;font-weight:500}
+.chip.subj-tanach[aria-pressed="true"]{background:var(--tanach);border-color:var(--tanach)}
+.chip.subj-sifrut[aria-pressed="true"]{background:var(--sifrut);border-color:var(--sifrut)}
+.chip.subj-lashon[aria-pressed="true"]{background:var(--lashon);border-color:var(--lashon)}
+.h1{font-family:var(--display);font-weight:500;font-size:clamp(1.9rem,4.4vw,2.8rem);line-height:1.2;margin:0 0 12px;color:var(--ink)}
+.h1 em{font-style:normal;color:var(--c)}
+.lead{color:var(--muted);margin:0 0 8px;line-height:1.75}
+.note{background:var(--soft);border-radius:8px;padding:14px 16px;color:var(--muted)}
+.units{list-style:none;padding:0;margin:28px 0 0;counter-reset:u}
+.unit{border-top:1px solid var(--line)}
+.unit:last-child{border-bottom:1px solid var(--line)}
+.u-btn{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:baseline;width:100%;text-align:right;background:none;border:0;padding:18px 4px;cursor:pointer;min-height:44px}
+.u-btn:hover .u-title{color:var(--c)}
+.u-num{font-family:var(--display);font-size:1.7rem;color:var(--c);line-height:1}
+.u-title{font-size:1.1rem;font-weight:500;line-height:1.45}
+.u-months{display:block;font-size:.9rem;color:var(--muted);font-weight:400;margin-top:2px}
+.u-tog{font-size:.88rem;color:var(--c);white-space:nowrap}
+.u-body{padding:0 58px 24px 4px}
+.u-body .big{font-family:var(--display);font-size:1.15rem;line-height:1.6;margin:0 0 16px;max-width:62ch}
+.lessons{list-style:none;padding:0;margin:0;max-width:68ch}
+.lessons li{border-top:1px dashed var(--line)}
+.lessons a,.lessons .na{display:flex;gap:12px;align-items:baseline;padding:11px 0;min-height:44px;text-decoration:none}
+.lessons a:hover .l-t{color:var(--c);text-decoration:underline;text-underline-offset:3px}
+.l-n{color:var(--muted);font-size:.85rem;min-width:52px}
+.l-t{flex:1}
+.l-m{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.lessons .na{color:var(--muted)}
+
+/* lesson */
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:8px;border:1px solid var(--c);background:#fff;color:var(--c);text-decoration:none;cursor:pointer;font-weight:500}
+.btn.solid{background:var(--c);color:#fff}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;color:var(--muted);font-size:.95rem;margin:4px 0 6px}
+.meta b{color:var(--ink);font-weight:500}
+.sec{margin:40px 0 0}
+.sec h2{font-family:var(--display);font-weight:700;font-size:1.4rem;margin:0 0 12px;color:var(--c)}
+.sec p,.sec li{line-height:1.85}
+.sec ul,.sec ol{padding-inline-start:1.3em;margin:0}
+.sec li{margin:0 0 6px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0;padding:0;list-style:none}
+.tags li{font-size:.82rem;padding:2px 10px;border-radius:999px;background:var(--soft);color:var(--muted);margin:0}
+.stage{margin:28px 0 0}
+.stage h3{font-size:1.05rem;font-weight:700;margin:0 0 8px;display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid var(--c);padding-bottom:6px}
+.stage h3 span{font-weight:400;color:var(--muted);font-size:.9rem}
+.act{padding:12px 0 14px;border-bottom:1px solid var(--line)}
+.act h4{margin:0 0 4px;font-size:1rem;font-weight:700;display:flex;justify-content:space-between;gap:12px}
+.act h4 span{font-weight:400;color:var(--muted);font-size:.88rem;white-space:nowrap}
+.act p{margin:0;line-height:1.85;white-space:pre-line}
+.diff{display:grid;gap:14px}
+.diff div{padding:14px 16px;border-radius:8px;background:var(--soft);border-inline-start:4px solid var(--c)}
+.diff b{display:block;margin-bottom:4px}
+.diff p{margin:0}
+.qs{list-style:none;padding:0}
+.qs li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);margin:0}
+.lvl{flex:0 0 auto;font-size:.8rem;padding:2px 10px;border-radius:999px;border:1px solid var(--c);color:var(--c);height:fit-content;margin-top:4px}
+.exit{padding:16px 18px;border:2px solid var(--c);border-radius:10px}
+.pn{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:48px;padding-top:20px;border-top:1px solid var(--line)}
+.pn a{color:var(--c);display:inline-flex;align-items:center;min-height:44px;max-width:46%}
+
+@media (max-width:900px){.grades{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:560px){
+  body{font-size:16px}
+  .top-in{gap:4px;padding:6px 14px}
+  .nav{margin-inline-start:0;width:100%;gap:0}
+  .nav a{padding:0 9px;font-size:.88rem}
+  .intro{padding:36px 16px 36px}
+  .ch-in,.read{padding-left:16px;padding-right:16px}
+  .grades{grid-template-columns:repeat(2,1fr);gap:10px}
+  .grades a{min-height:112px}
+  .u-btn{grid-template-columns:34px 1fr;padding:16px 0}
+  .u-tog{grid-column:2}
+  .u-body{padding:0 0 22px}
+  .pn a{max-width:100%}
+}
+@media print{
+  .top,.bar,.pick,.pn,.crumbs,.foot{display:none!important}
+  body{font-size:12pt}
+  .read{padding:0}
+  .col{max-width:none}
+  .sec{break-inside:auto}.act,.diff div{break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#/">מַעֲרָךְ</a>
+    <nav class="nav" aria-label="ניווט ראשי">
+      <a href="#/" data-nav="home">ראשי</a>
+      <a href="#/plan/sifrut-10" data-nav="plan">תוכניות שנתיות</a>
+      <a href="../index.html#library">המערכים שלי</a>
+      <a href="../index.html#tools">כלים למורה</a>
+    </nav>
+  </div>
+</header>
+<main id="app" tabindex="-1"></main>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+var SUBJ = [
+  {slug:"tanach", name:"תנ״ך", count:409, quote:"בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת הָאָרֶץ", src:"בראשית א׳ א׳",
+   line:"קריאה צמודה בסיפור, בנבואה ובשירה המקראית: מה כתוב, איך זה כתוב, ומה זה אומר לנו היום."},
+  {slug:"sifrut", name:"ספרות", count:425, quote:"הַכְנִיסִינִי תַּחַת כְּנָפֵךְ", src:"ח״נ ביאליק",
+   line:"שירה, סיפור ומחזה, מז׳ ועד הבגרות: כלים לקריאה, לפרשנות ולכתיבה על יצירה."},
+  {slug:"lashon", name:"לשון", count:488, quote:"מָוֶת וְחַיִּים בְּיַד לָשׁוֹן", src:"משלי י״ח כ״א",
+   line:"הבנת הנקרא, כתיבה, תחביר, צורות ומשמעות: הלשון ככלי לחשוב, להבין ולהתבטא."}
+];
+var GRADES = [{n:7,l:"ז׳"},{n:8,l:"ח׳"},{n:9,l:"ט׳"},{n:10,l:"י׳"},{n:11,l:"י״א"},{n:12,l:"י״ב"}];
+var CH = ["א׳","ב׳","ג׳"];
+var UNITS = window.UNITS || {};
+var app = document.getElementById("app");
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function subjOf(slug){for(var i=0;i<SUBJ.length;i++)if(SUBJ[i].slug===slug)return SUBJ[i];return null;}
+function gradeOf(n){for(var i=0;i<GRADES.length;i++)if(GRADES[i].n===n)return GRADES[i];return null;}
+function parseKey(k){var m=/^(tanach|sifrut|lashon)-(7|8|9|10|11|12)$/.exec(k||"");return m?{slug:m[1],n:+m[2],key:k}:null;}
+
+/* ---------- loading ---------- */
+var scripts = {};
+function loadScript(src){
+  if(scripts[src]) return scripts[src];
+  scripts[src] = new Promise(function(res,rej){
+    var s=document.createElement("script"); s.src=src; s.async=true;
+    s.onload=function(){res();}; s.onerror=function(){delete scripts[src];rej(new Error(src));};
+    document.head.appendChild(s);
+  });
+  return scripts[src];
+}
+var planCache = {};
+function findPlan(key){var a=window.YEAR_PLANS||[];for(var i=0;i<a.length;i++)if(a[i]&&a[i].key===key)return a[i];return null;}
+function loadPlan(key){
+  if(planCache[key]) return planCache[key];
+  planCache[key] = loadScript("../data/"+key+".js").then(function(){
+    var plan=findPlan(key); if(!plan) throw new Error("no plan");
+    return loadScript("../data/more/index.js").catch(function(){}).then(function(){
+      var idx=(window.MORE_INDEX||{})[key]||[];
+      return Promise.all(idx.map(function(n){return loadScript("../data/more/"+key+"-u"+n+".js").catch(function(){});}));
+    }).then(function(){return plan;});
+  });
+  planCache[key].catch(function(){delete planCache[key];});
+  return planCache[key];
+}
+function unitLessons(plan,ui){
+  var u=plan.units[ui]||{}, seen={}, out=[];
+  var more=(window.YEAR_MORE||{})[plan.key+"#"+(ui+1)]||[];
+  (u.lessons||[]).concat(more).forEach(function(l){
+    if(!l) return; var k=l.outlineIndex;
+    if(k==null||seen[k]) return; seen[k]=1; out.push(l);
+  });
+  out.sort(function(a,b){return a.outlineIndex-b.outlineIndex;});
+  return out;
+}
+function cleanOutline(s){return String(s||"").replace(/^שיעור\s*\d+\s*[:：]\s*/,"");}
+
+/* ---------- views ---------- */
+function setNav(which){
+  document.querySelectorAll("[data-nav]").forEach(function(a){
+    if(a.getAttribute("data-nav")===which) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+  });
+}
+function setSubjClass(slug){document.body.className = slug ? "s-"+slug : "";}
+
+function viewHome(){
+  setNav("home"); setSubjClass("");
+  var h='<section class="intro"><h1>מערכי שיעור מלאים לתנ״ך, לספרות וללשון, מז׳ ועד י״ב</h1>'+
+    '<p>בחרו מקצוע וכיתה, פתחו את היחידה, והשיעור מוכן להוראה או להדפסה.</p>'+
+    '<ul class="stats"><li><b>1,322</b><span>שיעורים</span></li><li><b>18</b><span>תוכניות שנתיות</span></li><li><b>3</b><span>מקצועות</span></li></ul>'+
+    '<nav class="toc" aria-label="פרקים">';
+  SUBJ.forEach(function(s,i){h+='<a class="s-'+s.slug+'" href="#ch-'+s.slug+'" data-jump="ch-'+s.slug+'">פרק '+CH[i]+' · '+esc(s.name)+'</a>';});
+  h+='</nav></section>';
+  SUBJ.forEach(function(s,i){
+    var units=0; GRADES.forEach(function(g){units+=(UNITS[s.slug+"-"+g.n]||[]).length;});
+    h+='<section class="chapter s-'+s.slug+'" id="ch-'+s.slug+'" aria-labelledby="chn-'+s.slug+'"><div class="ch-in">'+
+      '<p class="ch-label">פרק '+CH[i]+'</p>'+
+      '<figure class="quote"><blockquote>'+esc(s.quote)+'</blockquote><figcaption>'+esc(s.src)+'</figcaption></figure>'+
+      '<h2 class="ch-name" id="chn-'+s.slug+'">'+esc(s.name)+'</h2>'+
+      '<p class="ch-line">'+esc(s.line)+'</p>'+
+      '<p class="ch-meta">'+s.count.toLocaleString("en-US")+' שיעורים · '+units+' יחידות · 6 תוכניות שנתיות</p>'+
+      '<ul class="grades">';
+    GRADES.forEach(function(g){
+      var n=(UNITS[s.slug+"-"+g.n]||[]).length;
+      h+='<li><a href="#/plan/'+s.slug+'-'+g.n+'" aria-label="'+esc(s.name)+' כיתה '+esc(g.l)+', '+n+' יחידות">'+
+        '<span class="g-letter">'+esc(g.l)+'</span>'+
+        '<span class="g-units">'+n+' יחידות</span>'+
+        '<span class="g-stage">'+(g.n<=9?"חטיבת ביניים":"תיכון")+'</span></a></li>';
+    });
+    h+='</ul></div></section>';
+  });
+  h+='<footer class="foot">מַעֲרָךְ · שנת הלימודים תשפ״ז</footer>';
+  app.innerHTML=h;
+  app.querySelectorAll("[data-jump]").forEach(function(a){
+    a.addEventListener("click",function(e){e.preventDefault();var t=document.getElementById(a.getAttribute("data-jump"));if(t)t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});});
+  });
+}
+
+var openUnit = {}, renderTok = 0;
+function viewPlan(k, focusUnit){
+  var p=parseKey(k)||parseKey("sifrut-10"); var s=subjOf(p.slug), g=gradeOf(p.n);
+  setNav("plan"); setSubjClass(p.slug); var tok=++renderTok;
+  if(focusUnit!=null) openUnit[p.key]=focusUnit;
+  var list=UNITS[p.key]||[];
+  var h='<div class="read"><p class="crumbs"><a href="#/">ראשי</a> · תוכניות שנתיות</p>'+
+    '<div class="pick"><div class="row" role="group" aria-label="מקצוע"><span class="lab">מקצוע</span>';
+  SUBJ.forEach(function(x){h+='<button class="chip subj-'+x.slug+'" data-go="'+x.slug+'-'+p.n+'" aria-pressed="'+(x.slug===p.slug)+'">'+esc(x.name)+'</button>';});
+  h+='</div><div class="row" role="group" aria-label="כיתה"><span class="lab">כיתה</span>';
+  GRADES.forEach(function(x){h+='<button class="chip" data-go="'+p.slug+'-'+x.n+'" aria-pressed="'+(x.n===p.n)+'">'+esc(x.l)+'</button>';});
+  h+='</div></div><div class="col"><h1 class="h1">'+esc(s.name)+' · <em>כיתה '+esc(g.l)+'</em></h1>'+
+    '<p class="lead" id="ov">'+list.length+' יחידות לאורך השנה. בחרו יחידה כדי לראות את השיעורים שלה.</p></div>'+
+    '<ol class="units">';
+  list.forEach(function(u,i){
+    var open=openUnit[p.key]===i;
+    h+='<li class="unit"><button class="u-btn" data-u="'+i+'" aria-expanded="'+open+'" aria-controls="ub-'+i+'">'+
+      '<span class="u-num">'+(i+1)+'</span><span class="u-title">'+esc(u.t)+'<span class="u-months">'+esc(u.m)+'</span></span>'+
+      '<span class="u-tog">'+(open?"סגירה":"לשיעורים")+'</span></button>'+
+      '<div class="u-body" id="ub-'+i+'"'+(open?'':' hidden')+'><p class="note">טוען את השיעורים…</p></div></li>';
+  });
+  h+='</ol></div>';
+  app.innerHTML=h;
+  app.querySelectorAll("[data-go]").forEach(function(b){b.addEventListener("click",function(){location.hash="#/plan/"+b.getAttribute("data-go");});});
+  app.querySelectorAll(".u-btn").forEach(function(b){
+    b.addEventListener("click",function(){
+      var i=+b.getAttribute("data-u"), body=document.getElementById("ub-"+i), open=b.getAttribute("aria-expanded")==="true";
+      app.querySelectorAll(".u-btn[aria-expanded=true]").forEach(function(o){
+        if(o!==b){o.setAttribute("aria-expanded","false");o.querySelector(".u-tog").textContent="לשיעורים";document.getElementById("ub-"+o.getAttribute("data-u")).hidden=true;}
+      });
+      b.setAttribute("aria-expanded",String(!open)); body.hidden=open;
+      b.querySelector(".u-tog").textContent=open?"לשיעורים":"סגירה";
+      openUnit[p.key]=open?null:i;
+      if(!open) fillUnit(p.key,i);
+    });
+  });
+  if(openUnit[p.key]!=null){
+    fillUnit(p.key,openUnit[p.key]);
+    var ob=app.querySelector('.u-btn[data-u="'+openUnit[p.key]+'"]'); if(ob&&focusUnit!=null) ob.scrollIntoView({block:"start"});
+  }
+  loadPlan(p.key).then(function(plan){
+    var ov=document.getElementById("ov");
+    if(ov&&plan.overview&&tok===renderTok) ov.textContent=plan.overview;
+  }).catch(function(){
+    var ov=document.getElementById("ov");
+    if(ov) ov.innerHTML='<span class="note" style="display:block">לא הצלחנו לטעון את פרטי התוכנית כרגע. רשימת היחידות מוצגת, ואפשר לנסות שוב בעוד רגע.</span>';
+  });
+}
+function fillUnit(key,i){
+  var body=document.getElementById("ub-"+i); if(!body) return;
+  loadPlan(key).then(function(plan){
+    if(!document.getElementById("ub-"+i)||!app.querySelector('[data-go="'+key.split("-")[0]+'-'+key.split("-")[1]+'"][aria-pressed="true"]')) return;
+    var u=plan.units[i]; if(!u){body.innerHTML='<p class="note">היחידה לא נמצאה.</p>';return;}
+    var ls=unitLessons(plan,i), by={}; ls.forEach(function(l){by[l.outlineIndex]=l;});
+    var outline=u.outline||[], n=Math.max(outline.length, ls.length?ls[ls.length-1].outlineIndex:0);
+    var h=(u.bigIdea?'<p class="big">'+esc(u.bigIdea)+'</p>':'')+'<ol class="lessons">';
+    for(var j=1;j<=n;j++){
+      var l=by[j], t=l?l.title:cleanOutline(outline[j-1]);
+      if(l) h+='<li><a href="#/lesson/'+key+'/'+(i+1)+'/'+j+'"><span class="l-n">שיעור '+j+'</span><span class="l-t">'+esc(t)+'</span><span class="l-m">'+esc(l.minutes||45)+' דק׳</span></a></li>';
+      else if(t) h+='<li><span class="na"><span class="l-n">שיעור '+j+'</span><span class="l-t">'+esc(t)+'</span><span class="l-m">אין מערך</span></span></li>';
+    }
+    body.innerHTML=h+'</ol>';
+  }).catch(function(){
+    body.innerHTML='<p class="note">לא הצלחנו לטעון את השיעורים. בדקו את החיבור ונסו לפתוח את היחידה שוב.</p>';
+  });
+}
+
+function viewLesson(key,un,li){
+  var p=parseKey(key); if(!p){location.hash="#/plan/sifrut-10";return;}
+  var s=subjOf(p.slug), g=gradeOf(p.n);
+  setNav("plan"); setSubjClass(p.slug);
+  app.innerHTML='<div class="read"><p class="note">טוען את השיעור…</p></div>';
+  window.scrollTo(0,0);
+  loadPlan(key).then(function(plan){
+    if(location.hash!=="#/lesson/"+key+"/"+un+"/"+li) return;
+    var ui=un-1, u=plan.units[ui], ls=u?unitLessons(plan,ui):[], pos=-1;
+    for(var i=0;i<ls.length;i++) if(ls[i].outlineIndex===li) pos=i;
+    var back='#/plan/'+key+'/'+un;
+    if(pos<0){app.innerHTML='<div class="read col"><h1 class="h1">השיעור לא נמצא</h1><p class="lead">ייתכן שהקישור ישן.</p><a class="btn" href="'+back+'">חזרה לתוכנית</a></div>';return;}
+    var L=ls[pos];
+    var h='<article class="read"><div class="col">'+
+      '<p class="crumbs"><a href="#/">ראשי</a> · <a href="#/plan/'+key+'">'+esc(s.name)+' '+esc(g.l)+'</a> · יחידה '+un+': '+esc(u.title)+'</p>'+
+      '<div class="bar"><a class="btn" href="'+back+'">→ חזרה לתוכנית</a><button class="btn solid" id="print">הדפסה</button></div>'+
+      '<p class="crumbs" style="display:block">שיעור '+li+' ביחידה</p>'+
+      '<h1 class="h1">'+esc(L.title)+'</h1>'+
+      '<div class="meta"><span><b>'+esc(L.minutes||45)+'</b> דקות</span><span>'+esc(s.name)+' · כיתה '+esc(g.l)+'</span>'+(u.months?'<span>'+esc(u.months)+'</span>':'')+'</div>'+
+      (L.curriculum?'<p class="lead"><b style="color:var(--ink);font-weight:500">תוכנית הלימודים: </b>'+esc(L.curriculum)+'</p>':'');
+    if(L.goals&&L.goals.length){
+      h+='<section class="sec"><h2>מטרות</h2><ul>'+L.goals.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>';
+      if(L.bloom&&L.bloom.length) h+='<ul class="tags" aria-label="רמות חשיבה">'+L.bloom.map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul>';
+      h+='</section>';
+    }
+    if(L.materials) h+='<section class="sec"><h2>חומרים</h2><p>'+esc(L.materials)+'</p></section>';
+    if(L.stages&&L.stages.length){
+      h+='<section class="sec"><h2>מהלך השיעור</h2>';
+      L.stages.forEach(function(st){
+        var acts=st.activities||[], m=0; acts.forEach(function(a){m+=(+a.minutes||0);});
+        h+='<div class="stage"><h3>'+esc(st.name)+(m?'<span>'+m+' דק׳</span>':'')+'</h3>';
+        acts.forEach(function(a){
+          h+='<div class="act"><h4>'+esc(a.title)+(a.minutes?'<span>'+esc(a.minutes)+' דק׳</span>':'')+'</h4><p>'+esc(a.instructions)+'</p></div>';
+        });
+        h+='</div>';
+      });
+      h+='</section>';
+    }
+    if(L.diff){
+      h+='<section class="sec"><h2>הבחנה</h2><div class="diff">'+
+        (L.diff.support?'<div><b>תמיכה</b><p>'+esc(L.diff.support)+'</p></div>':'')+
+        (L.diff.core?'<div><b>ליבה</b><p>'+esc(L.diff.core)+'</p></div>':'')+
+        (L.diff.enrich?'<div><b>העשרה</b><p>'+esc(L.diff.enrich)+'</p></div>':'')+'</div></section>';
+    }
+    if(L.questions&&L.questions.length){
+      h+='<section class="sec"><h2>שאלות</h2><ol class="qs">'+L.questions.map(function(q){
+        return '<li>'+(q.level?'<span class="lvl">'+esc(q.level)+'</span>':'')+'<span>'+esc(q.q)+'</span></li>';}).join("")+'</ol></section>';
+    }
+    if(L.exitTicket) h+='<section class="sec"><h2>כרטיס יציאה</h2><p class="exit">'+esc(L.exitTicket)+'</p></section>';
+    if(L.notes) h+='<section class="sec"><h2>הערות למורה</h2><p>'+esc(L.notes)+'</p></section>';
+    var pr=ls[pos-1], nx=ls[pos+1];
+    h+='<nav class="pn" aria-label="שיעורים סמוכים">'+
+      (pr?'<a href="#/lesson/'+key+'/'+un+'/'+pr.outlineIndex+'">→ '+esc(pr.title)+'</a>':'<span></span>')+
+      (nx?'<a href="#/lesson/'+key+'/'+un+'/'+nx.outlineIndex+'">'+esc(nx.title)+' ←</a>':'<span></span>')+
+      '</nav></div></article>';
+    app.innerHTML=h;
+    document.getElementById("print").addEventListener("click",function(){window.print();});
+  }).catch(function(){
+    app.innerHTML='<div class="read col"><h1 class="h1">לא הצלחנו לטעון את השיעור</h1><p class="lead">אולי יש בעיה בחיבור. נסו לרענן את הדף בעוד רגע.</p><a class="btn" href="#/plan/'+key+'">חזרה לתוכנית</a></div>';
+  });
+}
+
+function route(){
+  var hsh=location.hash||"#/";
+  var m;
+  try{
+    if((m=/^#\/lesson\/([a-z]+-\d+)\/(\d+)\/(\d+)$/.exec(hsh))) viewLesson(m[1],+m[2],+m[3]);
+    else if((m=/^#\/plan(?:\/([a-z]+-\d+))?(?:\/(\d+))?$/.exec(hsh))){viewPlan(m[1]||"sifrut-10", m[2]?(+m[2]-1):null); if(!m[2]) window.scrollTo(0,0);}
+    else if(/^#ch-/.test(hsh)){viewHome();var t=document.getElementById(hsh.slice(1));if(t)t.scrollIntoView();}
+    else {viewHome(); window.scrollTo(0,0);}
+  }catch(e){
+    app.innerHTML='<div class="read col"><p class="note">משהו השתבש בהצגת הדף. <a href="#/">חזרה לדף הראשי</a></p></div>';
+  }
+}
+window.addEventListener("hashchange",route);
+route();
+})();
+</script>
+</body>
+</html>

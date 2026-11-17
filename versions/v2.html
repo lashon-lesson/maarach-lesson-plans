@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מַעֲרָךְ · מדף התוכניות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#f3f4f6; --card:#fff; --ink:#1f2328; --ink2:#4b5563; --ink3:#6b7280;
+  --line:#e5e7eb; --line2:#d1d5db;
+  --tanach:#1e40af; --sifrut:#7e22ce; --lashon:#047857;
+  --tanach-bg:#eef2ff; --sifrut-bg:#f5effc; --lashon-bg:#ecf8f3;
+  --r:6px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.5 "Rubik",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-variant-numeric:tabular-nums}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+
+/* top nav */
+.top{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+.top .wrap{display:flex;align-items:center;gap:20px;min-height:52px}
+.brand{font-weight:700;font-size:17px;text-decoration:none;letter-spacing:.2px;white-space:nowrap}
+.brand small{font-weight:400;color:var(--ink3);font-size:12px;margin-inline-start:6px}
+.nav{display:flex;gap:2px;margin-inline-start:auto;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{text-decoration:none;padding:6px 10px;border-radius:var(--r);color:var(--ink2);white-space:nowrap;font-size:13.5px;min-height:36px;display:flex;align-items:center}
+.nav a:hover{background:var(--page);color:var(--ink)}
+.nav a[aria-current="page"]{color:var(--ink);font-weight:600;background:var(--page)}
+
+main{padding:18px 0 48px}
+
+/* tags */
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 7px;border-radius:4px;line-height:1.6;white-space:nowrap}
+.s-tanach{--acc:var(--tanach);--accbg:var(--tanach-bg)}
+.s-sifrut{--acc:var(--sifrut);--accbg:var(--sifrut-bg)}
+.s-lashon{--acc:var(--lashon);--accbg:var(--lashon-bg)}
+.tag.acc{color:var(--acc);background:var(--accbg)}
+.tag.grey{color:var(--ink2);background:var(--page)}
+
+/* home head */
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 24px;margin-bottom:14px}
+.head h1{font-size:22px;margin:0;font-weight:700;line-height:1.25}
+.head p{margin:2px 0 0;color:var(--ink2);font-size:13.5px}
+.stats{display:flex;gap:18px;margin-inline-start:auto}
+.stat b{display:block;font-size:20px;font-weight:600;line-height:1.1}
+.stat span{font-size:11.5px;color:var(--ink3)}
+
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.search{flex:1 1 320px;position:relative}
+.search input{width:100%;height:40px;border:1px solid var(--line2);border-radius:var(--r);background:var(--card);padding:0 36px 0 12px;font:inherit;color:var(--ink)}
+.search input:focus{outline:2px solid var(--ink);outline-offset:-1px;border-color:transparent}
+.search svg{position:absolute;inset-inline-start:11px;top:12px;color:var(--ink3);pointer-events:none}
+.chips{display:flex;gap:4px;background:var(--card);border:1px solid var(--line2);border-radius:var(--r);padding:3px}
+.chip{border:0;background:none;padding:0 12px;height:32px;border-radius:4px;cursor:pointer;color:var(--ink2);font-size:13px}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+/* matrix */
+.matrix{--cols:6}
+.mhead,.mrow{display:grid;grid-template-columns:62px repeat(var(--cols),minmax(0,1fr));gap:6px}
+.mhead{margin-bottom:4px;font-size:12px;color:var(--ink3)}
+.mhead div{padding:0 4px}
+.mhead .lvl{font-size:10.5px;color:var(--ink3)}
+.mrow{margin-bottom:6px}
+.rlabel{display:flex;flex-direction:column;justify-content:center;font-weight:600;font-size:14px;color:var(--acc);border-inline-start:3px solid var(--acc);padding-inline-start:8px}
+.rlabel small{font-weight:400;color:var(--ink3);font-size:11px}
+.cellw{position:relative;min-width:0}
+.cell{display:flex;flex-direction:column;height:100%;min-height:118px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:var(--r);padding:8px 10px;text-decoration:none;transition:box-shadow .12s}
+.cell:hover{box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.cell .ct{display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+.cell .g{font-weight:700;font-size:15px}
+.cell .n{font-size:11.5px;color:var(--ink3);white-space:nowrap}
+.cell ol{margin:5px 0 0;padding:0;list-style:none;font-size:12px;color:var(--ink2);line-height:1.4}
+.cell ol li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cell ol li::before{content:counter(list-item) ". ";color:var(--ink3)}
+.cell .more{margin-top:auto;padding-top:4px;font-size:11px;color:var(--ink3)}
+
+/* signature: in-place peek of all units */
+.peek{position:absolute;top:0;inset-inline-start:0;width:max(100%,290px);z-index:20;background:var(--card);border:1px solid var(--line2);border-top:3px solid var(--acc);border-radius:var(--r);box-shadow:0 10px 28px rgba(17,24,39,.16);padding:8px 10px 10px;opacity:0;visibility:hidden;transform:translateY(-2px);transition:opacity .14s,transform .14s,visibility 0s .14s;pointer-events:none}
+.cellw.end .peek{inset-inline-start:auto;inset-inline-end:0}
+.peek .ph{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:4px}
+.peek .ph b{font-size:14px}
+.peek .ph span{font-size:11px;color:var(--ink3)}
+.peek ol{margin:0;padding:0;list-style:none;font-size:12px}
+.peek li{display:grid;grid-template-columns:16px 1fr auto;gap:6px;padding:3px 0;border-top:1px solid var(--line);line-height:1.35}
+.peek li:first-child{border-top:0}
+.peek li i{font-style:normal;color:var(--acc);font-weight:600}
+.peek li em{font-style:normal;color:var(--ink3);font-size:11px;white-space:nowrap}
+.peek .go{display:block;margin-top:6px;font-size:11.5px;color:var(--acc);font-weight:600}
+@media (hover:hover){
+  .cellw:hover .peek{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .14s,transform .14s}
+}
+.cellw:focus-within .peek{opacity:1;visibility:visible;transform:none;pointer-events:auto;transition:opacity .14s,transform .14s}
+.matrix.f-mid .hi,.matrix.f-high .mid{display:none}
+.matrix.f-mid,.matrix.f-high{--cols:3}
+
+.stabs{display:none}
+
+/* search results */
+.results{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px}
+.results .rh{display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--line);font-size:12px;color:var(--ink3)}
+.results ul{list-style:none;margin:0;padding:0;max-height:420px;overflow:auto}
+.results li a{display:grid;grid-template-columns:88px 1fr auto;gap:10px;align-items:center;padding:8px 12px;border-top:1px solid var(--line);text-decoration:none;min-height:44px}
+.results li:first-child a{border-top:0}
+.results li a:hover,.results li a:focus-visible{background:var(--page)}
+.results .rt{font-size:13px}
+.results .rm{font-size:11.5px;color:var(--ink3);white-space:nowrap}
+mark{background:#fde68a;color:inherit;border-radius:2px;padding:0 1px}
+.empty{padding:14px 12px;color:var(--ink3);font-size:13px}
+.foot{margin-top:18px;font-size:12px;color:var(--ink3)}
+
+/* year view */
+.crumbs{font-size:12.5px;color:var(--ink3);margin-bottom:8px}
+.crumbs a{color:var(--ink2);text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+.pick{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.seg{display:flex;background:var(--card);border:1px solid var(--line2);border-radius:var(--r);padding:3px;gap:2px;overflow-x:auto;max-width:100%}
+.seg a{text-decoration:none;padding:0 11px;height:32px;display:flex;align-items:center;border-radius:4px;font-size:13px;color:var(--ink2);white-space:nowrap}
+.seg a:hover{background:var(--page)}
+.seg a[aria-current="true"]{background:var(--ink);color:#fff}
+.plan{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:var(--r)}
+.ph2{padding:12px 14px;border-bottom:1px solid var(--line)}
+.ph2 h1{margin:0;font-size:19px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ph2 .meta{font-size:12px;color:var(--ink3);margin-top:3px}
+.ph2 details{margin-top:6px;font-size:13px;color:var(--ink2)}
+.ph2 summary{cursor:pointer;color:var(--ink);font-size:12.5px;font-weight:500;min-height:28px;display:inline-flex;align-items:center}
+.ph2 details p{margin:4px 0 0;max-width:80ch}
+.thead,.urow{display:grid;grid-template-columns:34px minmax(0,1fr) 150px 64px 28px;gap:10px;align-items:center;padding:0 14px}
+.thead{font-size:11px;color:var(--ink3);height:30px;border-bottom:1px solid var(--line);background:#fafafa}
+.urow{width:100%;border:0;background:none;text-align:start;min-height:48px;padding-block:8px;cursor:pointer;border-top:1px solid var(--line)}
+.unit:first-child .urow{border-top:0}
+.urow:hover{background:#fafafa}
+.urow .ix{font-weight:600;color:var(--acc)}
+.urow .ut{font-weight:500}
+.urow .mo{font-size:12.5px;color:var(--ink2)}
+.urow .lc{font-size:12.5px;text-align:end}
+.urow .ch{transition:transform .15s;color:var(--ink3);justify-self:end}
+.urow[aria-expanded="true"]{background:var(--accbg)}
+.urow[aria-expanded="true"] .ch{transform:rotate(180deg)}
+.lessons{border-top:1px solid var(--line);background:#fcfcfd}
+.lessons[hidden]{display:none}
+.uinfo{padding:8px 14px 8px 14px;padding-inline-start:58px;font-size:12.5px;color:var(--ink2);border-bottom:1px dashed var(--line)}
+.uinfo b{color:var(--ink);font-weight:500}
+.lrow{display:grid;grid-template-columns:24px minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:6px 14px;padding-inline-start:58px;min-height:44px;text-decoration:none;border-top:1px solid #f0f1f3;font-size:13px}
+.lrow:first-of-type{border-top:0}
+a.lrow:hover,a.lrow:focus-visible{background:var(--accbg)}
+.lrow .ln{color:var(--ink3);font-size:12px}
+.lrow .lm{font-size:11.5px;color:var(--ink3);white-space:nowrap}
+.lrow.na{color:var(--ink3)}
+.lrow .open{font-size:11.5px;color:var(--acc);font-weight:600;white-space:nowrap}
+
+/* lesson */
+.lesson{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--acc);border-radius:var(--r);padding:16px 18px}
+.lbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.btn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:var(--r);border:1px solid var(--line2);background:var(--card);cursor:pointer;text-decoration:none;font-size:13px}
+.btn:hover{background:var(--page)}
+.btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.pri:hover{background:#000}
+.lesson h1{font-size:21px;margin:4px 0 6px;line-height:1.3}
+.lmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:var(--ink2)}
+.lcur{font-size:12.5px;color:var(--ink2);margin:8px 0 0;padding:8px 10px;background:var(--page);border-radius:var(--r)}
+.lcur b{color:var(--ink);font-weight:500}
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.sec{margin-top:16px}
+.sec h2{font-size:12px;letter-spacing:.3px;color:var(--acc);margin:0 0 6px;font-weight:600;border-bottom:1px solid var(--line);padding-bottom:4px}
+.lgrid .sec{margin-top:0}
+.sec ul,.sec ol{margin:0;padding-inline-start:18px}
+.sec li{margin-bottom:3px}
+.sec p{margin:0}
+.stage{margin-bottom:10px}
+.stage h3{font-size:13.5px;margin:0 0 4px;display:flex;justify-content:space-between;gap:8px}
+.stage h3 span{font-weight:400;color:var(--ink3);font-size:12px}
+.act{border:1px solid var(--line);border-inline-start:3px solid var(--acc);border-radius:4px;padding:8px 10px;margin-bottom:6px}
+.act .ah{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-bottom:3px}
+.act .ah b{font-weight:600}
+.act .ah .mn{margin-inline-start:auto;font-size:12px;color:var(--ink3);white-space:nowrap}
+.act p{margin:0;font-size:13.5px;color:#2b3036;white-space:pre-line}
+.diff{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.diff div{border:1px solid var(--line);border-radius:4px;padding:8px 10px;font-size:13px}
+.diff b{display:block;font-size:12px;margin-bottom:2px}
+.qs{list-style:none;padding:0 !important}
+.qs li{display:grid;grid-template-columns:62px 1fr;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:13.5px}
+.qs li:first-child{border-top:0}
+.note{background:var(--page);border-radius:var(--r);padding:10px 12px;font-size:13.5px}
+
+.msg{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;text-align:center;color:var(--ink2)}
+.msg .btn{margin-top:10px}
+.loading{color:var(--ink3);font-size:13px;padding:16px 14px}
+
+/* phone */
+@media (max-width:760px){
+  .wrap{padding:0 12px}
+  .top .wrap{gap:10px;flex-wrap:wrap;padding-block:6px}
+  .nav{margin-inline-start:0;width:100%}
+  .nav a{min-height:44px}
+  .brand small{display:none}
+  .stats{margin-inline-start:0;width:100%;justify-content:space-between}
+  .chips{flex:1}
+  .chip{flex:1;height:38px}
+  .stabs{display:flex;gap:4px;margin-bottom:8px;background:var(--card);border:1px solid var(--line2);border-radius:var(--r);padding:3px}
+  .stabs button{flex:1;border:0;background:none;height:40px;border-radius:4px;cursor:pointer;font-weight:500;color:var(--ink2)}
+  .stabs button[aria-selected="true"]{background:var(--accbg);color:var(--acc);box-shadow:inset 0 -2px 0 var(--acc)}
+  .mhead{display:none}
+  .rlabel{display:none}
+  .mrow{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .mrow:not(.on){display:none}
+  .cell{min-height:104px}
+  .peek{display:none}
+  .results li a{grid-template-columns:1fr auto;}
+  .results li a .tag{grid-column:1/-1;justify-self:start}
+  .thead{display:none}
+  .urow{grid-template-columns:26px minmax(0,1fr) 22px;grid-template-areas:"ix ut ch" ". mo ch";row-gap:2px;padding-inline:12px}
+  .urow .ix{grid-area:ix}.urow .ut{grid-area:ut}.urow .ch{grid-area:ch}
+  .urow .mo{grid-area:mo}
+  .urow .lc{display:none}
+  .urow .mo::after{content:attr(data-lc)}
+  .uinfo,.lrow{padding-inline-start:12px}
+  .lrow{grid-template-columns:22px minmax(0,1fr) auto}
+  .lrow .lm{display:none}
+  .lesson{padding:12px}
+  .lgrid,.diff{grid-template-columns:1fr}
+  .qs li{grid-template-columns:1fr;gap:2px}
+  .btn{height:44px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none !important;animation:none !important}
+}
+
+@media print{
+  body{background:#fff;font-size:12pt}
+  .top,.lbar,.crumbs,.noprint{display:none !important}
+  main{padding:0}
+  .lesson{border:0;padding:0}
+  .act,.diff div{break-inside:avoid}
+  a{text-decoration:none}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#/">מַעֲרָךְ<small>מערכי שיעור · ז׳–י״ב</small></a>
+    <nav class="nav" aria-label="ניווט ראשי">
+      <a href="#/" data-nav="home">ראשי</a>
+      <a href="#/plan/sifrut-10" data-nav="plan">תוכניות שנתיות</a>
+      <a href="../index.html#library">המערכים שלי</a>
+      <a href="../index.html#tools">כלים למורה</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="app" tabindex="-1"></main>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+var SUBJ=[
+  {slug:"tanach",name:"תנ״ך",lessons:409},
+  {slug:"sifrut",name:"ספרות",lessons:425},
+  {slug:"lashon",name:"לשון",lessons:488}
+];
+var GRADES=[{n:7,h:"ז׳"},{n:8,h:"ח׳"},{n:9,h:"ט׳"},{n:10,h:"י׳"},{n:11,h:"י״א"},{n:12,h:"י״ב"}];
+var TOTAL_LESSONS=1322;
+var UNITS=window.UNITS||{};
+var TYPE={discuss:"דיון",exit:"כרטיס יציאה",explain:"הסבר",game:"משחק",group:"עבודה בקבוצות",media:"מדיה",poll:"סקר",quiz:"בוחן",read:"קריאה",tps:"חשוב-התאם-שתף",write:"כתיבה",cloud:"ענן מילים"};
+var MODEL={classic:"שיעור קלאסי",e5:"מודל 5E",inquiry:"למידת חקר",release:"שחרור הדרגתי",flipped:"כיתה הפוכה",pbl:"למידה מבוססת פרויקט",debate:"דיבייט"};
+var app=document.getElementById("app");
+var state={filter:"all",tab:"sifrut",q:""};
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function subj(slug){for(var i=0;i<SUBJ.length;i++)if(SUBJ[i].slug===slug)return SUBJ[i];return null;}
+function grade(n){for(var i=0;i<GRADES.length;i++)if(GRADES[i].n===+n)return GRADES[i];return null;}
+function parseKey(k){var m=/^(tanach|sifrut|lashon)-(7|8|9|10|11|12)$/.exec(k||"");return m?{s:subj(m[1]),g:grade(m[2]),key:k}:null;}
+function levelOf(n){return n<=9?"mid":"hi";}
+function fmt(n){return Number(n).toLocaleString("he-IL");}
+function hl(text,q){
+  text=String(text==null?"":text);
+  if(!q)return esc(text);
+  var low=text.toLowerCase(),ql=q.toLowerCase(),out="",i=0,j;
+  while((j=low.indexOf(ql,i))!==-1){out+=esc(text.slice(i,j))+"<mark>"+esc(text.slice(j,j+q.length))+"</mark>";i=j+q.length;}
+  return out+esc(text.slice(i));
+}
+var CHEV='<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+
+/* ---------- loading ---------- */
+var scripts={};
+function loadScript(src){
+  if(scripts[src])return scripts[src];
+  var p=new Promise(function(res,rej){
+    var s=document.createElement("script");s.src=src;s.async=true;
+    s.onload=function(){res();};
+    s.onerror=function(){delete scripts[src];s.remove();rej(new Error(src));};
+    document.head.appendChild(s);
+  });
+  scripts[src]=p;return p;
+}
+var plans={};
+function getPlan(key){
+  if(plans[key])return plans[key];
+  var p=loadScript("../data/"+key+".js").then(function(){
+    var plan=(window.YEAR_PLANS||[]).filter(function(x){return x&&x.key===key;})[0];
+    if(!plan)throw new Error("missing plan");
+    return loadScript("../data/more/index.js").catch(function(){}).then(function(){
+      var idx=(window.MORE_INDEX||{})[key]||[];
+      return Promise.all(idx.map(function(n){return loadScript("../data/more/"+key+"-u"+n+".js").catch(function(){});}));
+    }).then(function(){return plan;});
+  });
+  p.catch(function(){delete plans[key];});
+  plans[key]=p;return p;
+}
+function unitLessons(plan,ui){
+  var u=plan.units[ui]||{};
+  var more=(window.YEAR_MORE||{})[plan.key+"#"+(ui+1)]||[];
+  var all=(u.lessons||[]).concat(more),map={};
+  all.forEach(function(l,i){if(!l)return;var k=l.outlineIndex!=null?+l.outlineIndex:i+1;if(!map[k])map[k]=l;});
+  var outline=u.outline||[],keys={};
+  for(var i=1;i<=outline.length;i++)keys[i]=1;
+  Object.keys(map).forEach(function(k){keys[k]=1;});
+  return Object.keys(keys).map(Number).sort(function(a,b){return a-b;}).map(function(k){
+    return {idx:k,lesson:map[k]||null,outline:outline[k-1]||""};
+  });
+}
+function cleanOutline(s){return String(s||"").replace(/^שיעור\s*\d+\s*[:：]\s*/,"");}
+
+/* ---------- home ---------- */
+function renderHome(){
+  var totalUnits=0;Object.keys(UNITS).forEach(function(k){totalUnits+=UNITS[k].length;});
+  var h='';
+  h+='<div class="head"><div><h1>כל התוכניות על מדף אחד</h1><p>בחרו מקצוע וכיתה, פתחו יחידה והגיעו לשיעור מוכן להוראה או להדפסה.</p></div>';
+  h+='<div class="stats"><div class="stat"><b>'+fmt(TOTAL_LESSONS)+'</b><span>שיעורים</span></div><div class="stat"><b>18</b><span>תוכניות שנתיות</span></div><div class="stat"><b>'+fmt(totalUnits)+'</b><span>יחידות</span></div></div></div>';
+  h+='<div class="tools"><label class="search"><span class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">חיפוש ביחידות</span>';
+  h+='<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6"/></svg>';
+  h+='<input id="q" type="search" autocomplete="off" placeholder="חיפוש בכל היחידות: שם יצירה, נושא, ספר…" value="'+esc(state.q)+'"></label>';
+  h+='<div class="chips" role="group" aria-label="סינון לפי שכבה">';
+  [["all","הכול"],["mid","חטיבה ז׳–ט׳"],["high","תיכון י׳–י״ב"]].forEach(function(c){
+    h+='<button class="chip" type="button" data-f="'+c[0]+'" aria-pressed="'+(state.filter===c[0])+'">'+c[1]+'</button>';
+  });
+  h+='</div></div>';
+  h+='<div id="results"></div>';
+  h+='<div class="stabs" role="tablist" aria-label="מקצוע">';
+  SUBJ.forEach(function(s){h+='<button type="button" role="tab" class="s-'+s.slug+'" data-tab="'+s.slug+'" aria-selected="'+(state.tab===s.slug)+'">'+s.name+'</button>';});
+  h+='</div>';
+  h+='<div class="matrix'+(state.filter!=="all"?" f-"+state.filter:"")+'" id="matrix">';
+  h+='<div class="mhead"><div></div>';
+  GRADES.forEach(function(g){h+='<div class="'+levelOf(g.n)+'">כיתה '+g.h+' <span class="lvl">· '+(g.n<=9?"חטיבה":"תיכון")+'</span></div>';});
+  h+='</div>';
+  SUBJ.forEach(function(s){
+    h+='<div class="mrow s-'+s.slug+(state.tab===s.slug?" on":"")+'" data-s="'+s.slug+'">';
+    h+='<div class="rlabel">'+s.name+'<small>'+fmt(s.lessons)+' שיעורים</small></div>';
+    GRADES.forEach(function(g,gi){
+      var key=s.slug+"-"+g.n,us=UNITS[key]||[];
+      var end=gi>=4?" end":"";
+      h+='<div class="cellw '+levelOf(g.n)+end+'">';
+      h+='<a class="cell" href="#/plan/'+key+'" aria-label="'+esc(s.name+" כיתה "+g.h+", "+us.length+" יחידות")+'">';
+      h+='<div class="ct"><span class="g">'+g.h+'</span><span class="n">'+us.length+' יחידות</span></div><ol>';
+      us.slice(0,3).forEach(function(u){h+='<li>'+esc(u.t)+'</li>';});
+      h+='</ol>'+(us.length>3?'<span class="more">ועוד '+(us.length-3)+'…</span>':'')+'</a>';
+      h+='<div class="peek" aria-hidden="true"><div class="ph"><b>'+esc(s.name)+' · '+g.h+'</b><span>'+us.length+' יחידות</span></div><ol>';
+      us.forEach(function(u,i){h+='<li><i>'+(i+1)+'</i><span>'+esc(u.t)+'</span><em>'+esc(u.m)+'</em></li>';});
+      h+='</ol><a class="go" href="#/plan/'+key+'" tabindex="-1">לתוכנית המלאה ←</a></div></div>';
+    });
+    h+='</div>';
+  });
+  h+='</div>';
+  h+='<p class="foot">ריחוף או מעבר במקלדת על תא מציג את כל היחידות שלו. שנת הלימודים תשפ״ז.</p>';
+  app.innerHTML=h;
+
+  var q=document.getElementById("q");
+  q.addEventListener("input",function(){state.q=q.value;renderResults();});
+  app.querySelectorAll(".chip").forEach(function(b){b.addEventListener("click",function(){
+    state.filter=b.getAttribute("data-f");
+    app.querySelectorAll(".chip").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});
+    var m=document.getElementById("matrix");m.className="matrix"+(state.filter!=="all"?" f-"+state.filter:"");
+    renderResults();
+  });});
+  app.querySelectorAll(".stabs button").forEach(function(b){b.addEventListener("click",function(){
+    state.tab=b.getAttribute("data-tab");
+    app.querySelectorAll(".stabs button").forEach(function(x){x.setAttribute("aria-selected",String(x===b));});
+    app.querySelectorAll(".mrow").forEach(function(r){r.classList.toggle("on",r.getAttribute("data-s")===state.tab);});
+  });});
+  app.querySelectorAll(".peek").forEach(function(pk){pk.addEventListener("click",function(){
+    var go=pk.querySelector(".go");if(go)location.hash=go.getAttribute("href");
+  });pk.style.cursor="pointer";});
+  renderResults();
+}
+function renderResults(){
+  var box=document.getElementById("results");if(!box)return;
+  var q=state.q.trim();
+  if(q.length<2){box.innerHTML="";return;}
+  var res=[],ql=q.toLowerCase();
+  SUBJ.forEach(function(s){GRADES.forEach(function(g){
+    if(state.filter==="mid"&&g.n>9)return;
+    if(state.filter==="high"&&g.n<10)return;
+    var key=s.slug+"-"+g.n;
+    (UNITS[key]||[]).forEach(function(u,i){if(String(u.t).toLowerCase().indexOf(ql)!==-1)res.push({s:s,g:g,key:key,u:u,i:i});});
+  });});
+  var h='<div class="results" role="region" aria-live="polite"><div class="rh"><span>'+res.length+' יחידות תואמות ל״'+esc(q)+'״</span><span>'+(state.filter==="all"?"כל השכבות":state.filter==="mid"?"חטיבה":"תיכון")+'</span></div>';
+  if(!res.length){h+='<div class="empty">לא נמצאו יחידות. נסו מילה אחרת, למשל שם של יצירה או של ספר.</div>';}
+  else{
+    h+='<ul>';
+    res.forEach(function(r){
+      h+='<li class="s-'+r.s.slug+'"><a href="#/plan/'+r.key+'/u/'+(r.i+1)+'"><span class="tag acc">'+r.s.name+' '+r.g.h+'</span><span class="rt">'+(r.i+1)+'. '+hl(r.u.t,q)+'</span><span class="rm">'+esc(r.u.m)+'</span></a></li>';
+    });
+    h+='</ul>';
+  }
+  box.innerHTML=h+'</div>';
+}
+
+/* ---------- year ---------- */
+var token=0;
+function picker(p){
+  var h='<div class="pick noprint"><div class="seg" aria-label="מקצוע">';
+  SUBJ.forEach(function(s){h+='<a href="#/plan/'+s.slug+'-'+p.g.n+'" aria-current="'+(s===p.s)+'">'+s.name+'</a>';});
+  h+='</div><div class="seg" aria-label="כיתה">';
+  GRADES.forEach(function(g){h+='<a href="#/plan/'+p.s.slug+'-'+g.n+'" aria-current="'+(g===p.g)+'">'+g.h+'</a>';});
+  return h+'</div></div>';
+}
+function renderYear(key,openUnit){
+  var p=parseKey(key);if(!p){location.hash="#/plan/sifrut-10";return;}
+  var my=++token;
+  var us=UNITS[key]||[];
+  var h='<div class="crumbs"><a href="#/">ראשי</a> / תוכניות שנתיות / '+p.s.name+' '+p.g.h+'</div>'+picker(p);
+  h+='<section class="plan s-'+p.s.slug+'"><div class="ph2"><h1><span class="tag acc">'+p.s.name+'</span> תוכנית שנתית · כיתה '+p.g.h+'</h1>';
+  h+='<div class="meta" id="pmeta">'+us.length+' יחידות · '+(p.g.n<=9?"חטיבת ביניים":"תיכון")+' · תשפ״ז</div><div id="pover"></div></div>';
+  h+='<div class="thead" aria-hidden="true"><span>#</span><span>יחידה</span><span>חודשים</span><span style="text-align:end">שיעורים</span><span></span></div>';
+  h+='<div id="units">';
+  us.forEach(function(u,i){
+    h+='<div class="unit"><button class="urow" type="button" aria-expanded="false" aria-controls="ul'+i+'" data-u="'+i+'"><span class="ix">'+(i+1)+'</span><span class="ut">'+esc(u.t)+'</span><span class="mo" data-lc="">'+esc(u.m)+'</span><span class="lc">…</span><span class="ch">'+CHEV+'</span></button><div class="lessons" id="ul'+i+'" hidden><div class="loading">טוען שיעורים…</div></div></div>';
+  });
+  h+='</div></section>';
+  app.innerHTML=h;
+  var planP=getPlan(key);
+  app.querySelectorAll(".urow").forEach(function(b){b.addEventListener("click",function(){
+    var open=b.getAttribute("aria-expanded")==="true";
+    b.setAttribute("aria-expanded",String(!open));
+    document.getElementById(b.getAttribute("aria-controls")).hidden=open;
+    var n=+b.getAttribute("data-u")+1;
+    history.replaceState(null,"",open?"#/plan/"+key:"#/plan/"+key+"/u/"+n);
+  });});
+  if(openUnit){
+    var b=app.querySelector('.urow[data-u="'+(openUnit-1)+'"]');
+    if(b){b.setAttribute("aria-expanded","true");document.getElementById("ul"+(openUnit-1)).hidden=false;setTimeout(function(){b.scrollIntoView({block:"start",behavior:"auto"});},0);}
+  }
+  planP.then(function(plan){
+    if(my!==token)return;
+    var meta=[(plan.units||[]).length+" יחידות"];
+    var tot=0;(plan.units||[]).forEach(function(u){tot+=(u.outline||[]).length;});
+    meta.push(tot+" שיעורים");
+    if(plan.hoursPerWeek)meta.push(plan.hoursPerWeek+" ש״ש");
+    meta.push(p.g.n<=9?"חטיבת ביניים":"תיכון");
+    meta.push(plan.year||"תשפ״ז");
+    document.getElementById("pmeta").textContent=meta.join(" · ");
+    if(plan.overview)document.getElementById("pover").innerHTML='<details><summary>על התוכנית</summary><p>'+esc(plan.overview)+'</p></details>';
+    (plan.units||[]).forEach(function(u,i){
+      var row=app.querySelector('.urow[data-u="'+i+'"]');if(!row)return;
+      var items=unitLessons(plan,i);
+      var lc=items.length;
+      row.querySelector(".lc").textContent=lc;
+      row.querySelector(".mo").setAttribute("data-lc"," · "+lc+" שיעורים");
+      var x='<div class="uinfo">';
+      if(u.weeks)x+='<b>'+esc(u.weeks)+' שבועות</b> · ';
+      if(u.bigIdea)x+=esc(u.bigIdea);
+      x+='</div>';
+      items.forEach(function(it){
+        var t=it.lesson&&it.lesson.title?it.lesson.title:cleanOutline(it.outline);
+        if(it.lesson){
+          x+='<a class="lrow" href="#/lesson/'+key+'/'+(i+1)+'/'+it.idx+'"><span class="ln">'+it.idx+'</span><span>'+esc(t)+'</span><span class="lm">'+(it.lesson.minutes?esc(it.lesson.minutes)+' דק׳':'')+'</span><span class="open">פתיחה ←</span></a>';
+        }else{
+          x+='<div class="lrow na"><span class="ln">'+it.idx+'</span><span>'+esc(t)+'</span><span class="lm"></span><span class="lm">אין מערך עדיין</span></div>';
+        }
+      });
+      if(!items.length)x+='<div class="empty">אין שיעורים ביחידה זו.</div>';
+      document.getElementById("ul"+i).innerHTML=x;
+    });
+  }).catch(function(){
+    if(my!==token)return;
+    app.querySelectorAll(".lessons").forEach(function(el){el.innerHTML='<div class="empty">לא הצלחנו לטעון את השיעורים של התוכנית. בדקו את החיבור ונסו לרענן את הדף.</div>';});
+    app.querySelectorAll(".urow .lc").forEach(function(el){el.textContent="–";});
+  });
+}
+
+/* ---------- lesson ---------- */
+function list(arr){if(!arr||!arr.length)return"";return'<ul>'+arr.map(function(x){return'<li>'+esc(x)+'</li>';}).join("")+'</ul>';}
+function renderLesson(key,un,li){
+  var p=parseKey(key);if(!p){location.hash="#/";return;}
+  var my=++token;
+  app.innerHTML='<div class="loading">טוען את המערך…</div>';
+  getPlan(key).then(function(plan){
+    if(my!==token)return;
+    var ui=un-1,u=(plan.units||[])[ui];
+    var items=u?unitLessons(plan,ui).filter(function(x){return x.lesson;}):[];
+    var it=items.filter(function(x){return x.idx===+li;})[0];
+    if(!it)throw new Error("no lesson");
+    var L=it.lesson,back="#/plan/"+key+"/u/"+un;
+    var pos=items.indexOf(it),prev=items[pos-1],next=items[pos+1];
+    var h='<div class="crumbs"><a href="#/">ראשי</a> / <a href="#/plan/'+key+'">'+p.s.name+' '+p.g.h+'</a> / <a href="'+back+'">יחידה '+un+'</a> / שיעור '+it.idx+'</div>';
+    h+='<article class="lesson s-'+p.s.slug+'">';
+    h+='<div class="lbar"><a class="btn" href="'+back+'">→ חזרה לתוכנית</a><button class="btn pri" type="button" id="print">הדפסה</button>';
+    if(prev)h+='<a class="btn" href="#/lesson/'+key+'/'+un+'/'+prev.idx+'">שיעור קודם</a>';
+    if(next)h+='<a class="btn" href="#/lesson/'+key+'/'+un+'/'+next.idx+'">שיעור הבא</a>';
+    h+='</div>';
+    h+='<div class="lmeta"><span class="tag acc">'+p.s.name+' '+p.g.h+'</span><span>יחידה '+un+': '+esc(u.title)+'</span></div>';
+    h+='<h1>שיעור '+it.idx+': '+esc(L.title)+'</h1>';
+    h+='<div class="lmeta">';
+    if(L.minutes)h+='<span class="tag grey">'+esc(L.minutes)+' דקות</span>';
+    if(L.model)h+='<span class="tag grey">'+esc(MODEL[L.model]||L.model)+'</span>';
+    (L.bloom||[]).forEach(function(b){h+='<span class="tag grey">'+esc(b)+'</span>';});
+    h+='</div>';
+    if(L.curriculum)h+='<p class="lcur"><b>תוכנית לימודים:</b> '+esc(L.curriculum)+'</p>';
+    h+='<div class="lgrid"><div class="sec"><h2>מטרות</h2>'+(list(L.goals)||'<p>—</p>')+'</div><div class="sec"><h2>חומרים</h2><p>'+(L.materials?esc(L.materials):'—')+'</p></div></div>';
+    if(L.stages&&L.stages.length){
+      h+='<div class="sec"><h2>מהלך השיעור</h2>';
+      L.stages.forEach(function(s){
+        var sm=0;(s.activities||[]).forEach(function(a){sm+=+a.minutes||0;});
+        h+='<div class="stage"><h3>'+esc(s.name)+(sm?'<span>'+sm+' דק׳</span>':'')+'</h3>';
+        (s.activities||[]).forEach(function(a){
+          h+='<div class="act"><div class="ah">'+(a.type?'<span class="tag acc">'+esc(TYPE[a.type]||a.type)+'</span>':'')+'<b>'+esc(a.title)+'</b>'+(a.minutes?'<span class="mn">'+esc(a.minutes)+' דק׳</span>':'')+'</div><p>'+esc(a.instructions)+'</p></div>';
+        });
+        h+='</div>';
+      });
+      h+='</div>';
+    }
+    if(L.diff){
+      h+='<div class="sec"><h2>הבחנה</h2><div class="diff">';
+      [["support","תמיכה"],["core","ליבה"],["enrich","העשרה"]].forEach(function(d){h+='<div><b>'+d[1]+'</b>'+(L.diff[d[0]]?esc(L.diff[d[0]]):'—')+'</div>';});
+      h+='</div></div>';
+    }
+    if(L.questions&&L.questions.length){
+      h+='<div class="sec"><h2>שאלות</h2><ul class="qs">';
+      L.questions.forEach(function(q){h+='<li><span><span class="tag grey">'+esc(q.level||"")+'</span></span><span>'+esc(q.q)+'</span></li>';});
+      h+='</ul></div>';
+    }
+    if(L.exitTicket)h+='<div class="sec"><h2>כרטיס יציאה</h2><div class="note">'+esc(L.exitTicket)+'</div></div>';
+    if(L.notes)h+='<div class="sec"><h2>הערות למורה</h2><div class="note">'+esc(L.notes)+'</div></div>';
+    h+='</article>';
+    app.innerHTML=h;
+    document.getElementById("print").addEventListener("click",function(){window.print();});
+    window.scrollTo(0,0);
+  }).catch(function(){
+    if(my!==token)return;
+    app.innerHTML='<div class="msg">לא הצלחנו לפתוח את השיעור הזה. ייתכן שהקובץ לא נטען או שהמערך עדיין לא קיים.<br><a class="btn" href="#/plan/'+esc(key)+'/u/'+esc(un)+'">חזרה לתוכנית</a></div>';
+  });
+}
+
+/* ---------- router ---------- */
+function route(){
+  var hsh=location.hash.replace(/^#\/?/,""),parts=hsh.split("/").filter(Boolean);
+  var navKey="home";
+  try{
+    if(parts[0]==="plan"){navKey="plan";renderYear(parts[1]||"sifrut-10",parts[2]==="u"?+parts[3]:0);}
+    else if(parts[0]==="lesson"){navKey="plan";renderLesson(parts[1],+parts[2],+parts[3]);}
+    else{token++;renderHome();window.scrollTo(0,0);}
+  }catch(e){
+    app.innerHTML='<div class="msg">משהו השתבש בהצגת הדף. <br><a class="btn" href="#/">חזרה לדף הראשי</a></div>';
+  }
+  document.querySelectorAll(".nav a[data-nav]").forEach(function(a){
+    if(a.getAttribute("data-nav")===navKey)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");
+  });
+  if(navKey==="plan"&&parts[1]){var pk=parseKey(parts[1]);if(pk){state.tab=pk.s.slug;document.querySelector('.nav a[data-nav="plan"]').setAttribute("href","#/plan/"+parts[1]);}}
+}
+if(!window.UNITS){app.innerHTML='<div class="msg">לא הצלחנו לטעון את רשימת התוכניות (data.js). נסו לרענן את הדף.</div>';}
+else{window.addEventListener("hashchange",route);route();}
+})();
+</script>
+</body>
+</html>

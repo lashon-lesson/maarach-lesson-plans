@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>חמש גרסאות עיצוב · מַעֲרָךְ</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#eceef2;color:#1b2230;font-family:Heebo,system-ui,sans-serif;line-height:1.5}
+header{max-width:1400px;margin:0 auto;padding:28px 20px 8px}
+h1{margin:0 0 6px;font-size:28px}
+header p{margin:0;color:#4b5568;max-width:760px}
+.grid{max-width:1400px;margin:0 auto;padding:18px 20px 60px;display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:20px}
+.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;flex-direction:column;border:3px solid transparent}
+.card.pick{border-color:#1e6b52}
+.frame{position:relative;height:300px;overflow:hidden;background:#f6f6f6;border-bottom:1px solid #e5e7eb}
+.frame iframe{position:absolute;top:0;right:0;width:1280px;height:960px;border:0;transform:scale(.3125);transform-origin:top right;pointer-events:none}
+.info{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.info h2{margin:0;font-size:19px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.n{background:#1b2230;color:#fff;border-radius:8px;padding:1px 9px;font-size:14px}
+.badge{background:#1e6b52;color:#fff;border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:700}
+.info p{margin:0;color:#4b5568;font-size:14.5px}
+.info a{margin-top:auto;align-self:flex-start;background:#1b2230;color:#fff;text-decoration:none;padding:10px 16px;border-radius:10px;font-weight:500;min-height:44px;display:inline-flex;align-items:center}
+.info a:hover{background:#000}
+@media (max-width:460px){.grid{grid-template-columns:1fr}.frame{height:240px}.frame iframe{transform:scale(.25)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>חמש גרסאות עיצוב לאתר</h1>
+  <p>כל גרסה היא אתר עובד עם התוכן האמיתי: אפשר לבחור מקצוע וכיתה, לפתוח יחידה ולקרוא שיעור. לחצו על "פתחו בגודל מלא" כדי לנסות. האתר הנוכחי לא שונה. אחרי שתבחרי גרסה, היא תוחל על האתר כולו.</p>
+</header>
+<div class="grid" id="g"></div>
+<script>
+const V=[
+ {f:"v1.html",n:"שולחן עבודה",d:"הכלי הוא הדף: בוחרים מקצוע, כיתה ויחידה בעמודות זו ליד זו, והשיעור נפתח מיד לצידן. צבעי תכלת ונייבי רגועים. החתימה: פס זמן של 45 הדקות, לחיץ לפי שלבים."},
+ {f:"v2.html",n:"מדף",d:"קטלוג צפוף: טבלה של 3 מקצועות × 6 כיתות, וחיפוש חי בכל היחידות. אפור ניטרלי עם צבע לכל מקצוע. החתימה: מעבר על תא מציג את כל היחידות שלו בלי לעבור דף."},
+ {f:"v3.html",n:"ציר השנה",d:"השנה מספטמבר עד יוני כדרך אנכית, והיחידות מסודרות על החודשים. תכלת וצהוב חמניות. החתימה: סיכה ״אנחנו כאן״ על היום, עם קפיצה לשיעור הבא."},
+ {f:"v4.html",n:"שלושה פרקים",d:"דף מגזיני בשלושה פרקים, אחד לכל מקצוע, כל פרק בצבע עמוק משלו. החתימה: ציטוט ענק מנוקד בפתיחת כל פרק (בראשית, ביאליק, משלי)."},
+ {f:"v5.html",n:"מחברת",d:"מחברת משבצות שובבה: פתקים דביקים, מדבקות וסימונים בכתב יד. כחול קובלט, אלמוגי וירוק מרקר. החתימה: מרקר זוהר שנמרח על מה שנבחר."}
+];
+const PICK=window.PICK||"";
+document.getElementById("g").innerHTML=V.map((v,i)=>'<div class="card'+(PICK===v.f?' pick':'')+'"><div class="frame"><iframe src="'+v.f+'" loading="lazy" title="'+v.n+'" tabindex="-1"></iframe></div><div class="info"><h2><span class="n">'+(i+1)+'</span>'+v.n+(PICK===v.f?' <span class="badge">ההמלצה שלי</span>':'')+'</h2><p>'+v.d+'</p><a href="'+v.f+'" target="_blank" rel="noopener">פתחו בגודל מלא ←</a></div></div>').join("");
+</script>
+</body>
+</html>
