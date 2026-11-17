@@ -44,3 +44,5 @@
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",build); else build();
 })();
+/* phone: tap the plan description to expand it */
+document.addEventListener("click",function(e){ var y=e.target.closest&&e.target.closest(".yover"); if(y) y.classList.toggle("open"); });

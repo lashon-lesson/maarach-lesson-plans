@@ -205,3 +205,13 @@ html.calm *{animation:none!important;transition:none!important}
 html.calm .scard,html.calm .gbtn,html.calm .chip.on,html.calm .home h1 em,html.calm .unit>summary .num,html.calm .rbox.exit,html.calm .howto div,html.calm .brand b{transform:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media print{body{background:#fff!important}.mnav,.a11y-b,.a11y-p{display:none!important}}
+
+/* ---------- fixes after phone check ---------- */
+.brand b{line-height:1.35;padding-top:4px}
+.brand b::after{margin-top:-8px}
+@media (max-width:760px){
+  .back{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;font-size:14px;padding:9px 14px}
+  .yover{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;position:relative}
+  .yover.open{display:block}
+  .yover:not(.open)::after{content:"… קראו עוד";position:absolute;bottom:0;left:0;background:#fff;color:var(--violet);font-weight:700;padding-inline-start:6px}
+}
