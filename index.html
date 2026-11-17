@@ -6,7 +6,7 @@
 <title>מַעֲרָךְ · מערכי שיעור לחט״ב ולתיכון</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800&family=Secular+One&family=Suez+One&family=Varela+Round&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f5f2ea; --paper:#fffdf8; --ink:#1c2333; --ink2:#4a5468; --muted:#8a90a0;
@@ -437,6 +437,8 @@ details.about>summary{cursor:pointer;color:var(--accent-d);font-size:14px;font-w
   .brand span{display:none}
 }
 </style>
+<link rel="stylesheet" href="siman-theme.css?v=1">
+<meta name="theme-color" content="#EAFBF3">
 </head>
 <body>
 
@@ -1393,7 +1395,7 @@ function pickWebSrc(){
 /* הנתונים נטענים לפי דרישה מ-data/<slug>-<grade>.js וכל קובץ מוסיף אובייקט ל-window.YEAR_PLANS */
 const YEAR_SUBJ = [{s:"תנ״ך",slug:"tanach"},{s:"ספרות",slug:"sifrut"},{s:"לשון",slug:"lashon"}];
 const GRADE_NUM = {"ז׳":7,"ח׳":8,"ט׳":9,"י׳":10,"י״א":11,"י״ב":12};
-const DATA_V = "23";
+const DATA_V = "24";
 const KEY_YSEL = "maarach_v1_ysel";
 let ySel = (()=>{ try{ return JSON.parse(lsGet(KEY_YSEL))||{s:"תנ״ך",g:"ז׳"}; }catch(e){ return {s:"תנ״ך",g:"ז׳"}; } })();
 const planState = {}; /* key -> "loading" | "ok" | "missing" */
@@ -2013,5 +2015,6 @@ function init(){
 }
 init();
 </script>
+<script src="siman-theme.js?v=1"></script>
 </body>
 </html>
