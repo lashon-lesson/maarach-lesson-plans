@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מַעֲרָךְ · מערכי שיעור לתנ״ך, ספרות ולשון</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0f1e3d;      /* deep navy text: 16.9:1 on white */
+  --ink2:#26355a;     /* secondary text: ~12:1 on white (AAA) */
+  --blue:#1d4ed8;     /* links & buttons: 6.7:1 on white */
+  --blue-d:#1e3a8a;
+  --butter:#fff1b8;   /* only for current/selected + minutes */
+  --line:#c9d1e3;
+  --soft:#f3f5fa;
+  --bg:#fff;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Heebo",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:20px;line-height:1.75;font-weight:400}
+a{color:var(--blue);text-underline-offset:3px}
+a:hover{color:var(--blue-d)}
+:focus-visible{outline:4px solid var(--blue);outline-offset:3px;border-radius:6px}
+h1,h2,h3,h4{line-height:1.3;margin:0;font-weight:800}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+.read{max-width:44rem}
+.skip{position:absolute;right:-9999px}
+.skip:focus{right:12px;top:12px;background:var(--butter);padding:8px 14px;z-index:99}
+
+/* top bar */
+header.top{border-bottom:2px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.brand{font-size:30px;font-weight:800;color:var(--ink);text-decoration:none;letter-spacing:.5px}
+nav.main ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 6px}
+nav.main a{display:inline-flex;align-items:center;min-height:48px;padding:0 14px;border-radius:10px;font-weight:700;font-size:18px;text-decoration:none}
+nav.main a:hover{background:var(--soft)}
+nav.main a[aria-current="page"]{background:var(--butter);color:var(--ink)}
+
+main{padding:36px 0 80px}
+.lead{font-size:22px;color:var(--ink2);margin:10px 0 0;max-width:40rem}
+
+/* home */
+.h1-home{font-size:44px}
+.q{font-size:26px;font-weight:800;margin:40px 0 14px}
+.subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tile{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-height:150px;padding:22px 26px;border:3px solid var(--ink);border-radius:18px;background:#fff;text-align:right}
+.tile b{font-size:44px;font-weight:800;line-height:1.1}
+.tile span{font-size:19px;color:var(--ink2);margin-top:6px}
+.tile:hover{background:var(--soft)}
+.tile[aria-pressed="true"]{background:var(--butter);box-shadow:inset 0 0 0 3px var(--ink)}
+.grades{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.grade{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:120px;border-radius:16px;background:var(--blue);color:#fff;text-decoration:none;border:3px solid var(--blue)}
+.grade b{font-size:46px;font-weight:800;line-height:1}
+.grade span{font-size:17px;font-weight:700;margin-top:8px}
+.grade:hover{background:var(--blue-d);border-color:var(--blue-d);color:#fff}
+.grade.last{background:var(--butter);color:var(--ink);border-color:var(--ink)}
+.grade.last:hover{background:#ffe98a;color:var(--ink)}
+.facts{margin-top:44px;font-size:20px;color:var(--ink2)}
+.facts strong{color:var(--ink);font-weight:800}
+
+/* plan */
+.crumbs{font-size:18px;margin-bottom:10px}
+.crumbs a{font-weight:700}
+.plan-h{font-size:42px}
+.switch{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.switch a{display:inline-flex;align-items:center;justify-content:center;min-width:56px;min-height:48px;padding:0 12px;border:2px solid var(--line);border-radius:10px;text-decoration:none;font-weight:700}
+.switch a[aria-current="page"]{background:var(--butter);border-color:var(--ink);color:var(--ink)}
+.units{list-style:none;margin:30px 0 0;padding:0}
+.unit{border:2px solid var(--line);border-radius:16px;margin-bottom:16px;overflow:hidden}
+.unit.open{border-color:var(--ink)}
+.u-btn{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:18px;width:100%;padding:20px 22px;background:#fff;border:0;text-align:right}
+.u-btn:hover{background:var(--soft)}
+.unit.open .u-btn{background:var(--butter)}
+.u-num{display:flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;background:var(--ink);color:#fff;font-size:30px;font-weight:800}
+.u-t{display:block;font-size:24px;font-weight:800;line-height:1.35}
+.u-m{display:block;font-size:19px;color:var(--ink2);margin-top:4px;font-weight:700}
+.u-ar{font-size:30px;font-weight:800;color:var(--blue);width:30px;text-align:center}
+.u-body{padding:6px 22px 22px}
+.u-idea{font-size:19px;color:var(--ink2);margin:10px 0 14px;max-width:44rem}
+.lessons{list-style:none;margin:0;padding:0}
+.lessons li{border-top:1px solid var(--line)}
+.lessons li:first-child{border-top:0}
+.l-row{display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:start;padding:16px 4px;min-height:64px;text-decoration:none;color:var(--ink)}
+a.l-row:hover{background:var(--soft)}
+a.l-row:hover .l-t{text-decoration:underline;color:var(--blue-d)}
+.l-n{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border:2px solid var(--ink);border-radius:12px;font-size:22px;font-weight:800}
+.l-t{font-size:21px;font-weight:700;line-height:1.5;color:var(--blue)}
+.l-sub{display:block;font-size:17px;font-weight:400;color:var(--ink2);margin-top:2px}
+.l-row.none .l-t{color:var(--ink2)}
+.msg{font-size:20px;padding:18px 20px;border:2px solid var(--line);border-radius:14px;background:var(--soft);margin:16px 0}
+
+/* lesson */
+.back{display:inline-flex;align-items:center;gap:8px;min-height:48px;font-weight:700;font-size:20px}
+.les-h{font-size:40px;margin:10px 0 0;max-width:46rem}
+.meta{display:flex;flex-wrap:wrap;gap:10px 22px;margin:18px 0 0;font-size:19px;color:var(--ink2)}
+.meta b{color:var(--ink)}
+.min{display:inline-block;background:var(--butter);color:var(--ink);font-weight:800;padding:2px 12px;border-radius:8px;white-space:nowrap}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:60px;padding:0 26px;border-radius:14px;border:3px solid var(--blue);background:#fff;color:var(--blue);font-size:21px;font-weight:800;text-decoration:none}
+.btn:hover{background:var(--soft)}
+.btn.primary{background:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue-d);border-color:var(--blue-d)}
+.sec{margin-top:50px}
+.sec>h2{font-size:30px;padding-bottom:10px;border-bottom:3px solid var(--ink);margin-bottom:18px}
+.sec ul{margin:0;padding-inline-start:28px}
+.sec li{margin-bottom:10px}
+.sec p{margin:0 0 14px}
+.stage{margin-top:34px}
+.stage-h{display:flex;align-items:center;gap:16px;font-size:27px}
+.stage-h .sn{display:flex;align-items:center;justify-content:center;flex:none;width:52px;height:52px;border-radius:50%;background:var(--ink);color:#fff;font-size:26px}
+.stage-h .min{font-size:19px}
+.act{margin:18px 0 0;padding:20px 22px;border:2px solid var(--line);border-radius:14px}
+.act-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px}
+.act-h h4{font-size:23px}
+.act .min{font-size:20px}
+.act-type{display:block;font-size:17px;font-weight:700;color:var(--ink2);margin-top:2px}
+.act .ins{margin-top:12px;max-width:44rem}
+.ans{background:var(--soft);border-radius:6px;padding:0 4px;color:var(--ink2)}
+.diff{display:grid;gap:14px}
+.diff div{padding:16px 20px;border-inline-start:6px solid var(--ink);background:var(--soft);border-radius:4px 12px 12px 4px}
+.diff h3{font-size:22px;margin-bottom:6px}
+.qs{list-style:none;padding:0 !important;counter-reset:q}
+.qs li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;margin-bottom:16px}
+.lvl{display:inline-block;border:2px solid var(--ink);border-radius:8px;padding:0 10px;font-size:17px;font-weight:800;white-space:nowrap;margin-top:4px}
+.box{padding:20px 22px;border:3px solid var(--ink);border-radius:14px}
+.pager{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:60px;padding-top:24px;border-top:2px solid var(--line)}
+.pager a{display:block;max-width:28rem;min-height:48px;font-weight:700;text-decoration:none;padding:10px 0}
+.pager small{display:block;font-size:17px;color:var(--ink2);font-weight:700}
+.pager a span{text-decoration:underline}
+
+/* teaching mode (signature) */
+#teach{position:fixed;inset:0;z-index:50;background:#fff;color:var(--ink);display:none;flex-direction:column}
+#teach.on{display:flex}
+body.teaching{overflow:hidden}
+.t-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 24px;border-bottom:2px solid var(--line)}
+.t-pos{font-size:22px;font-weight:800}
+.t-pos .min{font-size:20px;margin-inline-start:10px}
+.t-x{min-height:56px;padding:0 22px;border-radius:12px;border:3px solid var(--ink);background:#fff;font-size:20px;font-weight:800}
+.t-x:hover{background:var(--soft)}
+.t-body{flex:1;overflow:auto;padding:28px 6vw 20px}
+.t-stage{font-size:clamp(34px,5vw,60px);font-weight:800;line-height:1.2;margin:0 0 18px}
+.t-stage .lessname{display:block;font-size:clamp(18px,1.8vw,24px);font-weight:700;color:var(--ink2);margin-bottom:8px}
+.t-act{margin:0 0 26px;max-width:62rem}
+.t-act h3{font-size:clamp(26px,3.2vw,40px);display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline}
+.t-act h3 .min{font-size:.7em}
+.t-act .ins{font-size:clamp(22px,2.4vw,32px);line-height:1.6;margin-top:10px}
+.t-act .ins p{margin:0 0 .6em}
+.t-nav{display:flex;gap:16px;padding:16px 24px;border-top:2px solid var(--line)}
+.t-nav button{flex:1;min-height:84px;border-radius:16px;font-size:clamp(22px,2.6vw,30px);font-weight:800;border:3px solid var(--blue)}
+.t-prev{background:#fff;color:var(--blue)}
+.t-next{background:var(--blue);color:#fff}
+.t-nav button:disabled{opacity:.4;cursor:default}
+.t-dots{display:flex;gap:8px;justify-content:center;padding-top:6px}
+.t-dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink)}
+.t-dots i.cur{background:var(--ink)}
+.t-hint{font-size:16px;color:var(--ink2);text-align:center;padding:0 0 10px}
+
+footer.foot{border-top:2px solid var(--line);padding:24px 0;font-size:17px;color:var(--ink2)}
+
+@media (max-width:760px){
+  body{font-size:19px}
+  .h1-home{font-size:36px}
+  .subjects{grid-template-columns:1fr}
+  .tile{min-height:104px;flex-direction:row;align-items:center;gap:16px;flex-wrap:wrap}
+  .tile b{font-size:38px}
+  .tile span{margin-top:0}
+  .grades{grid-template-columns:repeat(3,1fr)}
+  .grade{min-height:104px}
+  .plan-h{font-size:32px}
+  .les-h{font-size:30px}
+  .u-btn{grid-template-columns:48px 1fr auto;gap:12px;padding:16px}
+  .u-num{width:48px;height:48px;font-size:24px}
+  .u-t{font-size:21px}
+  .u-body{padding:4px 14px 16px}
+  .l-row{grid-template-columns:44px 1fr;gap:12px}
+  .l-n{width:40px;height:40px;font-size:19px}
+  .l-t{font-size:19px}
+  .btn{flex:1 1 100%}
+  .sec>h2{font-size:26px}
+  .stage-h{font-size:23px}
+  .act{padding:16px}
+  .act-h h4{font-size:21px}
+  .t-top{padding:10px 14px}
+  .t-nav{padding:12px 14px}
+  .t-nav button{min-height:68px}
+  .t-hint{display:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  a,button,.tile,.grade{transition:background-color .15s ease,color .15s ease}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important;scroll-behavior:auto !important}
+}
+@media print{
+  header.top,footer.foot,.actions,.back,.pager,.skip,#teach,.crumbs{display:none !important}
+  body{font-size:13pt;line-height:1.55}
+  main{padding:0}
+  .act,.box,.unit{break-inside:avoid;border-color:#888}
+  .min{background:none;border:1px solid #000}
+  a{color:#000;text-decoration:none}
+  .sec{margin-top:24px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#app">דילוג לתוכן</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#/">מַעֲרָךְ</a>
+    <nav class="main" aria-label="ניווט ראשי">
+      <ul>
+        <li><a href="#/" data-nav="home">ראשי</a></li>
+        <li><a href="#/plan/sifrut-10" data-nav="plan" id="navPlan">תוכניות שנתיות</a></li>
+        <li><a href="../index.html#library">המערכים שלי</a></li>
+        <li><a href="../index.html#tools">כלים למורה</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="app" class="wrap" tabindex="-1"></main>
+<footer class="foot"><div class="wrap">מַעֲרָךְ · מערכי שיעור לתנ״ך, ספרות ולשון · ז׳–י״ב · תשפ״ז</div></footer>
+
+<div id="teach" role="dialog" aria-modal="true" aria-label="מצב הוראה">
+  <div class="t-top">
+    <div class="t-pos" id="tPos"></div>
+    <button class="t-x" id="tExit" type="button">יציאה (Esc)</button>
+  </div>
+  <div class="t-body" id="tBody" tabindex="-1"></div>
+  <div class="t-dots" id="tDots" aria-hidden="true"></div>
+  <div class="t-nav">
+    <button class="t-prev" id="tPrev" type="button">→ השלב הקודם</button>
+    <button class="t-next" id="tNext" type="button">השלב הבא ←</button>
+  </div>
+  <div class="t-hint">אפשר גם בחיצים במקלדת · Esc ליציאה</div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+var SUBJECTS=[
+  {slug:"tanach",name:"תנ״ך",note:"409 שיעורים"},
+  {slug:"sifrut",name:"ספרות",note:"425 שיעורים"},
+  {slug:"lashon",name:"לשון",note:"488 שיעורים"}
+];
+var GRADES=[[7,"ז׳","חטיבה"],[8,"ח׳","חטיבה"],[9,"ט׳","חטיבה"],[10,"י׳","תיכון"],[11,"י״א","תיכון"],[12,"י״ב","תיכון"]];
+var TYPES={explain:"הסבר",discuss:"דיון",read:"קריאה",write:"כתיבה",group:"עבודה בקבוצות",game:"משחק",poll:"סקר",quiz:"בוחן",tps:"חשבו-התאימו-שתפו",exit:"כרטיס יציאה",pair:"עבודה בזוגות",video:"צפייה"};
+var state={subject:"sifrut",openUnit:{}};
+var app=document.getElementById("app");
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function ans(h){return h.replace(/\?(\s*)\(([^()]{2,240})\)/g,'?$1<span class="ans">($2)</span>');}
+function paras(s){
+  var parts=String(s==null?"":s).split(/\n+/).filter(function(x){return x.trim();});
+  return parts.map(function(p){return "<p>"+ans(esc(p))+"</p>";}).join("");
+}
+function subj(slug){for(var i=0;i<SUBJECTS.length;i++)if(SUBJECTS[i].slug===slug)return SUBJECTS[i];return null;}
+function gradeName(n){for(var i=0;i<GRADES.length;i++)if(GRADES[i][0]===n)return GRADES[i][1];return "";}
+function parseKey(key){var m=/^(tanach|sifrut|lashon)-(7|8|9|10|11|12)$/.exec(key||"");return m?{slug:m[1],grade:+m[2]}:null;}
+function title(k){var p=parseKey(k);return subj(p.slug).name+" · כיתה "+gradeName(p.grade);}
+
+/* ---------- loading via <script> (works on file://) ---------- */
+var loaded={};
+function loadScript(src){
+  if(loaded[src])return loaded[src];
+  loaded[src]=new Promise(function(res,rej){
+    var s=document.createElement("script");s.src=src;s.async=true;
+    s.onload=function(){res();};
+    s.onerror=function(){delete loaded[src];rej(new Error(src));};
+    document.head.appendChild(s);
+  });
+  return loaded[src];
+}
+function getPlan(key){
+  return loadScript("../data/"+key+".js").then(function(){
+    var a=window.YEAR_PLANS||[];for(var i=0;i<a.length;i++)if(a[i]&&a[i].key===key)return a[i];
+    throw new Error("missing plan");
+  });
+}
+function getUnitLessons(key,ui){
+  return getPlan(key).then(function(plan){
+    return loadScript("../data/more/index.js").catch(function(){}).then(function(){
+      var idx=(window.MORE_INDEX||{})[key]||[];
+      var n=ui+1;
+      var p=idx.indexOf(n)>=0?loadScript("../data/more/"+key+"-u"+n+".js").catch(function(){}):Promise.resolve();
+      return p.then(function(){
+        var u=plan.units[ui];if(!u)throw new Error("unit");
+        var all=(u.lessons||[]).concat(((window.YEAR_MORE||{})[key+"#"+n])||[]);
+        var by={};all.forEach(function(l){if(l&&l.outlineIndex!=null&&!by[l.outlineIndex])by[l.outlineIndex]=l;});
+        var list=Object.keys(by).map(function(k){return by[k];}).sort(function(a,b){return a.outlineIndex-b.outlineIndex;});
+        return {plan:plan,unit:u,lessons:list,map:by};
+      });
+    });
+  });
+}
+function stripNum(s){return String(s||"").replace(/^שיעור\s*\d+\s*[:：]\s*/,"");}
+function failMsg(){return '<div class="msg" role="alert"><b>לא הצלחנו לטעון את התוכן כרגע.</b><br>נסו לרענן את הדף. אם פתחתם את הקובץ מחוץ לתיקיית האתר, ודאו שתיקיית <span dir="ltr">data</span> נמצאת לידו.</div>';}
+
+/* ---------- views ---------- */
+function setNav(which,key){
+  document.querySelectorAll("nav.main a[data-nav]").forEach(function(a){
+    if(a.getAttribute("data-nav")===which)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");
+  });
+  document.getElementById("navPlan").setAttribute("href","#/plan/"+(key||state.subject+"-10"));
+}
+
+function renderHome(){
+  setNav("home");
+  document.title="מַעֲרָךְ · מערכי שיעור לתנ״ך, ספרות ולשון";
+  var s=state.subject;
+  var h='<h1 class="h1-home">מערכי שיעור מוכנים לכיתה</h1>'+
+  '<p class="lead">בוחרים מקצוע וכיתה, ומגיעים לשיעור שצריך ללמד: מוכן להוראה או להדפסה.</p>'+
+  '<h2 class="q" id="qs">1. איזה מקצוע?</h2>'+
+  '<div class="subjects" role="group" aria-labelledby="qs">'+
+  SUBJECTS.map(function(x){return '<button type="button" class="tile" data-s="'+x.slug+'" aria-pressed="'+(x.slug===s)+'"><b>'+esc(x.name)+'</b><span>'+esc(x.note)+'</span></button>';}).join("")+
+  '</div>'+
+  '<h2 class="q" id="qg">2. איזו כיתה? <span style="font-weight:400;font-size:20px;color:var(--ink2)">('+esc(subj(s).name)+')</span></h2>'+
+  '<div class="grades" role="group" aria-labelledby="qg">'+
+  GRADES.map(function(g){var k=s+"-"+g[0];return '<a class="grade'+(k==="sifrut-10"&&s==="sifrut"?" last":"")+'" href="#/plan/'+k+'" aria-label="'+esc(subj(s).name+" כיתה "+g[1])+'"><b>'+esc(g[1])+'</b><span>'+g[2]+'</span></a>';}).join("")+
+  '</div>'+
+  '<p class="facts"><strong>1,322</strong> שיעורים מלאים · <strong>18</strong> תוכניות שנתיות · תנ״ך, ספרות ולשון לכיתות ז׳–י״ב, תשפ״ז.</p>';
+  app.innerHTML=h;
+  app.querySelectorAll(".tile").forEach(function(b){
+    b.addEventListener("click",function(){state.subject=b.getAttribute("data-s");renderHome();var t=app.querySelector('.tile[data-s="'+state.subject+'"]');if(t)t.focus();});
+  });
+}
+
+function renderPlan(key){
+  var p=parseKey(key);if(!p){location.hash="#/plan/sifrut-10";return;}
+  state.subject=p.slug;setNav("plan",key);
+  document.title=title(key)+" · תוכנית שנתית · מַעֲרָךְ";
+  var units=(window.UNITS||{})[key]||[];
+  var open=state.openUnit[key];
+  var h='<nav class="crumbs" aria-label="מיקום"><a href="#/">ראשי</a> ‹ תוכנית שנתית</nav>'+
+  '<h1 class="plan-h">'+esc(title(key))+'</h1>'+
+  '<p class="lead">'+units.length+' יחידות לאורך השנה. לחצו על יחידה כדי לראות את השיעורים שלה.</p>'+
+  '<div class="switch" aria-label="החלפת כיתה">'+GRADES.map(function(g){var k=p.slug+"-"+g[0];return '<a href="#/plan/'+k+'"'+(k===key?' aria-current="page"':'')+'>'+esc(g[1])+'</a>';}).join("")+'</div>'+
+  '<ol class="units">';
+  units.forEach(function(u,i){
+    var isOpen=open===i;
+    h+='<li class="unit'+(isOpen?" open":"")+'" id="unit-'+(i+1)+'"><button type="button" class="u-btn" aria-expanded="'+isOpen+'" aria-controls="ub-'+i+'" data-u="'+i+'">'+
+      '<span class="u-num" aria-hidden="true">'+(i+1)+'</span>'+
+      '<span><span class="u-t">'+esc(u.t)+'</span><span class="u-m">'+esc(u.m)+'</span></span>'+
+      '<span class="u-ar" aria-hidden="true">'+(isOpen?"−":"+")+'</span></button>'+
+      '<div class="u-body" id="ub-'+i+'"'+(isOpen?'':' hidden')+'></div></li>';
+  });
+  h+='</ol>';
+  if(!units.length)h+=failMsg();
+  app.innerHTML=h;
+  app.querySelectorAll(".u-btn").forEach(function(b){
+    b.addEventListener("click",function(){
+      var i=+b.getAttribute("data-u");
+      state.openUnit[key]=(state.openUnit[key]===i)?null:i;
+      renderPlan(key);
+      var nb=app.querySelector('.u-btn[data-u="'+i+'"]');if(nb)nb.focus();
+    });
+  });
+  if(open!=null&&units[open])fillUnit(key,open);
+}
+
+function fillUnit(key,ui){
+  var body=document.getElementById("ub-"+ui);if(!body)return;
+  body.innerHTML='<p class="msg" aria-live="polite">טוען את השיעורים…</p>';
+  getUnitLessons(key,ui).then(function(r){
+    var b=document.getElementById("ub-"+ui);if(!b)return;
+    var outline=r.unit.outline||[];
+    var h=r.unit.bigIdea?'<p class="u-idea"><b>הרעיון המרכזי:</b> '+esc(r.unit.bigIdea)+'</p>':'';
+    h+='<ol class="lessons">';
+    var n=Math.max(outline.length,r.lessons.length?r.lessons[r.lessons.length-1].outlineIndex:0);
+    for(var oi=1;oi<=n;oi++){
+      var l=r.map[oi];var name=l?l.title:stripNum(outline[oi-1]);
+      var sub=outline[oi-1]&&l?stripNum(outline[oi-1]):"";
+      if(l){
+        h+='<li><a class="l-row" href="#/lesson/'+key+'/'+(ui+1)+'/'+oi+'"><span class="l-n" aria-hidden="true">'+oi+'</span><span><span class="l-t">'+esc(name)+'</span>'+(l.minutes?'<span class="l-sub">'+esc(l.minutes)+' דקות</span>':'')+'</span></a></li>';
+      }else{
+        h+='<li><div class="l-row none"><span class="l-n" aria-hidden="true">'+oi+'</span><span><span class="l-t">'+esc(name)+'</span><span class="l-sub">אין עדיין מערך מלא</span></span></div></li>';
+      }
+    }
+    h+='</ol>';
+    b.innerHTML=h;
+  }).catch(function(){var b=document.getElementById("ub-"+ui);if(b)b.innerHTML=failMsg();});
+}
+
+var cur=null; /* current lesson for teaching mode */
+function renderLesson(key,un,oi){
+  var p=parseKey(key);if(!p){location.hash="#/";return;}
+  state.subject=p.slug;setNav("plan",key);
+  var ui=un-1;state.openUnit[key]=ui;
+  app.innerHTML='<p class="msg" aria-live="polite">טוען את השיעור…</p>';
+  getUnitLessons(key,ui).then(function(r){
+    var l=r.map[oi];
+    if(!l){app.innerHTML='<a class="back" href="#/plan/'+key+'">→ חזרה לתוכנית</a><div class="msg" role="alert">השיעור הזה לא נמצא. חזרו לתוכנית ובחרו שיעור אחר.</div>';return;}
+    cur={l:l,key:key};
+    document.title=l.title+" · "+title(key)+" · מַעֲרָךְ";
+    var stages=l.stages||[];
+    var h='<a class="back" href="#/plan/'+key+'">→ חזרה לתוכנית</a>'+
+    '<p class="crumbs" style="margin:8px 0 0">'+esc(title(key))+' · יחידה '+un+': '+esc(r.unit.title||"")+'</p>'+
+    '<h1 class="les-h">שיעור '+oi+': '+esc(l.title)+'</h1>'+
+    '<div class="meta">'+(l.minutes?'<span class="min">'+esc(l.minutes)+' דקות</span>':'')+
+      (l.curriculum?'<span><b>תוכנית לימודים:</b> '+esc(l.curriculum)+'</span>':'')+'</div>'+
+    '<div class="actions">'+(stages.length?'<button type="button" class="btn primary" id="goTeach">▶ מצב הוראה</button>':'')+
+      '<button type="button" class="btn" id="goPrint">הדפסה</button>'+
+      '<a class="btn" href="#/plan/'+key+'">חזרה לתוכנית</a></div>';
+    if((l.goals||[]).length)h+='<section class="sec read"><h2>מטרות</h2><ul>'+l.goals.map(function(g){return "<li>"+esc(g)+"</li>";}).join("")+'</ul>'+((l.bloom||[]).length?'<p style="margin-top:12px;color:var(--ink2)"><b style="color:var(--ink)">רמות חשיבה:</b> '+esc(l.bloom.join(" · "))+'</p>':'')+'</section>';
+    if(l.materials)h+='<section class="sec read"><h2>חומרים</h2>'+paras(l.materials)+'</section>';
+    if(stages.length){
+      h+='<section class="sec"><h2>מהלך השיעור</h2>';
+      stages.forEach(function(st,si){
+        var acts=st.activities||[];var m=acts.reduce(function(a,x){return a+(+x.minutes||0);},0);
+        h+='<div class="stage"><h3 class="stage-h"><span class="sn" aria-hidden="true">'+(si+1)+'</span><span>שלב '+(si+1)+': '+esc(st.name)+'</span>'+(m?'<span class="min">'+m+' דק׳</span>':'')+'</h3>';
+        acts.forEach(function(a){
+          h+='<div class="act"><div class="act-h"><div><h4>'+esc(a.title)+'</h4>'+(TYPES[a.type]?'<span class="act-type">'+TYPES[a.type]+'</span>':'')+'</div>'+(a.minutes?'<span class="min">'+esc(a.minutes)+' דקות</span>':'')+'</div><div class="ins">'+paras(a.instructions)+'</div></div>';
+        });
+        h+='</div>';
+      });
+      h+='</section>';
+    }
+    var d=l.diff||{};
+    if(d.support||d.core||d.enrich){
+      h+='<section class="sec read"><h2>הבחנה</h2><div class="diff">'+
+      (d.support?'<div><h3>תמיכה</h3>'+paras(d.support)+'</div>':'')+
+      (d.core?'<div><h3>ליבה</h3>'+paras(d.core)+'</div>':'')+
+      (d.enrich?'<div><h3>העשרה</h3>'+paras(d.enrich)+'</div>':'')+'</div></section>';
+    }
+    if((l.questions||[]).length){
+      h+='<section class="sec read"><h2>שאלות</h2><ol class="qs">'+l.questions.map(function(q){return '<li><span class="lvl">'+esc(q.level)+'</span><span>'+ans(esc(q.q))+'</span></li>';}).join("")+'</ol></section>';
+    }
+    if(l.exitTicket)h+='<section class="sec read"><h2>כרטיס יציאה</h2><div class="box">'+paras(l.exitTicket)+'</div></section>';
+    if(l.notes)h+='<section class="sec read"><h2>הערות למורה</h2>'+paras(l.notes)+'</section>';
+    /* prev / next */
+    var idx=r.lessons.indexOf(l),pv=r.lessons[idx-1],nx=r.lessons[idx+1];
+    h+='<nav class="pager" aria-label="שיעורים סמוכים">'+
+      (pv?'<a href="#/lesson/'+key+'/'+un+'/'+pv.outlineIndex+'"><small>→ השיעור הקודם</small><span>'+esc(pv.title)+'</span></a>':'<span></span>')+
+      (nx?'<a href="#/lesson/'+key+'/'+un+'/'+nx.outlineIndex+'" style="text-align:left"><small>השיעור הבא ←</small><span>'+esc(nx.title)+'</span></a>':'')+'</nav>';
+    app.innerHTML=h;
+    document.getElementById("goPrint").addEventListener("click",function(){window.print();});
+    var gt=document.getElementById("goTeach");if(gt)gt.addEventListener("click",function(){openTeach(0);});
+  }).catch(function(){app.innerHTML='<a class="back" href="#/plan/'+key+'">→ חזרה לתוכנית</a>'+failMsg();});
+}
+
+/* ---------- teaching mode ---------- */
+var T=document.getElementById("teach"),tIdx=0,lastFocus=null;
+function openTeach(i){
+  if(!cur||!(cur.l.stages||[]).length)return;
+  lastFocus=document.activeElement;tIdx=i;T.classList.add("on");document.body.classList.add("teaching");
+  drawTeach();
+  if(T.requestFullscreen&&!document.fullscreenElement){T.requestFullscreen().catch(function(){});}
+  document.getElementById("tNext").focus();
+}
+function closeTeach(){
+  if(!T.classList.contains("on"))return;
+  T.classList.remove("on");document.body.classList.remove("teaching");
+  if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(function(){});
+  if(lastFocus&&lastFocus.focus)lastFocus.focus();
+}
+function drawTeach(){
+  var st=cur.l.stages,s=st[tIdx],acts=s.activities||[];
+  var m=acts.reduce(function(a,x){return a+(+x.minutes||0);},0);
+  document.getElementById("tPos").innerHTML='שלב '+(tIdx+1)+' מתוך '+st.length+(m?'<span class="min">'+m+' דק׳</span>':'');
+  var h='<h2 class="t-stage"><span class="lessname">'+esc(cur.l.title)+'</span>'+esc(s.name)+'</h2>';
+  acts.forEach(function(a){
+    h+='<div class="t-act"><h3><span>'+esc(a.title)+'</span>'+(a.minutes?'<span class="min">'+esc(a.minutes)+' דקות</span>':'')+'</h3><div class="ins">'+paras(a.instructions)+'</div></div>';
+  });
+  var b=document.getElementById("tBody");b.innerHTML=h;b.scrollTop=0;
+  document.getElementById("tDots").innerHTML=st.map(function(_,i){return '<i class="'+(i===tIdx?"cur":"")+'"></i>';}).join("");
+  document.getElementById("tPrev").disabled=tIdx===0;
+  var nx=document.getElementById("tNext");
+  nx.textContent=tIdx===st.length-1?"סיום ✓":"השלב הבא ←";
+}
+function tMove(d){
+  var n=cur.l.stages.length;
+  if(d>0&&tIdx===n-1){closeTeach();return;}
+  tIdx=Math.max(0,Math.min(n-1,tIdx+d));drawTeach();
+}
+document.getElementById("tNext").addEventListener("click",function(){tMove(1);});
+document.getElementById("tPrev").addEventListener("click",function(){tMove(-1);});
+document.getElementById("tExit").addEventListener("click",closeTeach);
+document.addEventListener("keydown",function(e){
+  if(!T.classList.contains("on"))return;
+  if(e.key==="Escape"){e.preventDefault();closeTeach();}
+  /* RTL: left arrow = forward, right arrow = back */
+  else if(e.key==="ArrowLeft"||e.key==="PageDown"||(e.key===" "&&e.target.tagName!=="BUTTON")){e.preventDefault();if(!(tIdx===cur.l.stages.length-1))tMove(1);}
+  else if(e.key==="ArrowRight"||e.key==="PageUp"){e.preventDefault();tMove(-1);}
+  else if(e.key==="Tab"){ /* keep focus inside */
+    var f=T.querySelectorAll("button:not([disabled])");if(!f.length)return;
+    var first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  }
+});
+document.addEventListener("fullscreenchange",function(){if(!document.fullscreenElement&&T.classList.contains("on")){/* user left fullscreen via browser: stay in mode */}});
+
+/* ---------- router ---------- */
+function route(){
+  closeTeach();
+  var h=location.hash.replace(/^#\/?/,"").split("/");
+  try{
+    if(h[0]==="plan"&&h[1])renderPlan(h[1]);
+    else if(h[0]==="lesson"&&h[1])renderLesson(h[1],parseInt(h[2],10)||1,parseInt(h[3],10)||1);
+    else renderHome();
+  }catch(err){app.innerHTML=failMsg();}
+  window.scrollTo(0,0);
+  if(h[0])app.focus({preventScroll:true});
+}
+window.addEventListener("hashchange",route);
+route();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מַעֲרָךְ · מערכי שיעור לתנ״ך, ספרות ולשון</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#eef6f1;
+  --card:#ffffff;
+  --green:#2f6b57;
+  --green-dark:#22503f;
+  --green-soft:#dcece3;
+  --line:#cfe1d6;
+  --ink:#1f2d27;
+  --ink-2:#44564e;   /* secondary text, AA on white and on mint */
+  --peach:#f7c9a9;
+  --peach-soft:#fdeee3;
+  --shadow:0 1px 2px rgba(31,45,39,.05),0 6px 18px rgba(47,107,87,.08);
+  --r:18px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--page);color:var(--ink);
+  font-family:"Assistant",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  font-size:18px;line-height:1.75;
+}
+h1,h2,h3,h4{font-family:"Alef","Assistant",system-ui,sans-serif;color:var(--green);line-height:1.3;margin:0;font-weight:700}
+a{color:var(--green)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--peach);outline-offset:2px;border-radius:10px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.read{max-width:44em}
+
+/* top nav */
+.top{background:var(--card);box-shadow:0 1px 0 var(--line)}
+.top .wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap;min-height:68px}
+.brand{font-family:"Alef",sans-serif;font-weight:700;font-size:26px;color:var(--green);text-decoration:none;margin-inline-end:auto;display:flex;align-items:center;gap:8px}
+.brand svg{width:26px;height:26px}
+.nav{display:flex;gap:4px;flex-wrap:wrap;list-style:none;margin:0;padding:0}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;text-decoration:none;color:var(--ink-2);font-weight:600;font-size:17px}
+.nav a:hover{background:var(--green-soft);color:var(--green-dark)}
+.nav a[aria-current="page"]{background:var(--green-soft);color:var(--green-dark)}
+
+main{padding:36px 0 72px}
+.view-enter{animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* home */
+.hello{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;margin-bottom:34px}
+.hello h1{font-size:40px}
+.hello p{margin:10px 0 0;color:var(--ink-2);font-size:19px;max-width:36em}
+.hello svg{width:150px;height:auto}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.stat{background:var(--card);border-radius:999px;padding:6px 16px;font-size:17px;color:var(--ink-2);box-shadow:var(--shadow)}
+.stat b{color:var(--green-dark);font-weight:700}
+.step-h{font-size:22px;margin:30px 0 14px}
+.subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.subj{all:unset;box-sizing:border-box;cursor:pointer;background:var(--card);border-radius:var(--r);padding:22px 22px 20px;box-shadow:var(--shadow);border:2px solid transparent;transition:border-color .2s,transform .2s;min-height:44px}
+.subj:hover{transform:translateY(-2px)}
+.subj[aria-pressed="true"]{border-color:var(--green)}
+.subj h3{font-size:25px}
+.subj p{margin:6px 0 0;color:var(--ink-2);font-size:17px;line-height:1.6}
+.subj .n{display:inline-block;margin-top:12px;font-size:15px;font-weight:600;color:var(--green-dark);background:var(--green-soft);border-radius:999px;padding:2px 12px}
+.subj[aria-pressed="true"] .n{background:var(--peach-soft)}
+.grades-box{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:22px}
+.grades-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.grades-row + .grades-row{margin-top:14px}
+.grades-row .lbl{min-width:120px;color:var(--ink-2);font-size:17px}
+.grade{display:inline-flex;align-items:center;justify-content:center;min-width:64px;min-height:48px;padding:0 18px;border-radius:999px;background:var(--page);color:var(--green-dark);text-decoration:none;font-family:"Alef",sans-serif;font-size:22px;font-weight:700;border:2px solid var(--line);transition:background .2s,border-color .2s}
+.grade:hover{background:var(--green-soft);border-color:var(--green)}
+.grade.def{border-color:var(--green);background:var(--green-soft)}
+.hint{margin:14px 0 0;color:var(--ink-2);font-size:16px}
+
+/* year view */
+.crumbs{font-size:16px;color:var(--ink-2);margin-bottom:14px}
+.crumbs a{color:var(--green-dark)}
+.plan-h{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.plan-h h1{font-size:36px}
+.switch{display:flex;gap:6px;flex-wrap:wrap}
+.switch a{display:inline-flex;align-items:center;justify-content:center;min-width:48px;min-height:44px;border-radius:999px;text-decoration:none;color:var(--green-dark);background:var(--card);font-weight:700;box-shadow:var(--shadow);padding:0 12px}
+.switch a[aria-current="true"]{background:var(--green);color:#fff}
+.overview{color:var(--ink-2);margin:14px 0 0}
+
+/* signature: seasonal band */
+.season{position:relative;overflow:hidden;margin:26px 0 34px;border-radius:24px;padding:24px 26px;background:linear-gradient(120deg,#ffffff 0%,#f4faf6 55%,var(--peach-soft) 100%);box-shadow:var(--shadow);display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center}
+.season .art{width:96px;height:96px}
+.season .when{font-size:16px;color:var(--ink-2);margin:0}
+.season .when b{color:var(--green-dark)}
+.season h2{font-size:30px;margin:2px 0 6px}
+.season .now{margin:0;font-size:18px}
+.season .now a{font-weight:700}
+.season .pill{display:inline-block;background:var(--peach);color:#4a2a14;border-radius:999px;padding:0 10px;font-size:15px;font-weight:700;margin-inline-start:6px}
+
+.sgroup{margin-top:30px}
+.sgroup-h{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.sgroup-h h2{font-size:24px}
+.sgroup-h span{color:var(--ink-2);font-size:16px}
+.sgroup-h .here{background:var(--peach);color:#4a2a14;border-radius:999px;padding:0 10px;font-weight:700;font-size:14px}
+.sgroup .empty{color:var(--ink-2);font-size:16px;margin:0;padding:0 4px}
+.unit{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden}
+.unit.current{box-shadow:0 0 0 2px var(--peach),var(--shadow)}
+.unit-btn{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;width:100%;padding:18px 20px;min-height:44px}
+.unit-btn .num{width:42px;height:42px;border-radius:50%;background:var(--green-soft);color:var(--green-dark);display:grid;place-items:center;font-family:"Alef",sans-serif;font-weight:700;font-size:20px}
+.unit-btn h3{font-size:21px;color:var(--ink)}
+.unit-btn .m{color:var(--ink-2);font-size:16px}
+.unit-btn .chev{width:22px;height:22px;transition:transform .2s;color:var(--green)}
+.unit-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.unit-body{padding:0 20px 20px;border-top:1px solid var(--line)}
+.unit-body .big{margin:16px 0 4px;color:var(--ink-2)}
+.unit-body .big b{color:var(--green-dark)}
+.lessons{list-style:none;margin:14px 0 0;padding:0;counter-reset:l}
+.lessons li{counter-increment:l}
+.lessons a,.lessons .na{display:grid;grid-template-columns:2.4em 1fr auto;gap:10px;align-items:baseline;padding:10px 12px;border-radius:12px;text-decoration:none;color:var(--ink);min-height:44px}
+.lessons a::before,.lessons .na::before{content:counter(l);font-family:"Alef",sans-serif;font-weight:700;color:var(--green);text-align:center}
+.lessons a:hover{background:var(--page)}
+.lessons a .t{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:4px}
+.lessons .min{font-size:15px;color:var(--ink-2);white-space:nowrap}
+.lessons .na{color:var(--ink-2)}
+.loading{color:var(--ink-2);font-size:16px;padding:12px 0}
+.msg{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.msg h2{font-size:24px;margin-bottom:6px}
+
+/* lesson view */
+.lesson-head{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:26px 28px;position:relative;overflow:hidden}
+.lesson-head .unit-name{color:var(--ink-2);font-size:16px;margin:0 0 6px}
+.lesson-head h1{font-size:34px;max-width:22em}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{display:inline-flex;align-items:center;background:var(--page);border-radius:999px;padding:3px 14px;font-size:16px;color:var(--ink-2)}
+.chip.strong{background:var(--green);color:#fff;font-weight:700}
+.chip.peach{background:var(--peach-soft);color:#5a3418}
+.curr{margin:14px 0 0;color:var(--ink-2);font-size:17px;max-width:44em}
+.curr b{color:var(--green-dark)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;font:inherit;font-size:17px;font-weight:700;cursor:pointer;text-decoration:none;border:2px solid var(--green);background:var(--card);color:var(--green-dark)}
+.btn.primary{background:var(--green);color:#fff}
+.btn:hover{background:var(--green-dark);border-color:var(--green-dark);color:#fff}
+.btn svg{width:20px;height:20px}
+.lbody{display:grid;gap:18px;margin-top:18px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:24px 28px}
+.card > h2{font-size:24px;margin-bottom:10px}
+.two{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+ul.goals{margin:0;padding-inline-start:1.2em}
+ul.goals li{margin-bottom:8px}
+ul.goals li::marker{color:var(--green)}
+.stage{margin-top:6px}
+.stage + .stage{margin-top:26px}
+.stage-h{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.stage-h .sn{width:38px;height:38px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-family:"Alef",sans-serif;font-weight:700;font-size:19px;flex:none}
+.stage-h h3{font-size:22px}
+.stage-h .sm{color:var(--ink-2);font-size:16px;margin-inline-start:auto;white-space:nowrap}
+.act{border-inline-start:3px solid var(--green-soft);padding:4px 0 4px 0;padding-inline-start:20px;margin-inline-start:18px}
+.act + .act{margin-top:16px}
+.act-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.act-h h4{font-size:20px;color:var(--ink)}
+.mins{display:inline-flex;align-items:center;background:var(--peach);color:#4a2a14;border-radius:999px;padding:0 12px;font-weight:700;font-size:16px;white-space:nowrap}
+.atype{color:var(--ink-2);font-size:15px}
+.instr{max-width:44em}
+.instr p{margin:8px 0 0}
+.ans{background:var(--green-soft);border-radius:6px;padding:0 4px;color:var(--green-dark);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.diff{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.diff > div{background:var(--page);border-radius:14px;padding:16px 18px}
+.diff h3{font-size:19px;margin-bottom:6px}
+.diff p{margin:0}
+ol.qs{list-style:none;margin:0;padding:0}
+ol.qs li{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+ol.qs li:last-child{border-bottom:0}
+.lvl{display:inline-block;min-width:4.6em;text-align:center;background:var(--green-soft);color:var(--green-dark);border-radius:999px;padding:0 10px;font-size:15px;font-weight:700}
+.exit{background:var(--peach-soft)}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:24px}
+.pager a{flex:1 1 240px;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 18px;text-decoration:none;color:var(--ink);min-height:44px}
+.pager a small{display:block;color:var(--ink-2);font-size:15px}
+.pager a.next{text-align:left}
+.leaf-deco{position:absolute;inset-inline-end:-6px;bottom:-8px;width:120px;opacity:.9;pointer-events:none}
+
+footer{color:var(--ink-2);font-size:15px;padding:24px 0 40px;text-align:center}
+
+@media (max-width:820px){
+  .subjects{grid-template-columns:1fr}
+  .two,.diff{grid-template-columns:1fr}
+  .hello{grid-template-columns:1fr}
+  .hello svg{display:none}
+}
+@media (max-width:560px){
+  body{font-size:17px}
+  .wrap{padding:0 14px}
+  main{padding-top:22px}
+  .hello h1{font-size:31px}
+  .plan-h h1{font-size:28px}
+  .lesson-head{padding:20px}
+  .lesson-head h1{font-size:26px}
+  .card{padding:18px}
+  .season{grid-template-columns:1fr;padding:20px}
+  .season .art{width:64px;height:64px}
+  .season h2{font-size:25px}
+  .unit-btn{grid-template-columns:auto 1fr;padding:14px}
+  .unit-btn .chev{display:none}
+  .unit-body{padding:0 12px 14px}
+  .act{margin-inline-start:4px;padding-inline-start:14px}
+  .grades-row .lbl{min-width:100%}
+  .leaf-deco{display:none}
+  .lessons a,.lessons .na{grid-template-columns:2em 1fr}
+  .lessons .min{grid-column:2}
+  .brand{font-size:23px}
+  .nav a{padding:0 10px;font-size:16px}
+  .lesson .instr,.lesson{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+@media print{
+  body{background:#fff;font-size:12.5pt;line-height:1.55}
+  .top,.actions,.pager,.leaf-deco,footer,.crumbs,.no-print{display:none!important}
+  main{padding:0}
+  .card,.lesson-head{box-shadow:none;border:1px solid #bbb;break-inside:avoid-page;padding:12pt}
+  .act{break-inside:avoid}
+  .mins{border:1px solid #999}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#/">
+      <svg viewBox="0 0 32 32" fill="none" stroke="#2f6b57" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 26C10 14 18 7 27 5c-1 10-7 18-19 21z"/><path d="M6 26C12 20 17 15 22 10"/></svg>
+      מַעֲרָךְ
+    </a>
+    <nav aria-label="ניווט ראשי">
+      <ul class="nav">
+        <li><a href="#/" data-nav="home">ראשי</a></li>
+        <li><a href="#/plan/sifrut-10" data-nav="plan" id="navPlan">תוכניות שנתיות</a></li>
+        <li><a href="../index.html#library">המערכים שלי</a></li>
+        <li><a href="../index.html#tools">כלים למורה</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="app" class="wrap" tabindex="-1"></main>
+<footer>מַעֲרָךְ · תוכניות שנתיות ומערכי שיעור · תשפ״ז</footer>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---------- constants ---------- */
+var TODAY = new Date(2026, 10, 17);           /* 17 בנובמבר 2026 */
+var HEB_DATE = "חשוון תשפ״ז";                  /* החודש העברי של TODAY */
+var SUBJECTS = [
+  {slug:"tanach", name:"תנ״ך", count:409, desc:"סיפור, נבואה וחכמה: קריאה קרובה בטקסט המקראי ושיח על ערכים."},
+  {slug:"sifrut", name:"ספרות", count:425, desc:"שירה, סיפור ודרמה: לקרוא לאט, לפרש ולכתוב על יצירה."},
+  {slug:"lashon", name:"לשון", count:488, desc:"הבנת הנקרא, כתיבה ודקדוק: כלים לחשיבה ולהבעה בהירה."}
+];
+var GRADES = [[7,"ז׳"],[8,"ח׳"],[9,"ט׳"],[10,"י׳"],[11,"י״א"],[12,"י״ב"]];
+var MONTHS = [["ספטמבר",0],["אוקטובר",1],["נובמבר",2],["דצמבר",3],["ינואר",4],["פברואר",5],["מרץ",6],["אפריל",7],["מאי",8],["יוני",9],["יולי",10]];
+var SEASONS = [
+  {id:"autumn", name:"סתיו", range:"ספטמבר–נובמבר", from:0, to:2},
+  {id:"winter", name:"חורף", range:"דצמבר–פברואר", from:3, to:5},
+  {id:"spring", name:"אביב", range:"מרץ–מאי", from:6, to:8},
+  {id:"summer", name:"קיץ", range:"יוני", from:9, to:10}
+];
+var MODELS = {classic:"שיעור קלאסי", debate:"דיון ועימות", e5:"מודל 5E", flipped:"כיתה הפוכה", inquiry:"למידת חקר", release:"מהמורה אל התלמיד"};
+var ACT = {poll:"סקר", explain:"הסבר", discuss:"דיון", group:"עבודה בקבוצות", write:"כתיבה", read:"קריאה", tps:"חשבו-שוחחו-שתפו", game:"משחק", media:"צפייה", quiz:"בוחן", cloud:"ענן מילים", exit:"סיכום"};
+
+/* ---------- helpers ---------- */
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+/* escape, then softly mark answers written in parentheses after a question */
+function richText(s){
+  var e = esc(s);
+  return e.replace(/\?(\s*)\(([^()]{2,})\)/g, '?$1<span class="ans">($2)</span>');
+}
+function paras(s){
+  var parts = String(s == null ? "" : s).split(/\n+/).filter(function(x){return x.trim();});
+  return parts.map(function(p){ return "<p>" + richText(p) + "</p>"; }).join("");
+}
+function gradeName(n){ for (var i=0;i<GRADES.length;i++) if (GRADES[i][0]===n) return GRADES[i][1]; return String(n); }
+function subjOf(slug){ for (var i=0;i<SUBJECTS.length;i++) if (SUBJECTS[i].slug===slug) return SUBJECTS[i]; return null; }
+function parseKey(key){
+  var m = /^(tanach|sifrut|lashon)-(7|8|9|10|11|12)$/.exec(key || "");
+  return m ? {slug:m[1], grade:+m[2], subj:subjOf(m[1])} : null;
+}
+function monthSpan(str){
+  var hits = [];
+  MONTHS.forEach(function(m){
+    var i = String(str || "").indexOf(m[0]);
+    while (i > -1){ hits.push([i, m[1]]); i = str.indexOf(m[0], i+1); }
+  });
+  hits.sort(function(a,b){return a[0]-b[0];});
+  if (!hits.length) return {start:0, end:0};
+  return {start:hits[0][1], end:hits[hits.length-1][1]};
+}
+function schoolMonth(d){ var m = d.getMonth(); return m >= 8 ? m-8 : m+4; } /* Sep=0 … Aug=11 */
+function seasonOf(idx){
+  for (var i=0;i<SEASONS.length;i++) if (idx>=SEASONS[i].from && idx<=SEASONS[i].to) return SEASONS[i];
+  return SEASONS[3];
+}
+function currentUnitIndex(units){
+  var now = schoolMonth(TODAY), pick = -1, best = -1;
+  units.forEach(function(u, i){
+    var s = monthSpan(u.m);
+    if (s.start <= now && now <= s.end && s.start >= best){ best = s.start; pick = i; }
+  });
+  if (pick === -1){ /* fallback: last unit that already started */
+    units.forEach(function(u, i){ if (monthSpan(u.m).start <= now) pick = i; });
+  }
+  return pick < 0 ? 0 : pick;
+}
+
+/* ---------- script loader (works from file://) ---------- */
+var loaded = {};
+function loadScript(src){
+  if (loaded[src]) return loaded[src];
+  loaded[src] = new Promise(function(res, rej){
+    var s = document.createElement("script");
+    s.src = src; s.async = true;
+    s.onload = function(){ res(); };
+    s.onerror = function(){ delete loaded[src]; rej(new Error("load " + src)); };
+    document.head.appendChild(s);
+  });
+  return loaded[src];
+}
+function getPlan(key){
+  function find(){
+    var arr = window.YEAR_PLANS || [];
+    for (var i=0;i<arr.length;i++) if (arr[i] && arr[i].key === key) return arr[i];
+    return null;
+  }
+  var p = find();
+  if (p) return Promise.resolve(p);
+  return loadScript("../data/" + key + ".js").then(function(){
+    var q = find(); if (!q) throw new Error("no plan"); return q;
+  });
+}
+function getUnitLessons(key, plan, ui){
+  var unit = plan.units[ui];
+  var base = (unit && unit.lessons) ? unit.lessons.slice() : [];
+  var more = loadScript("../data/more/index.js").then(function(){
+    var idx = (window.MORE_INDEX || {})[key] || [];
+    if (idx.indexOf(ui+1) === -1) return [];
+    return loadScript("../data/more/" + key + "-u" + (ui+1) + ".js").then(function(){
+      return (window.YEAR_MORE || {})[key + "#" + (ui+1)] || [];
+    });
+  }).catch(function(){ return []; });
+  return more.then(function(extra){
+    var seen = {}, out = [];
+    base.concat(extra).forEach(function(l){
+      if (!l || seen[l.outlineIndex]) return;
+      seen[l.outlineIndex] = 1; out.push(l);
+    });
+    out.sort(function(a,b){ return a.outlineIndex - b.outlineIndex; });
+    return out;
+  });
+}
+
+/* ---------- decoration (thin-line SVG) ---------- */
+var BRANCH = '<svg viewBox="0 0 200 140" fill="none" stroke="#2f6b57" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+  '<path d="M20 125C60 100 110 70 185 20"/>' +
+  '<path d="M60 101c-6-16-2-30 10-38 4 15 0 28-10 38z"/><path d="M60 101c14-4 26 0 34 10-14 4-26 1-34-10z"/>' +
+  '<path d="M103 74c-5-17 0-31 13-38 3 15-2 29-13 38z"/><path d="M103 74c15-3 27 2 33 13-15 3-26-1-33-13z"/>' +
+  '<path d="M146 46c-3-14 2-25 13-31 2 13-2 23-13 31z"/><path d="M146 46c12-2 21 3 26 12-12 2-21-2-26-12z"/>' +
+  '<circle cx="178" cy="25" r="3.5" fill="#f7c9a9" stroke="none"/></svg>';
+var SEASON_ART = {
+  autumn:'<svg class="art" viewBox="0 0 100 100" fill="none" stroke="#2f6b57" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M50 88V60"/><path d="M50 60C30 58 20 42 24 22c14 4 22 12 26 24 4-12 12-20 26-24 4 20-6 36-26 38z" fill="#f7c9a9" fill-opacity=".45"/><path d="M50 60V34"/><path d="M50 50l-12-8M50 44l11-8"/><path d="M70 82c4-6 10-8 16-6-3 6-9 8-16 6z"/></svg>',
+  winter:'<svg class="art" viewBox="0 0 100 100" fill="none" stroke="#2f6b57" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M50 15v70M20 32l60 36M80 32L20 68"/><path d="M44 20l6 6 6-6M44 80l6-6 6 6"/><circle cx="50" cy="50" r="7" fill="#f7c9a9" fill-opacity=".45"/></svg>',
+  spring:'<svg class="art" viewBox="0 0 100 100" fill="none" stroke="#2f6b57" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M50 90V48"/><circle cx="50" cy="38" r="7" fill="#f7c9a9" fill-opacity=".6"/><path d="M50 31c-4-10 0-17 0-17s4 7 0 17M57 38c10-4 17 0 17 0s-7 4-17 0M43 38c-10-4-17 0-17 0s7 4 17 0M50 45c-4 10 0 14 0 14"/><path d="M50 72c-10-2-16-10-16-18 9 1 15 8 16 18z"/></svg>',
+  summer:'<svg class="art" viewBox="0 0 100 100" fill="none" stroke="#2f6b57" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="50" cy="50" r="15" fill="#f7c9a9" fill-opacity=".5"/><path d="M50 18v10M50 72v10M18 50h10M72 50h10M27 27l7 7M66 66l7 7M73 27l-7 7M34 66l-7 7"/></svg>'
+};
+var CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+
+/* ---------- views ---------- */
+var app = document.getElementById("app");
+var lastPlanKey = "sifrut-10";
+var homeSubject = "sifrut";
+
+function setNav(which){
+  var links = document.querySelectorAll("[data-nav]");
+  for (var i=0;i<links.length;i++){
+    if (links[i].getAttribute("data-nav") === which) links[i].setAttribute("aria-current","page");
+    else links[i].removeAttribute("aria-current");
+  }
+  document.getElementById("navPlan").setAttribute("href", "#/plan/" + lastPlanKey);
+}
+function paint(html){
+  app.innerHTML = html;
+  app.classList.remove("view-enter"); void app.offsetWidth; app.classList.add("view-enter");
+}
+function failBox(title, text){
+  return '<div class="msg"><h2>' + esc(title) + '</h2><p>' + esc(text) +
+    '</p><p><a class="btn" href="#/">חזרה לדף הראשי</a></p></div>';
+}
+
+function viewHome(){
+  setNav("home");
+  document.title = "מַעֲרָךְ · מערכי שיעור לתנ״ך, ספרות ולשון";
+  var s = subjOf(homeSubject) || SUBJECTS[1];
+  var cards = SUBJECTS.map(function(x){
+    return '<button type="button" class="subj" data-subj="' + x.slug + '" aria-pressed="' + (x.slug===s.slug) + '">' +
+      '<h3>' + esc(x.name) + '</h3><p>' + esc(x.desc) + '</p><span class="n">' + x.count.toLocaleString("he-IL") + ' שיעורים</span></button>';
+  }).join("");
+  function gradeLinks(list){
+    return list.map(function(g){
+      var key = s.slug + "-" + g[0];
+      var def = key === "sifrut-10" ? " def" : "";
+      return '<a class="grade' + def + '" href="#/plan/' + key + '" aria-label="' + esc(s.name + " כיתה " + g[1]) + '">' + esc(g[1]) + '</a>';
+    }).join("");
+  }
+  paint(
+    '<section class="hello"><div>' +
+      '<h1>שלום, מה מלמדים השבוע?</h1>' +
+      '<p>תוכנית שנתית לכל מקצוע ולכל כיתה, ובכל שיעור מערך מלא: מטרות, שלבים, הבחנה ושאלות. מוכן להוראה או להדפסה.</p>' +
+      '<div class="stats"><span class="stat"><b>1,322</b> שיעורים</span><span class="stat"><b>18</b> תוכניות שנתיות</span><span class="stat">כיתות <b>ז׳–י״ב</b></span></div>' +
+    '</div>' + BRANCH + '</section>' +
+    '<h2 class="step-h">1. בחרו מקצוע</h2>' +
+    '<div class="subjects">' + cards + '</div>' +
+    '<h2 class="step-h">2. בחרו כיתה ב' + esc(s.name) + '</h2>' +
+    '<div class="grades-box">' +
+      '<div class="grades-row"><span class="lbl">חטיבת ביניים</span>' + gradeLinks(GRADES.slice(0,3)) + '</div>' +
+      '<div class="grades-row"><span class="lbl">תיכון</span>' + gradeLinks(GRADES.slice(3)) + '</div>' +
+      '<p class="hint">לחיצה על כיתה פותחת את התוכנית השנתית שלה.</p>' +
+    '</div>'
+  );
+  var btns = app.querySelectorAll(".subj");
+  for (var i=0;i<btns.length;i++){
+    btns[i].addEventListener("click", function(){
+      homeSubject = this.getAttribute("data-subj");
+      var y = window.scrollY; viewHome(); window.scrollTo(0, y);
+      var b = app.querySelector('.subj[data-subj="' + homeSubject + '"]'); if (b) b.focus();
+    });
+  }
+}
+
+function viewPlan(key, openUnit){
+  var k = parseKey(key);
+  if (!k){ setNav("plan"); paint(failBox("לא מצאנו את התוכנית", "הקישור לא תקין. אפשר לבחור מקצוע וכיתה בדף הראשי.")); return; }
+  lastPlanKey = key; homeSubject = k.slug;
+  setNav("plan");
+  var units = (window.UNITS || {})[key] || [];
+  var title = k.subj.name + " · כיתה " + gradeName(k.grade);
+  document.title = title + " · מַעֲרָךְ";
+  var cur = currentUnitIndex(units);
+  var season = seasonOf(schoolMonth(TODAY));
+  var switcher = GRADES.map(function(g){
+    var kk = k.slug + "-" + g[0];
+    return '<a href="#/plan/' + kk + '"' + (kk===key ? ' aria-current="true"' : '') + '>' + esc(g[1]) + '</a>';
+  }).join("");
+
+  var band = units.length ?
+    '<section class="season" aria-label="העונה עכשיו">' + SEASON_ART[season.id] +
+      '<div><p class="when"><b>היום</b> · 17 בנובמבר 2026 · ' + esc(HEB_DATE) + '</p>' +
+      '<h2>' + esc(season.name) + ' · ' + esc(season.range) + '</h2>' +
+      '<p class="now">בעונה הזו מלמדים את <a href="#/plan/' + key + '/' + (cur+1) + '">יחידה ' + (cur+1) + ': ' + esc(units[cur].t) + '</a>' +
+      '<span class="pill">' + esc(units[cur].m) + '</span></p></div></section>' : '';
+
+  var groups = SEASONS.map(function(se){
+    var inside = [];
+    units.forEach(function(u, i){ if (seasonOf(monthSpan(u.m).start).id === se.id) inside.push(i); });
+    var isNow = se.id === season.id;
+    var body = inside.length ? inside.map(function(i){
+      var u = units[i];
+      return '<article class="unit' + (i===cur ? ' current' : '') + '" id="unit-' + (i+1) + '">' +
+        '<button type="button" class="unit-btn" aria-expanded="false" aria-controls="ub-' + (i+1) + '" data-ui="' + i + '">' +
+          '<span class="num">' + (i+1) + '</span><span><h3>' + esc(u.t) + '</h3><span class="m">' + esc(u.m) + '</span></span>' + CHEV +
+        '</button><div class="unit-body" id="ub-' + (i+1) + '" hidden></div></article>';
+    }).join("") : '<p class="empty">אין יחידה שמתחילה בעונה הזו. היחידה הקודמת נמשכת לתוכה.</p>';
+    return '<section class="sgroup"><div class="sgroup-h"><h2>' + esc(se.name) + '</h2><span>' + esc(se.range) + '</span>' +
+      (isNow ? '<span class="here">עכשיו</span>' : '') + '</div>' + body + '</section>';
+  }).join("");
+
+  paint(
+    '<div class="crumbs"><a href="#/">ראשי</a> · ' + esc(k.subj.name) + '</div>' +
+    '<div class="plan-h"><h1>' + esc(title) + '</h1><nav class="switch" aria-label="החלפת כיתה">' + switcher + '</nav></div>' +
+    '<p class="overview read" id="overview"></p>' +
+    (units.length ? band + groups : failBox("התוכנית לא נטענה", "לא הצלחנו לטעון את רשימת היחידות. נסו לרענן את הדף."))
+  );
+
+  getPlan(key).then(function(plan){
+    var ov = document.getElementById("overview");
+    if (ov && plan.overview){
+      var t = String(plan.overview); var cut = t.indexOf(". ", 160);
+      ov.textContent = cut > 0 && t.length > 340 ? t.slice(0, cut+1) : t;
+    }
+  }).catch(function(){});
+
+  var btns = app.querySelectorAll(".unit-btn");
+  for (var i=0;i<btns.length;i++) btns[i].addEventListener("click", function(){ toggleUnit(key, +this.getAttribute("data-ui"), true); });
+
+  var bandLink = app.querySelector(".season .now a");
+  if (bandLink) bandLink.addEventListener("click", function(ev){
+    ev.preventDefault(); toggleUnit(key, cur, false, true);
+  });
+
+  if (openUnit){ toggleUnit(key, openUnit-1, false, true); }
+}
+
+function toggleUnit(key, ui, flip, scroll){
+  var art = document.getElementById("unit-" + (ui+1));
+  if (!art) return;
+  var btn = art.querySelector(".unit-btn"), body = art.querySelector(".unit-body");
+  var open = btn.getAttribute("aria-expanded") === "true";
+  if (open && flip){ btn.setAttribute("aria-expanded","false"); body.hidden = true; return; }
+  btn.setAttribute("aria-expanded","true"); body.hidden = false;
+  if (scroll) art.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+  if (body.getAttribute("data-ready")) return;
+  body.innerHTML = '<p class="loading">טוענים את השיעורים…</p>';
+  getPlan(key).then(function(plan){
+    var u = plan.units[ui];
+    if (!u) throw new Error("no unit");
+    return getUnitLessons(key, plan, ui).then(function(ls){
+      var byIdx = {}; ls.forEach(function(l){ byIdx[l.outlineIndex] = l; });
+      var outline = u.outline && u.outline.length ? u.outline : ls.map(function(l){ return l.title; });
+      var items = outline.map(function(o, i){
+        var l = byIdx[i+1];
+        var label = l ? l.title : String(o).replace(/^שיעור\s*\d+\s*[:：]\s*/, "");
+        if (l) return '<li><a href="#/lesson/' + key + '/' + (ui+1) + '/' + (i+1) + '"><span class="t">' + esc(label) + '</span><span class="min">' + esc(l.minutes || 45) + ' דק׳</span></a></li>';
+        return '<li><span class="na">' + esc(label) + '</span></li>';
+      }).join("");
+      body.innerHTML =
+        (u.bigIdea ? '<p class="big read"><b>הרעיון הגדול:</b> ' + esc(u.bigIdea) + '</p>' : '') +
+        '<ol class="lessons">' + items + '</ol>';
+      body.setAttribute("data-ready", "1");
+    });
+  }).catch(function(){
+    body.innerHTML = '<p class="loading">לא הצלחנו לטעון את השיעורים של היחידה. נסו שוב בעוד רגע.</p>';
+  });
+}
+
+function viewLesson(key, unitN, oi){
+  var k = parseKey(key);
+  setNav("plan");
+  if (!k || !(unitN > 0) || !(oi > 0)){ paint(failBox("לא מצאנו את השיעור", "הקישור לא תקין.")); return; }
+  lastPlanKey = key; setNav("plan");
+  paint('<p class="loading">טוענים את מערך השיעור…</p>');
+  var ui = unitN - 1;
+  getPlan(key).then(function(plan){
+    var u = plan.units[ui];
+    if (!u) throw new Error("no unit");
+    return getUnitLessons(key, plan, ui).then(function(ls){
+      var pos = -1;
+      for (var i=0;i<ls.length;i++) if (ls[i].outlineIndex === oi) pos = i;
+      if (pos < 0){ paint(failBox("השיעור עוד לא זמין", "למערך הזה אין עדיין תוכן מלא. אפשר לחזור לתוכנית ולבחור שיעור אחר.")); return; }
+      renderLesson(key, k, plan, u, ui, ls, pos);
+    });
+  }).catch(function(){
+    paint(failBox("לא הצלחנו לטעון את השיעור", "ייתכן שאין חיבור, או שהקובץ חסר. נסו לרענן את הדף."));
+  });
+}
+
+function renderLesson(key, k, plan, u, ui, ls, pos){
+  var L = ls[pos];
+  document.title = L.title + " · מַעֲרָךְ";
+  var back = "#/plan/" + key + "/" + (ui+1);
+  var total = 0;
+  var stages = (L.stages || []).map(function(st, si){
+    var sm = 0;
+    var acts = (st.activities || []).map(function(a){
+      sm += +a.minutes || 0;
+      return '<div class="act"><div class="act-h"><h4>' + esc(a.title) + '</h4>' +
+        (a.minutes ? '<span class="mins">' + esc(a.minutes) + ' דק׳</span>' : '') +
+        (ACT[a.type] ? '<span class="atype">' + esc(ACT[a.type]) + '</span>' : '') +
+        '</div><div class="instr">' + paras(a.instructions) + '</div></div>';
+    }).join("");
+    total += sm;
+    return '<div class="stage"><div class="stage-h"><span class="sn">' + (si+1) + '</span><h3>' + esc(st.name) + '</h3>' +
+      (sm ? '<span class="sm">' + sm + ' דקות</span>' : '') + '</div>' + acts + '</div>';
+  }).join("");
+  var goals = (L.goals || []).map(function(g){ return '<li>' + esc(g) + '</li>'; }).join("");
+  var bloom = (L.bloom || []).map(function(b){ return '<span class="chip">' + esc(b) + '</span>'; }).join("");
+  var d = L.diff || {};
+  var qs = (L.questions || []).map(function(q){
+    return '<li><span class="lvl">' + esc(q.level) + '</span><span>' + richText(q.q) + '</span></li>';
+  }).join("");
+  var prev = ls[pos-1], next = ls[pos+1];
+  var lessonNo = L.outlineIndex;
+
+  paint(
+    '<div class="crumbs"><a href="#/">ראשי</a> · <a href="#/plan/' + key + '">' + esc(k.subj.name + " " + gradeName(k.grade)) + '</a> · <a href="' + back + '">יחידה ' + (ui+1) + '</a></div>' +
+    '<article class="lesson">' +
+    '<header class="lesson-head">' +
+      '<p class="unit-name">יחידה ' + (ui+1) + ': ' + esc(u.title) + ' · שיעור ' + esc(lessonNo) + '</p>' +
+      '<h1>' + esc(L.title) + '</h1>' +
+      '<div class="meta"><span class="chip strong">' + esc(L.minutes || 45) + ' דקות</span>' +
+        (MODELS[L.model] ? '<span class="chip peach">' + esc(MODELS[L.model]) + '</span>' : '') +
+        '<span class="chip">' + esc(k.subj.name + " · כיתה " + gradeName(k.grade)) + '</span></div>' +
+      (L.curriculum ? '<p class="curr"><b>תוכנית הלימודים:</b> ' + esc(L.curriculum) + '</p>' : '') +
+      '<div class="actions"><a class="btn" href="' + back + '">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>חזרה לתוכנית</a>' +
+        '<button type="button" class="btn primary" id="printBtn">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"/></svg>הדפסה</button></div>' +
+      '<div class="leaf-deco" aria-hidden="true">' + BRANCH + '</div>' +
+    '</header>' +
+    '<div class="lbody">' +
+      '<div class="two">' +
+        '<section class="card"><h2>מטרות</h2><ul class="goals read">' + goals + '</ul>' +
+          (bloom ? '<div class="meta">' + bloom + '</div>' : '') + '</section>' +
+        '<section class="card"><h2>חומרים</h2><div class="read">' + paras(L.materials || "אין חומרים מיוחדים.") + '</div></section>' +
+      '</div>' +
+      '<section class="card"><h2>מהלך השיעור' + (total ? ' · ' + total + ' דקות' : '') + '</h2>' + stages + '</section>' +
+      ((d.support || d.core || d.enrich) ?
+      '<section class="card"><h2>הבחנה</h2><div class="diff">' +
+        '<div><h3>תמיכה</h3><p>' + esc(d.support) + '</p></div>' +
+        '<div><h3>ליבה</h3><p>' + esc(d.core) + '</p></div>' +
+        '<div><h3>העשרה</h3><p>' + esc(d.enrich) + '</p></div></div></section>' : '') +
+      (qs ? '<section class="card"><h2>שאלות לדיון</h2><ol class="qs read">' + qs + '</ol></section>' : '') +
+      '<div class="two">' +
+        (L.exitTicket ? '<section class="card exit"><h2>כרטיס יציאה</h2><div class="read">' + paras(L.exitTicket) + '</div></section>' : '') +
+        (L.notes ? '<section class="card"><h2>הערות למורה</h2><div class="read">' + paras(L.notes) + '</div></section>' : '') +
+      '</div>' +
+    '</div></article>' +
+    '<nav class="pager" aria-label="שיעורים סמוכים">' +
+      (prev ? '<a href="#/lesson/' + key + '/' + (ui+1) + '/' + prev.outlineIndex + '"><small>השיעור הקודם</small>' + esc(prev.title) + '</a>' : '<span></span>') +
+      (next ? '<a class="next" href="#/lesson/' + key + '/' + (ui+1) + '/' + next.outlineIndex + '"><small>השיעור הבא</small>' + esc(next.title) + '</a>' : '') +
+    '</nav>'
+  );
+  document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
+}
+
+/* ---------- router ---------- */
+function route(){
+  var h = (location.hash || "").replace(/^#\/?/, "");
+  var p = h.split("/").map(function(x){ try { return decodeURIComponent(x); } catch(e){ return x; } });
+  try {
+    if (p[0] === "plan"){ viewPlan(p[1] || "sifrut-10", p[2] ? parseInt(p[2], 10) : 0); }
+    else if (p[0] === "lesson"){ viewLesson(p[1], parseInt(p[2], 10), parseInt(p[3], 10)); window.scrollTo(0,0); return; }
+    else { viewHome(); }
+  } catch(e){
+    paint(failBox("משהו השתבש", "נסו לרענן את הדף או לחזור לדף הראשי."));
+  }
+  if (!(p[0] === "plan" && p[2])) window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+route();
+})();
+</script>
+</body>
+</html>
