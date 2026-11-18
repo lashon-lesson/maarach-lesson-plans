@@ -439,7 +439,7 @@ body.noscroll{overflow:hidden}
   .brand span{display:none}
 }
 </style>
-<link rel="stylesheet" href="siman-theme.css?v=3">
+<link rel="stylesheet" href="siman-theme.css?v=4">
 <meta name="theme-color" content="#EAFBF3">
 </head>
 <body>
@@ -716,7 +716,8 @@ const STRATS = [
 const KEY = "maarach_v1_lessons", KEY_CLASS = "maarach_v1_class";
 let MEM = {};
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return MEM[k]===undefined?null:MEM[k]; } }
-function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ MEM[k]=v; } }
+let lsWarned=false;
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ MEM[k]=v; if(!lsWarned){ lsWarned=true; setTimeout(()=>toast("⚠️ לא ניתן לשמור בדפדפן הזה (אולי הזיכרון מלא או מצב גלישה פרטית). השינויים יישמרו רק עד סגירת האתר. כדאי לייצא את המערכים."),300); } } }
 const uid = () => Math.random().toString(36).slice(2,9);
 const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
@@ -957,7 +958,8 @@ function closeAllOverlays(){ while(OV.length){ const o=OV.pop(); try{ o.closeFn(
 window.addEventListener("scroll",()=>{ scrollMem[location.hash||"#home"]=window.scrollY; },{passive:true});
 function restoreScroll(){
   const h=location.hash||"#home", y=navPop?(scrollMem[h]||0):0; navPop=false;
-  let n=0; (function t(){ window.scrollTo(0,y); if(Math.abs(window.scrollY-y)>2 && n++<20) setTimeout(t,60); })();
+  let n=0, stop=false; const s=()=>{ stop=true; }; ["wheel","touchstart","keydown"].forEach(ev=>window.addEventListener(ev,s,{once:true,passive:true}));
+  (function t(){ if(stop) return; window.scrollTo(0,y); if(Math.abs(window.scrollY-y)>2 && n++<20) setTimeout(t,60); })();
 }
 function keyToSel(key){ const m=/^([a-z]+)-(\d+)$/.exec(key||""); if(!m) return null; const o=YEAR_SUBJ.find(x=>x.slug===m[1]); const g=Object.keys(GRADE_NUM).find(k=>GRADE_NUM[k]===+m[2]); return (o&&g)?{s:o.s,g:g}:null; }
 function route(){
@@ -1137,7 +1139,7 @@ function actHtml(si,ai,a){
 }
 function setAct(si,ai,k,v){ cur.stages[si].activities[ai][k]=v; touch(); }
 function addAct(si, a){ cur.stages[si].activities.push(a||A("explain","",5,"")); touch(); renderStages(); }
-function rmAct(si,ai){ cur.stages[si].activities.splice(ai,1); touch(); renderStages(); }
+function rmAct(si,ai){ const a=cur.stages[si].activities[ai]; if(!confirm("למחוק את הפעילות ״"+((a&&a.title)||"ללא שם")+"״?")) return; cur.stages[si].activities.splice(ai,1); touch(); renderStages(); }
 function mvAct(si,ai,d){
   const arr = cur.stages[si].activities, j = ai+d;
   if(j<0||j>=arr.length){ // move across stages
@@ -1188,7 +1190,7 @@ function renderToolbox(){
 }
 function addStratFromBank(i){
   if(!cur || !lessons.includes(cur)){ newLesson(); setTimeout(()=>{ insertStrat(i,0); },80); return; }
-  modal('<h3>לאיזה שלב להוסיף?</h3>'+cur.stages.map((st,si)=>'<button class="btn" style="margin:4px" onclick="insertStrat('+i+','+si+')">'+esc(st.name)+'</button>').join("")+'<div class="ft"><button class="btn" onclick="closeModal()">ביטול</button></div>');
+  modal('<h3>הוספה למערך ״'+esc(cur.title||"ללא שם")+'״ · לאיזה שלב?</h3><p style="margin:0 0 8px">רוצים מערך אחר? פתחו אותו קודם מ״המערכים שלי״.</p>'+cur.stages.map((st,si)=>'<button class="btn" style="margin:4px" onclick="insertStrat('+i+','+si+')">'+esc(st.name)+'</button>').join("")+'<div class="ft"><button class="btn" onclick="closeModal()">ביטול</button></div>');
 }
 
 /* ============ WEB DIRECTORY ============ */
@@ -1390,7 +1392,7 @@ function webToLesson(i){
     newLesson(); if(SUBJECTS[w.s]) cur.subject = w.s;
   }
   addSrc(w.t, w.u); if(location.hash!=="#edit") go("edit"); else renderEditor();
-  toast("הקישור נוסף למערך");
+  toast("הקישור נוסף למערך ״"+(cur.title||"ללא שם")+"״");
 }
 function pickWebSrc(){
   const rel = WEB.map((w,i)=>({w,i})).filter(o=>o.w.s===cur.subject||o.w.s==="כללי");
@@ -1403,7 +1405,7 @@ function pickWebSrc(){
 /* הנתונים נטענים לפי דרישה מ-data/<slug>-<grade>.js וכל קובץ מוסיף אובייקט ל-window.YEAR_PLANS */
 const YEAR_SUBJ = [{s:"תנ״ך",slug:"tanach"},{s:"ספרות",slug:"sifrut"},{s:"לשון",slug:"lashon"}];
 const GRADE_NUM = {"ז׳":7,"ח׳":8,"ט׳":9,"י׳":10,"י״א":11,"י״ב":12};
-const DATA_V = "25";
+const DATA_V = "26";
 const KEY_YSEL = "maarach_v1_ysel";
 let ySel = (()=>{ try{ return JSON.parse(lsGet(KEY_YSEL))||{s:"תנ״ך",g:"ז׳"}; }catch(e){ return {s:"תנ״ך",g:"ז׳"}; } })();
 const planState = {}; /* key -> "loading" | "ok" | "missing" */
@@ -1431,7 +1433,7 @@ function loadPlan(key, cb){
       await Promise.all(units.map(n=>loadScript("data/more/"+key+"-u"+n+".js?v="+DATA_V)));
       mergeMore(p);
     }
-    planState[key] = p?"ok":"missing";
+    planState[key] = p?"ok":undefined; if(!p) delete scriptP["data/"+key+".js?v="+DATA_V];
     const w=planWait[key]||[]; planWait[key]=[]; w.forEach(f=>f());
   })();
 }
@@ -1454,7 +1456,7 @@ function renderYear(){
   const key = planKey(ySel.s, ySel.g), body = document.getElementById("yBody");
   if(!planFor(key)) body.innerHTML = '<div class="yload">טוען את התוכנית…</div>';
   loadPlan(key, ()=>{ if(planKey(ySel.s,ySel.g)!==key) return; const p=planFor(key);
-    body.innerHTML = p ? planHtml(p) : '<div class="empty">התוכנית ל'+esc(ySel.s)+' בכיתה '+esc(ySel.g)+' עדיין לא זמינה.</div>';
+    body.innerHTML = p ? planHtml(p) : '<div class="empty">לא הצלחנו לטעון את התוכנית ל'+esc(ySel.s)+' בכיתה '+esc(ySel.g)+'. בדקו את החיבור לאינטרנט.<br><br><button class="btn pri" onclick="renderYear()">נסו שוב</button></div>';
     if(p && yearUnit!==null){ const d=document.getElementById("unit"+yearUnit); if(d) d.open=true; }
     if(p) document.querySelectorAll("#yBody details.unit").forEach((d,ui)=>d.addEventListener("toggle",()=>{ if(d.open) setYearHash(key,ui); }));
     if(navPop || yearUnit===null) restoreScroll();
@@ -1634,7 +1636,7 @@ function openShow(i){
 function hideShow(){ const el=document.getElementById("sshow"); if(el) el.hidden=true; document.body.classList.remove("noscroll"); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
 /* "back to plan": use real history when the plan is the previous page, so its place is kept */
 let lastPlanHash="";
-window.addEventListener("hashchange",e=>{ try{ const o=new URL(e.oldURL).hash; if(o.indexOf("#year")===0) lastPlanHash=o; }catch(_){} });
+window.addEventListener("hashchange",e=>{ try{ lastPlanHash=new URL(e.oldURL).hash; }catch(_){ lastPlanHash=""; } });
 function backToPlan(key,ui){ if(lastPlanHash.indexOf("#year:"+key)===0){ history.back(); return false; } return true; }
 function drawShow(){
   const el=document.getElementById("sshow"); if(!el) return; const s=SL.arr[SL.i], n=SL.arr.length;
@@ -2033,6 +2035,6 @@ function init(){
 }
 init();
 </script>
-<script src="siman-theme.js?v=2"></script>
+<script src="siman-theme.js?v=3"></script>
 </body>
 </html>

@@ -46,3 +46,15 @@
 })();
 /* phone: tap the plan description to expand it */
 document.addEventListener("click",function(e){ var y=e.target.closest&&e.target.closest(".yover"); if(y) y.classList.toggle("open"); });
+/* smoother everyday behaviour */
+document.addEventListener("keydown",function(e){
+  if(e.key!=="Escape") return;
+  var m=document.querySelector("#modalRoot .modal"); if(m && typeof closeModal==="function"){ closeModal(); return; }
+});
+document.addEventListener("click",function(e){
+  /* "עוד ▾" menus close after a choice or a tap elsewhere */
+  document.querySelectorAll("details.more[open]").forEach(function(d){ if(!d.contains(e.target) || e.target.closest(".menu")) d.removeAttribute("open"); });
+  /* accessibility panel closes on a tap outside it */
+  var p=document.getElementById("a11yP"); if(p && !p.hidden && !p.contains(e.target) && !e.target.closest(".a11y-b")){ p.hidden=true; var b=document.querySelector(".a11y-b"); if(b) b.setAttribute("aria-expanded","false"); }
+});
+window.addEventListener("hashchange",function(){ var p=document.getElementById("a11yP"); if(p) p.hidden=true; });
