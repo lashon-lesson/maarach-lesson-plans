@@ -244,3 +244,9 @@ html.calm .scard,html.calm .gbtn,html.calm .chip.on,html.calm .home h1 em,html.c
   .a11y-b{top:12px;bottom:auto;left:16px;width:46px;height:46px;font-size:22px;position:fixed;z-index:40}
   .a11y-p{top:68px;bottom:auto;left:16px}
 }
+/* My Lessons: subjects list stays even with no lessons */
+.subjc{display:inline-flex;align-items:center;gap:2px}
+.chip.zero{border-style:dashed;background:transparent;opacity:.85}
+.chipx{border:0;background:transparent;color:var(--ink-s);font-size:14px;min-width:32px;min-height:40px;border-radius:999px;cursor:pointer}
+.chipx:hover,.chipx:focus-visible{background:var(--rose)}
+.chip.add{border-style:dashed;color:var(--violet,#6B2BD9);background:#fff}

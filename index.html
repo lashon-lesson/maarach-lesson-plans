@@ -439,7 +439,7 @@ body.noscroll{overflow:hidden}
   .brand span{display:none}
 }
 </style>
-<link rel="stylesheet" href="siman-theme.css?v=4">
+<link rel="stylesheet" href="siman-theme.css?v=5">
 <meta name="theme-color" content="#EAFBF3">
 </head>
 <body>
@@ -510,11 +510,12 @@ body.noscroll{overflow:hidden}
         <input id="q" placeholder="חיפוש במערכים שלי…" oninput="renderLibrary()">
       </div>
       <select class="f" id="fGrade" onchange="renderLibrary()"></select>
-      <button class="btn pri" onclick="newLesson()">＋ מערך חדש</button>
+      <button class="btn pri" onclick="newLesson(filterSubj)">＋ מערך חדש</button>
       <details class="more"><summary class="btn">עוד ▾</summary><div class="menu">
         <select class="f" id="fModel" onchange="renderLibrary()"></select>
         <button class="btn" onclick="openImport()">ייבוא מערכים מקובץ</button>
         <button class="btn" onclick="openExportAll()">ייצוא כל המערכים (גיבוי)</button>
+        <button class="btn warn" onclick="clearLibrary()">🧹 ריקון המערכים שלי</button>
       </div></details>
     </div>
     <div class="chips" id="subjChips"></div>
@@ -904,19 +905,37 @@ function seed2(){
   ];
 }
 
-const KEY_SEEDV = "maarach_v1_seedv", SEED_V = 2;
+const KEY_SEEDV = "maarach_v1_seedv", SEED_V = 3;
+/* המקצועות שנרצה להשלים להם מערכים: נשארים ב״המערכים שלי״ גם כשאין בהם אף מערך */
+const KEY_SUBJS = "maarach_v1_subjects";
+const DEFAULT_SUBJS = ["לשון","ספרות","תנ״ך","מתמטיקה","היסטוריה","אזרחות","אנגלית","ביולוגיה","גיאוגרפיה","מדעים","פיזיקה","מדעי המחשב"];
+let wantSubjs = DEFAULT_SUBJS.slice();
+/* מערך ״ריק״: אין כותרת, אין מטרות ואין תוכן בפעילויות. נוצר כשפותחים ״מערך חדש״ ויוצאים בלי לכתוב */
+function isEmptyLesson(l){
+  if(!l || l.fromPlan || l.seedKey) return false;
+  const t=s=>String(s||"").trim();
+  if(t(l.title)||t(l.materials)||t(l.exitTicket)||t(l.notes)||t(l.curriculum)) return false;
+  if((l.goals||[]).some(g=>t(g))) return false;
+  if((l.questions||[]).some(q=>t(q&&q.q))) return false;
+  if(l.diff && (t(l.diff.support)||t(l.diff.core)||t(l.diff.enrich))) return false;
+  return (l.stages||[]).every(st=>(st.activities||[]).every(a=>!t(a.title)&&!t(a.instructions)));
+}
+function pruneEmpty(keep){ const n=lessons.length; lessons=lessons.filter(l=>l===keep||!isEmptyLesson(l)); if(lessons.length!==n){ save(); return true; } return false; }
 function load(){
+  try{ const s=JSON.parse(lsGet(KEY_SUBJS)||"null"); if(Array.isArray(s)) wantSubjs=s.filter(x=>SUBJECTS[x]); }catch(e){}
   let raw = lsGet(KEY);
   if(raw){ try{ lessons = JSON.parse(raw)||[]; }catch(e){ lessons = []; } }
-  if(!raw){ lessons = seed(); lsSet(KEY_SEEDV, String(SEED_V)); save(); return; }
-  /* למשתמשים קיימים: הוספה חד-פעמית של מערכים חדשים בלי לגעת במערכים שלהם */
-  if((+lsGet(KEY_SEEDV)||1) < SEED_V){
-    const have = new Set(lessons.map(l=>l.seedKey).filter(Boolean));
-    seed2().forEach(l=>{ if(!have.has(l.seedKey)) lessons.push(l); });
+  if(!raw){ lessons = []; lsSet(KEY_SEEDV, String(SEED_V)); save(); return; }
+  /* גרסה 3: מסירים את מערכי הדוגמה (רק אותם) — המקצועות נשארים ברשימה */
+  if((+lsGet(KEY_SEEDV)||1) < 3){
+    const sampleTitles = new Set(seed().map(l=>l.title));
+    lessons = lessons.filter(l=>l.fromPlan || !(l.seedKey || sampleTitles.has(l.title)));
     lsSet(KEY_SEEDV, String(SEED_V)); save();
   }
+  pruneEmpty(null);
 }
 function save(){ lsSet(KEY, JSON.stringify(lessons)); }
+function saveSubjs(){ lsSet(KEY_SUBJS, JSON.stringify(wantSubjs)); }
 
 /* ============ HELPERS ============ */
 function toast(msg){
@@ -968,6 +987,7 @@ function route(){
   yearUnit=null;
   if(v.indexOf("year:")===0){ const p=v.split(":"); const sel=keyToSel(p[1]); if(sel){ ySel=sel; lsSet(KEY_YSEL, JSON.stringify(ySel)); } if(p[2]!==undefined&&p[2]!=="") yearUnit=+p[2]; v="year"; }
   closeAllOverlays();
+  if(v!=="edit"){ pruneEmpty(null); if(cur && !lessons.includes(cur)) cur=null; }
   if(!["home","library","edit","ai","toolbox","web","year","tools","read"].includes(v)) v="home";
   document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on", x.id==="v-"+v));
   const navOf = {edit:"tools",ai:"tools",toolbox:"tools",web:"tools",read:"year"};
@@ -989,10 +1009,14 @@ function renderLibrary(){
   const q = document.getElementById("q").value.trim();
   const g = document.getElementById("fGrade").value, m = document.getElementById("fModel").value;
   const subjCount = {};
+  wantSubjs.forEach(s=>subjCount[s]=0);
   lessons.forEach(l=>subjCount[l.subject]=(subjCount[l.subject]||0)+1);
+  const canAdd = Object.keys(SUBJECTS).some(s=>s!=="אחר" && subjCount[s]===undefined);
   document.getElementById("subjChips").innerHTML =
     '<button class="chip'+(filterSubj===""?" on":"")+'" onclick="filterSubj=\'\';renderLibrary()">הכל · '+lessons.length+'</button>'+
-    Object.keys(subjCount).map(s=>'<button class="chip'+(filterSubj===s?" on":"")+'" onclick="filterSubj=this.dataset.s;renderLibrary()" data-s="'+esc(s)+'">'+esc(s)+' · '+subjCount[s]+'</button>').join("");
+    Object.keys(subjCount).map(s=>'<span class="subjc"><button class="chip'+(filterSubj===s?" on":"")+(subjCount[s]?"":" zero")+'" onclick="filterSubj=this.dataset.s;renderLibrary()" data-s="'+esc(s)+'">'+esc(s)+' · '+subjCount[s]+'</button>'+
+      (!subjCount[s]?'<button class="chipx" title="הסרת המקצוע מהרשימה" aria-label="הסרת '+esc(s)+' מהרשימה" data-s="'+esc(s)+'" onclick="removeSubj(this.dataset.s)">✕</button>':'')+'</span>').join("")+
+    (canAdd?'<button class="chip add" onclick="addSubjBox()">＋ מקצוע</button>':'');
   const list = lessons.filter(l=>{
     if(filterSubj && l.subject!==filterSubj) return false;
     if(g && l.grade!==g) return false;
@@ -1006,7 +1030,17 @@ function renderLibrary(){
     '<div class="stat"><b>'+Object.keys(subjCount).length+'</b><span>מקצועות</span></div>'+
     '<div class="stat"><b>'+totalActs+'</b><span>פעילויות</span></div>';
   const grid = document.getElementById("libGrid");
-  if(!list.length){ grid.innerHTML='<div class="empty" style="grid-column:1/-1">לא נמצאו מערכים. <a href="#ai">נסו את המחולל החכם</a></div>'; return; }
+  if(!list.length){
+    const ys = YEAR_SUBJ.find(x=>x.s===filterSubj);
+    grid.innerHTML = (filterSubj && !q && !g && !m)
+      ? '<div class="empty" style="grid-column:1/-1"><b>עוד אין מערכים ב'+esc(filterSubj)+'.</b><br>'+
+        '<button class="btn pri" style="margin-top:10px" onclick="newLesson(filterSubj)">＋ מערך חדש ב'+esc(filterSubj)+'</button>'+
+        (ys?' <a class="btn" style="margin-top:10px" href="#year">📅 מהתוכנית השנתית</a>':'')+'</div>'
+      : (!lessons.length
+        ? '<div class="empty" style="grid-column:1/-1"><b>עוד אין כאן מערכים.</b><br>המקצועות שלמעלה הם הרשימה שנרצה להשלים. בחרו מקצוע כדי להתחיל מערך חדש, או שמרו מערך מהתוכנית השנתית.</div>'
+        : '<div class="empty" style="grid-column:1/-1">לא נמצאו מערכים. <a href="#ai">נסו את המחולל החכם</a></div>');
+    return;
+  }
   grid.innerHTML = list.map(l=>{
     const c = subjColor(l.subject), md = MODELS[l.model]?MODELS[l.model].n:"";
     return '<article class="card"><div class="band" style="background:'+c+'"></div><div class="body">'+
@@ -1042,8 +1076,25 @@ function applyModel(l, model){
   l.model = model;
   l.stages = M.st.map(([n,p])=>S(n,[A("explain","",Math.max(3,Math.round(l.minutes*p)),"")]));
 }
-function newLesson(){
-  cur = blankLesson(); lessons.unshift(cur); save(); go("edit");
+function removeSubj(s){ wantSubjs=wantSubjs.filter(x=>x!==s); saveSubjs(); if(filterSubj===s) filterSubj=""; renderLibrary(); }
+function addSubjBox(){
+  const have=new Set(wantSubjs.concat(lessons.map(l=>l.subject)));
+  const free=Object.keys(SUBJECTS).filter(s=>s!=="אחר"&&!have.has(s));
+  modal('<h3>הוספת מקצוע לרשימה</h3><p>המקצוע יופיע ב״המערכים שלי״ גם לפני שיש בו מערכים.</p><div class="chips">'+
+    free.map(s=>'<button class="chip" data-s="'+esc(s)+'" onclick="wantSubjs.push(this.dataset.s);saveSubjs();closeModal();renderLibrary()">'+esc(s)+'</button>').join("")+
+    '</div><div class="ft"><button class="btn" onclick="closeModal()">סגירה</button></div>');
+}
+function clearLibrary(){
+  if(!lessons.length){ toast("אין מערכים למחוק"); return; }
+  modal('<h3>לרוקן את המערכים שלי?</h3><p>יימחקו כל '+lessons.length+' המערכים השמורים בדפדפן הזה. רשימת המקצועות תישאר. אי אפשר לבטל את זה, אז כדאי קודם לשמור גיבוי.</p>'+
+    '<div class="ft"><button class="btn" onclick="openExportAll()">שמירת גיבוי קודם</button><button class="btn pri warn" id="clrY">כן, לרוקן</button><button class="btn" onclick="closeModal()">ביטול</button></div>');
+  document.getElementById("clrY").onclick=()=>{
+    const subs=new Set(wantSubjs); lessons.forEach(l=>{ if(SUBJECTS[l.subject] && l.subject!=="אחר" && !subs.has(l.subject)){ subs.add(l.subject); wantSubjs.push(l.subject); } });
+    saveSubjs(); lessons=[]; cur=null; save(); closeModal(); filterSubj=""; renderLibrary(); toast("המערכים נמחקו. המקצועות נשארו ברשימה");
+  };
+}
+function newLesson(subj){
+  cur = blankLesson(); if(typeof subj==="string" && SUBJECTS[subj]) cur.subject=subj; lessons.unshift(cur); save(); go("edit");
   setTimeout(()=>{ const t=document.getElementById("eTitle"); if(t) t.focus(); },60);
 }
 
