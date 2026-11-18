@@ -250,6 +250,8 @@ details.about>summary{cursor:pointer;color:var(--accent-d);font-size:14px;font-w
 .slk{display:inline-flex;gap:4px;flex-wrap:wrap}
 .slk button{border:1px solid #c7d8ee;background:#eef4fb;color:#1d4b85;border-radius:999px;padding:2px 10px;font-size:12.5px}
 .slk button:hover{background:#dbe8f7}
+.sshow[hidden],.pres[hidden]{display:none!important}
+body.noscroll{overflow:hidden}
 .sshow{position:fixed;inset:0;z-index:200;background:#0f1a2b;display:flex;flex-direction:column}
 .sshow .sbar{display:flex;align-items:center;gap:8px;padding:8px 12px;color:#c9d6ea;font-size:14px;flex-wrap:wrap}
 .sshow .sbar .sp{flex:1}
@@ -437,7 +439,7 @@ details.about>summary{cursor:pointer;color:var(--accent-d);font-size:14px;font-w
   .brand span{display:none}
 }
 </style>
-<link rel="stylesheet" href="siman-theme.css?v=2">
+<link rel="stylesheet" href="siman-theme.css?v=3">
 <meta name="theme-color" content="#EAFBF3">
 </head>
 <body>
@@ -946,6 +948,12 @@ async function copy(text){
 let navPop=false, yearUnit=null;
 const scrollMem={};
 window.addEventListener("popstate",()=>{ navPop=true; });
+/* ---- overlays (slideshow, presenter) live in browser history: Back closes them, ✕ goes "back" too ---- */
+const OV=[];
+function ovPush(name, closeFn){ if(OV.some(o=>o.name===name)) return; OV.push({name,closeFn}); history.pushState({ov:name},"",location.href); }
+function ovClose(name){ const top=OV[OV.length-1]; if(top && top.name===name && history.state && history.state.ov===name){ history.back(); return true; } const i=OV.findIndex(o=>o.name===name); if(i>=0) OV.splice(i,1); return false; }
+window.addEventListener("popstate",()=>{ const o=OV.pop(); if(o){ navPop=false; try{ o.closeFn(); }catch(e){} } });
+function closeAllOverlays(){ while(OV.length){ const o=OV.pop(); try{ o.closeFn(); }catch(e){} } closeModal(); if(typeof closeTool==="function") closeTool(); }
 window.addEventListener("scroll",()=>{ scrollMem[location.hash||"#home"]=window.scrollY; },{passive:true});
 function restoreScroll(){
   const h=location.hash||"#home", y=navPop?(scrollMem[h]||0):0; navPop=false;
@@ -957,7 +965,7 @@ function route(){
   if(v.indexOf("read:")===0){ const p=v.split(":"); readState={key:p[1],ui:+p[2],li:+p[3]}; v="read"; }
   yearUnit=null;
   if(v.indexOf("year:")===0){ const p=v.split(":"); const sel=keyToSel(p[1]); if(sel){ ySel=sel; lsSet(KEY_YSEL, JSON.stringify(ySel)); } if(p[2]!==undefined&&p[2]!=="") yearUnit=+p[2]; v="year"; }
-  const sh=document.getElementById("sshow"); if(sh&&!sh.hidden){ sh.hidden=true; }
+  closeAllOverlays();
   if(!["home","library","edit","ai","toolbox","web","year","tools","read"].includes(v)) v="home";
   document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on", x.id==="v-"+v));
   const navOf = {edit:"tools",ai:"tools",toolbox:"tools",web:"tools",read:"year"};
@@ -1008,8 +1016,8 @@ function renderLibrary(){
 }
 function openLesson(id, present){
   cur = lessons.find(l=>l.id===id)||null;
+  if(present){ if(cur) startPresent(cur); return; }
   go("edit");
-  if(present && cur) setTimeout(startPresent, 50);
 }
 function dupLesson(id){
   const o = lessons.find(l=>l.id===id); if(!o) return;
@@ -1395,7 +1403,7 @@ function pickWebSrc(){
 /* הנתונים נטענים לפי דרישה מ-data/<slug>-<grade>.js וכל קובץ מוסיף אובייקט ל-window.YEAR_PLANS */
 const YEAR_SUBJ = [{s:"תנ״ך",slug:"tanach"},{s:"ספרות",slug:"sifrut"},{s:"לשון",slug:"lashon"}];
 const GRADE_NUM = {"ז׳":7,"ח׳":8,"ט׳":9,"י׳":10,"י״א":11,"י״ב":12};
-const DATA_V = "24";
+const DATA_V = "25";
 const KEY_YSEL = "maarach_v1_ysel";
 let ySel = (()=>{ try{ return JSON.parse(lsGet(KEY_YSEL))||{s:"תנ״ך",g:"ז׳"}; }catch(e){ return {s:"תנ״ך",g:"ז׳"}; } })();
 const planState = {}; /* key -> "loading" | "ok" | "missing" */
@@ -1518,7 +1526,7 @@ function addPlanLesson(key,ui,li,open){
   if(open){ closeModal(); openLesson(l.id); } else if(location.hash==="#year") renderYear();
   return l;
 }
-function presentPlanLesson(key,ui,li){ const l=addPlanLesson(key,ui,li,false); if(l){ closeModal(); openLesson(l.id,true); } }
+function presentPlanLesson(key,ui,li){ const l=planLessonObj(key,ui,li); if(l){ closeModal(); startPresent(l); } }
 function addAllPlan(key){
   const p=planFor(key); if(!p) return; let n=0;
   p.units.forEach((u,ui)=>(u.lessons||[]).forEach((x,li)=>{ if(!inLib(planLid(p,ui,li))){ const l=planLessonObj(key,ui,li); if(l){ lessons.push(l); n++; } } }));
@@ -1614,11 +1622,16 @@ function stageOf(s){ const l=SL.lesson; if(!l||!s.a) return ""; const st=(l.stag
 function openShow(i){
   let el=document.getElementById("sshow");
   if(!el){ el=document.createElement("div"); el.id="sshow"; el.className="sshow"; el.setAttribute("role","dialog"); el.setAttribute("aria-label","מצגת השיעור"); document.body.appendChild(el); document.addEventListener("keydown",showKey); }
-  if(el.hidden!==false || !(history.state&&history.state.show)) history.pushState({show:1},"",location.href);
-  el.hidden=false; SL.i=Math.max(0,Math.min(i,SL.arr.length-1)); drawShow();
+  if(!el.dataset.swipe){ el.dataset.swipe="1"; let x0=null,y0=null;
+    el.addEventListener("touchstart",e=>{ const t=e.touches[0]; x0=t.clientX; y0=t.clientY; },{passive:true});
+    el.addEventListener("touchend",e=>{ if(x0===null) return; const t=e.changedTouches[0], dx=t.clientX-x0, dy=t.clientY-y0; x0=null;
+      if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5) showGo(dx>0?1:-1); },{passive:true}); }
+  el.hidden=false; document.body.classList.add("noscroll");
+  ovPush("show", hideShow);
+  SL.i=Math.max(0,Math.min(i,SL.arr.length-1)); drawShow();
+  const c=el.querySelector(".sbar button"); if(c) c.focus();
 }
-/* back button closes the slideshow instead of leaving the lesson */
-window.addEventListener("popstate",()=>{ const el=document.getElementById("sshow"); if(el&&!el.hidden){ el.hidden=true; navPop=false; if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); } });
+function hideShow(){ const el=document.getElementById("sshow"); if(el) el.hidden=true; document.body.classList.remove("noscroll"); if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
 /* "back to plan": use real history when the plan is the previous page, so its place is kept */
 let lastPlanHash="";
 window.addEventListener("hashchange",e=>{ try{ const o=new URL(e.oldURL).hash; if(o.indexOf("#year")===0) lastPlanHash=o; }catch(_){} });
@@ -1632,7 +1645,7 @@ function drawShow(){
 }
 function toggleNotes(){ const el=document.getElementById("sshow"); if(el) el.classList.toggle("notes"); }
 function showGo(d){ const n=SL.i+d; if(n<0||n>=SL.arr.length) return; SL.i=n; drawShow(); }
-function closeShow(){ const el=document.getElementById("sshow"); if(el&&!el.hidden&&history.state&&history.state.show){ history.back(); return; } if(el) el.hidden=true; if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }
+function closeShow(){ if(!ovClose("show")) hideShow(); }
 function fullShow(){ const el=document.getElementById("sshow"); if(!document.fullscreenElement&&el.requestFullscreen) el.requestFullscreen().catch(()=>{}); else if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); }
 function showKey(e){ const el=document.getElementById("sshow"); if(!el||el.hidden) return;
   if(e.key==="ArrowLeft"||e.key===" "||e.key==="PageDown"){ e.preventDefault(); showGo(1); }
@@ -1903,20 +1916,25 @@ function doImport(){
 /* ============ PRESENTER ============ */
 let P = null;
 function flatActs(l){ const out=[]; l.stages.forEach((st,si)=>st.activities.forEach((a,ai)=>out.push({si,ai,st,a}))); return out; }
-function startPresent(){
-  if(!cur) return;
-  const f = flatActs(cur); if(!f.length){ toast("אין פעילויות במערך"); return; }
-  P = {i:0, list:f, left:(+f[0].a.minutes||0)*60, run:false, t:null, done:new Set(), audio:null};
-  renderPres();
-  try{ document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{}); }catch(e){}
+function startPresent(lesson){
+  const L = lesson || cur; if(!L) return;
+  const f = flatActs(L); if(!f.length){ toast("אין פעילויות במערך"); return; }
+  if(P) _stopPresent();
+  P = {i:0, list:f, left:(+f[0].a.minutes||0)*60, run:false, t:null, done:new Set(), audio:null, lesson:L};
+  renderPres(); document.body.classList.add("noscroll");
+  ovPush("pres", _stopPresent);
   document.addEventListener("keydown", presKeys);
 }
-function stopPresent(){
+function stopPresent(){ if(!ovClose("pres")) _stopPresent(); }
+function _stopPresent(){
   if(!P) return; clearInterval(P.t); P=null;
+  if(typeof closeTool==="function") closeTool();
   document.getElementById("presRoot").innerHTML="";
+  document.body.classList.remove("noscroll");
   document.removeEventListener("keydown", presKeys);
   try{ if(document.fullscreenElement) document.exitFullscreen(); }catch(e){}
 }
+function presFull(){ try{ if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen(); }catch(e){} }
 function presKeys(e){
   if(!P || document.querySelector(".tool")) { if(e.key==="Escape") closeTool(); return; }
   if(e.key==="ArrowLeft") presGo(1);
@@ -1927,17 +1945,17 @@ function presKeys(e){
 function fmt(s){ const neg=s<0; s=Math.abs(s); return (neg?"-":"")+String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
 function renderPres(){
   const it = P.list[P.i], T = TYPES[it.a.type]||TYPES.explain;
-  let side = '<h4>'+esc(cur.title)+'</h4><div class="sub">'+esc(cur.subject)+' · כיתה '+esc(cur.grade)+'</div>';
+  let side = '<h4>'+esc(P.lesson.title)+'</h4><div class="sub">'+esc(P.lesson.subject)+' · כיתה '+esc(P.lesson.grade)+'</div>';
   let k=0;
-  cur.stages.forEach(st=>{
+  P.lesson.stages.forEach(st=>{
     side += '<div class="st"><b>'+esc(st.name)+'</b>';
     st.activities.forEach(a=>{ const idx=k++; side += '<button class="it'+(idx===P.i?" on":"")+(P.done.has(idx)&&idx!==P.i?" done":"")+'" onclick="presJump('+idx+')">'+T_ic(a)+' '+esc(a.title||"פעילות")+' · '+a.minutes+'׳</button>'; });
     side += '</div>';
   });
   document.getElementById("presRoot").innerHTML = '<div class="pres"><aside>'+side+'</aside><div class="stagearea">'+
-    '<div class="ptop"><button class="pbtn" onclick="stopPresent()">✕ יציאה</button><span class="sp"></span>'+
+    '<div class="ptop"><button class="pbtn x" onclick="stopPresent()">✕ יציאה וחזרה למערך</button><button class="pbtn" onclick="presFull()">⛶ מסך מלא</button><span class="sp"></span>'+
     '<button class="pbtn" onclick="toolPicker()">🎯 שולף שמות</button><button class="pbtn" onclick="toolGroups()">👥 חלוקה לקבוצות</button>'+
-    (cur.exitTicket?'<button class="pbtn" onclick="toolExit()">🎫 כרטיס יציאה</button>':'')+'</div>'+
+    (P.lesson.exitTicket?'<button class="pbtn" onclick="toolExit()">🎫 כרטיס יציאה</button>':'')+'</div>'+
     '<div class="pstage">'+esc(it.st.name)+' · '+(P.i+1)+' מתוך '+P.list.length+'</div>'+
     '<h1 class="ptitle">'+esc(it.a.title||T.n)+'</h1><div><span class="ptype">'+T.i+' '+T.n+'</span></div>'+
     '<div class="pins">'+esc(it.a.instructions)+'</div>'+
@@ -2001,7 +2019,7 @@ function mkGroups(){
   document.getElementById("grs").innerHTML = g.map((m,i)=>'<div><b>קבוצה '+(i+1)+'</b>'+m.map(esc).join("<br>")+'</div>').join("");
 }
 function toolExit(){
-  toolShell('<div style="display:flex"><span style="flex:1"></span><button class="pbtn" onclick="closeTool()">✕</button></div><div style="font-size:16px;color:var(--amber);font-weight:700">🎫 כרטיס יציאה</div><div style="font-family:Secular One;font-size:40px;line-height:1.35;padding:20px 0">'+esc(cur.exitTicket)+'</div>');
+  toolShell('<div style="display:flex"><span style="flex:1"></span><button class="pbtn" onclick="closeTool()">✕</button></div><div style="font-size:16px;color:var(--amber);font-weight:700">🎫 כרטיס יציאה</div><div style="font-family:Secular One;font-size:40px;line-height:1.35;padding:20px 0">'+esc((P?P.lesson:cur).exitTicket)+'</div>');
 }
 
 /* ============ INIT ============ */

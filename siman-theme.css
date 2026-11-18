@@ -215,3 +215,19 @@ html.calm .scard,html.calm .gbtn,html.calm .chip.on,html.calm .home h1 em,html.c
   .yover.open{display:block}
   .yover:not(.open)::after{content:"… קראו עוד";position:absolute;bottom:0;left:0;background:#fff;color:var(--violet);font-weight:700;padding-inline-start:6px}
 }
+
+/* ---------- presenter & slideshow: always an obvious way out ---------- */
+.pres{z-index:150}
+.pbtn{min-height:44px;border-radius:999px}
+.pbtn.x{background:var(--sun);color:var(--ink-s);border:2px solid #fff;font-weight:700}
+.sshow .sbar button:first-child{background:var(--sun);color:var(--ink-s);border-color:#fff;font-weight:700}
+@media (max-width:760px){
+  .stagearea{padding:14px 14px calc(20px + env(safe-area-inset-bottom))}
+  .ptop{flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .ptitle{font-size:28px}.pins{font-size:17px}
+  .timer{flex-wrap:wrap;gap:8px;padding-top:16px}
+  .clock{font-size:42px;min-width:0;flex:1 1 100%}
+  .timer .pbtn{flex:1 1 auto}
+  .sshow .sbar{padding:6px 8px}
+  .sshow .sbar span:not(.sp){font-size:12.5px}
+}
